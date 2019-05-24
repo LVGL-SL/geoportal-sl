@@ -73,7 +73,7 @@ http_proxy_pass=""
 webadmin_email="test@test.de"
 use_ssl="false"
 not_proxy_hosts="localhost,127.0.0.1"
-installation_folder="/data/"
+installation_folder="/opt/geoportal/"
 
 # what should be done
 install_system_packages="true"
