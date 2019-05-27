@@ -68,7 +68,7 @@ http_proxy_user=""
 http_proxy_pass=""
 
 # misc
-webadmin_email="test@test.de"
+webadmin_email="s.vancrombrugge@lvgl.saarland.de"
 use_ssl="false"
 not_proxy_hosts="localhost,127.0.0.1"
 installation_folder="/opt/geoportal/"
