@@ -40,10 +40,8 @@ bbox_current_epsg_space="$minx $miny $maxx $maxy"
 ############################################################
 # define name of the default gui -
 # don't use spaces, cause the gui names are used for filenames!!!! - TBD not already operabel!
-#default_gui_name="Geoportal-Default-GUI"
-#extended_search_default_gui_name="Geoportal-Extended-Search-GUI"
-default_gui_name="Geoportal-RLP"
-extended_search_default_gui_name="Geoportal-RLP_erwSuche2"
+default_gui_name="Geoportal-SL"
+extended_search_default_gui_name="Geoportal-SL-extended-search"
 ############################################################
 
 # atomFeedClient.conf / config.js - mm2_config.js
@@ -139,11 +137,11 @@ else
   http_proxy_pass_hex=""
 fi
 
-
 if [ $use_proxy_svn = 'true' ]; then
     # set proxy env for wget from shell
     cp /etc/subversion/servers /etc/subversion/servers_backup_geoportal
 fi
+
 if [ $use_proxy_system = 'true' ]; then
 
     if [ "$http_proxy_user_hex" != "" ] && [ "$http_proxy_pass_hex" != "" ];then
@@ -231,7 +229,6 @@ fi
 ############################################################
 cd ${installation_folder}svn/
 
-
 if [ $checkout_mapbender_svn = 'true' ]; then
     svn co -q https://svn.osgeo.org/mapbender/trunk/mapbender
 fi
@@ -297,7 +294,7 @@ fi
 # configure and install mapbender
 ############################################################
 if [ $create_folders = 'true' ]; then
-    mkdir ${installation_folder}mapbender/http/tmp/wmc
+    mkdir -pv ${installation_folder}mapbender/http/tmp/wmc
 fi
 
 ############################################################
@@ -306,11 +303,6 @@ fi
 if [ $install_mapbender_database = 'true' ]; then
 
   echo 'install mapbender database ... '
-  # su postgres
-  # createuser  -S -D -R -P $mapbender_database_user #mapbenderdbpassword
-  # CREATE DATABASE yourdbname;
-  # CREATE USER youruser WITH ENCRYPTED PASSWORD 'yourpass';
-  # GRANT ALL PRIVILEGES ON DATABASE yourdbname TO youruser;
 
   su - postgres -c "dropdb -p $mapbender_database_port $mapbender_database_name"
   su - postgres -c "createdb -p $mapbender_database_port -E UTF8 $mapbender_database_name -T template0"
@@ -318,31 +310,23 @@ if [ $install_mapbender_database = 'true' ]; then
   sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -c "DROP USER $mapbender_database_user"
   sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -c "CREATE USER $mapbender_database_user WITH ENCRYPTED PASSWORD '$mapbender_database_password'"
 
-  # su -c - postgres "createlang plpgsql -d $mapbender_database_name" - not needed for debian 8+
-
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -f /usr/share/postgresql/9.6/contrib/postgis-2.3/postgis.sql"
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -f /usr/share/postgresql/9.6/contrib/postgis-2.3/spatial_ref_sys.sql"
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -f /usr/share/postgresql/9.6/contrib/postgis-2.3/legacy.sql"
   su - postgres -c "PGOPTIONS='--client-min-messages=warning' psql -q -p $mapbender_database_port -d $mapbender_database_name -f /usr/share/postgresql/9.6/contrib/postgis-2.3/topology.sql"
 
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT ALL PRIVILEGES ON DATABASE $mapbender_database_name TO $mapbender_database_user'"
-
-  # su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'grant all on geometry_columns to $mapbender_database_user;'"
-  #maybe new to postgis 2.x
-  # su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'grant all on geography_columns to $mapbender_database_user;'"
-  # su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'grant all on spatial_ref_sys to $mapbender_database_user;'"
-
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'ALTER DATABASE $mapbender_database_name OWNER TO $mapbender_database_user'"
 
   #overwrite default pg_hba.conf of main - default cluster
   cp /etc/postgresql/9.6/main/pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf_backup
   #####################
-cat << EOF > "/etc/postgresql/9.6/main/pg_hba.conf"
+  cat << EOF > "/etc/postgresql/9.6/main/pg_hba.conf"
   # Database administrative login by Unix domain socket
   local   all             postgres                                peer
-
+  
   # TYPE  DATABASE        USER            ADDRESS                 METHOD
-
+  
   # "local" is for Unix domain socket connections only
   local   all             postgres                                peer
   local   $mapbender_database_name        $mapbender_database_user                        md5
@@ -350,11 +334,11 @@ cat << EOF > "/etc/postgresql/9.6/main/pg_hba.conf"
   host    all             postgres        127.0.0.1/32            trust
   host    $mapbender_database_name             $mapbender_database_user 127.0.0.1/32            md5
   # IPv6 local connections:
-
+  
   host    all             postgres        ::1/128                 trust
   host    $mapbender_database_name             $mapbender_database_user ::1/128                 md5
 EOF
-
+  
   #####################
   service postgresql restart
   #####################
@@ -669,7 +653,7 @@ EOF
   UPDATE spatial_ref_sys SET proj4text='+proj=tmerc +lat_0=0 +lon_0=15 +k=1 +x_0=5500000 +y_0=0 +datum=potsdam +ellps=bessel +nadgrids=@BETA2007.gsb,null +units=m +no_defs' WHERE srid = 31469;
 EOF
   sudo -u postgres psql -q -d mapbender -f ${installation_folder}geoportal_database_proj_adaption.sql
-  fi
+fi
 
   sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/pgsql/pgsql_serial_set_sequences_2.7.sql
 
@@ -711,7 +695,6 @@ EOF
           sed -i "s/define(\"CONNECTION_USER\", \"\");/define(\"CONNECTION_USER\", \"$http_proxy_user\");/g" ${installation_folder}/mapbender/conf/mapbender.conf
           sed -i "s/define(\"CONNECTION_PASSWORD\", \"\");/define(\"CONNECTION_PASSWORD\", \"$http_proxy_pass\");/g" ${installation_folder}/mapbender/conf/mapbender.conf
         fi
-
       fi
       #####################
       # set database connection
@@ -751,21 +734,21 @@ EOF
   . /etc/profile
   [ -f /tmp/wmsmonitorlock ] && : || /usr/bin/php7.0 ${installation_folder}mapbender/tools/mod_monitorCapabilities_main.php group:${mapbender_subadmin_group_id} > /dev/null
 EOF
-      #####################
-      # register initial services for default and extended search GUIs
-      #####################
-    cd ${installation_folder}mapbender/tools/
+  #####################
+  # register initial services for default and extended search GUIs
+  #####################
+  cd ${installation_folder}mapbender/tools/
   echo 'register initial default services ... '
-      ##################### Geoportal-RLP
+  ##################### Geoportal-RLP
   eval $wms_1_register_cmd
   eval $wms_2_register_cmd
   eval $wms_3_register_cmd
-      ##################### Geoportal-RLP_erwSuche2
+  ##################### Geoportal-RLP_erwSuche2
   eval $wms_4_register_cmd
   eval $wms_5_register_cmd
-      ##################### demo service
+  ##################### demo service
   eval $wms_6_register_cmd
-      #####################
+  #####################
   # qualify the main gui
   # update database to set initial extent and epsg for Main GUI: TODO: maybe use a hidden layer !
   sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -c "UPDATE gui_wms SET gui_wms_epsg = '$epsg' WHERE fkey_gui_id = '${default_gui_name}'"
