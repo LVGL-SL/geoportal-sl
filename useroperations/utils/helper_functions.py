@@ -65,7 +65,7 @@ def get_mapbender_config_value(value):
     assign_pattern = re.compile(r"""(^|;)\s*\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\s*=\s*('|")(.*)\3\s*;""")
 
     php_vars = {}
-    for line in open(PROJECT_DIR + "mapbender/conf/mapbender.conf"):
+    for line in open(PROJECT_DIR + "mapbender/conf/mapbender.conf", encoding="utf-8"):
         for match in define_pattern.finditer(line):
             php_vars[match.group(2)] = match.group(4)
         for match in assign_pattern.finditer(line):
@@ -168,7 +168,7 @@ def get_landing_page(lang):
     ret_dict = {}
     # get favourite wmcs
     searcher = Searcher(keywords="", resource_set=["wmc"],page=1,order_by="rank",host=HOSTNAME)
-    search_results = searcher.get_search_results_rlp()
+    search_results = searcher.get_search_results_primary()
     ret_dict["wmc"] = search_results.get("wmc", {}).get("wmc", {}).get("wmc", {}).get("srv", [])
 
     return ret_dict
