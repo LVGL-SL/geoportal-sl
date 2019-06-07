@@ -1370,7 +1370,7 @@ apt-get update
 apt-get install -y apache2 apache2-dev python3 python3-dev git python3-pip virtualenv libapache2-mod-wsgi-py3 composer zip mysql-utilities zlib1g-dev libjpeg-dev libfreetype6-dev python-dev
 
 cd ${installation_folder}
-git clone https://git.osgeo.org/gitea/SvenLVGL/GeoPortal.sl
+git clone -b SL-specific --single-branch https://git.osgeo.org/gitea/SvenLVGL/GeoPortal.sl
 
 # this directory is used to store php helper scripts for the intermediate geoportal solution
 mkdir -pv ${installation_folder}/portal
@@ -1580,7 +1580,7 @@ git reset --hard
 git pull
 
 if [ ! -f ${installation_folder}/GeoPortal.rlp/Geoportal/settings.py ]; then
-  wget -P ${installation_folder}/GeoPortal.rlp/Geoportal/ https://git.osgeo.org/gitea/SvenLVGL/GeoPortal.sl/raw/branch/master/Geoportal/settings.py
+  wget -P ${installation_folder}/GeoPortal.rlp/Geoportal/ https://git.osgeo.org/gitea/SvenLVGL/GeoPortal.sl/src/branch/SL-specific/Geoportal/settings.py
 fi
 
 # refill with old values
