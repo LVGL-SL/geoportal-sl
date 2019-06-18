@@ -18,6 +18,10 @@ function getCookie(cname) {
     return "";
 }
 
+function resizeIframe(obj) {
+  obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+}
+
 function setCookie(cname, cvalue){
     document.cookie = cname + "=" + cvalue + ";";
 }
@@ -127,6 +131,12 @@ $(document).on("keypress", "#id_message", function(){
 });
 
 $(document).on("click", ".map-viewer-toggler, #mapviewer-sidebar", function(){
+    // for dsgvo not accepted
+    if ($("#dsgvo").val() == "False"){
+    window.location.href = "/change_profile";
+    return;
+    }
+
     // start loading the iframe content
     var iframe = $("#mapviewer");
     var src = iframe.attr("src");
@@ -175,6 +185,11 @@ $(document).on("click", ".sidebar-area-title", function(){
 });
 
 $(document).on("click", "#geoportal-search-button", function(){
+    // for dsgvo not accepted
+    if ($("#dsgvo").val() == "False"){
+        window.location.href = "/change_profile";
+        return;
+    }
     var elem = $(this);
     // check if the index page is already opened
     var index = $(".content-tabs.-js-tabs");
@@ -406,3 +421,4 @@ $(document).ready(function(){
     // show and auto hide messages
     $(".messages-container").delay(500).slideToggle("medium");
 });
+

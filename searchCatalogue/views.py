@@ -39,7 +39,7 @@ app_name = ""
 logger = logging.getLogger(__name__)
 
 @check_browser
-def  index_external(request: HttpRequest):
+def index_external(request: HttpRequest):
     """ Renders the index template for external embedded calls.
 
     This route is for external embedded calls in iFrames and so on.
@@ -51,10 +51,13 @@ def  index_external(request: HttpRequest):
         Redirect: Redirect to the real render functionality with a flag for external_call
     """
     external_call = True
-    return index(request, external_call)
+    params_get = request.GET
+    start_search = helper.resolve_boolean_value(params_get.get("start", "False"))
+
+    return index(request=request, external_call=external_call, start_search=start_search)
 
 @check_browser
-def index(request: HttpRequest, external_call = False):
+def index(request: HttpRequest, external_call=False, start_search=False):
     """ Renders the index template for all calls.
 
     If the external_call flag is set to True, this function will change the template to be rendered.
@@ -106,6 +109,7 @@ def index(request: HttpRequest, external_call = False):
         "value_form_map_as_json": "",
         "selected_facets": preselected_facets,
         "external_call": external_call,
+        "start_search": start_search,
     }
     geoportal_context = GeoportalContext(request=request)
     geoportal_context.add_context(params)
@@ -129,10 +133,19 @@ def auto_completion(request: HttpRequest):
     Returns:
         JsonResponse: Contains auto-completion suggestions
     """
-    max_results = 3
+    max_results = 7
 
     if request.method == 'POST' and request.POST.dict()["type"] == "autocomplete":
         search_text = request.POST.dict()["terms"]
+        # clean for UMLAUTE!
+        search_text = search_text.replace("ö", "oe")
+        search_text = search_text.replace("Ö", "Oe")
+        search_text = search_text.replace("ä", "ae")
+        search_text = search_text.replace("Ä", "Ae")
+        search_text = search_text.replace("ü", "ue")
+        search_text = search_text.replace("U", "Ue")
+        search_text = search_text.replace("ß", "ss")
+
         auto_completer = AutoCompleter(search_text, max_results)
         results = auto_completer.get_auto_completion_suggestions()
     elif request.method == 'GET':
@@ -390,6 +403,14 @@ def get_data_primary(request: HttpRequest):
     # rehash facets
     rehasher = Rehasher(search_results, search_filters)
     facets = rehasher.get_rehashed_categories()
+    # set flag to indicate that the facet is one of the selected
+    for facet_key, facet_val in selected_facets.items():
+        for chosen_facet in facet_val:
+            _id = chosen_facet["id"]
+            for facet in facets[facet_key]:
+                if facet["id"] == _id:
+                    facet["is_selected"] = True
+                    break
     search_filters = rehasher.get_rehashed_filters()
     del rehasher
     print_debug(EXEC_TIME_PRINT % ("rehashing of facets", time.time() - start_time))

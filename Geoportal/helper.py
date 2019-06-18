@@ -124,6 +124,7 @@ def get_mb_user_session_data(request: HttpRequest):
         ret_dict["gui"] = session_data['gui']
         ret_dict["guis"] = session_data['guis']
         ret_dict["loggedin"] = session_data['loggedin']
+        ret_dict["dsgvo"] = str(session_data['session_data'][b'dsgvo'], "utf-8")
     # GUEST
     else:
         ret_dict["username"] = guest_name.mb_user_name
@@ -166,6 +167,7 @@ def write_gml_to_session(session_id: str, lat_lon: dict):
 
     response = requests.post(url=uri, data=post_content, verify=INTERNAL_SSL)
 
+
 def execute_threads(thread_list):
     """ Executes a list of threads
 
@@ -178,6 +180,7 @@ def execute_threads(thread_list):
     for thread in thread_list:
         thread.join()
 
+
 def print_debug(string: str):
     """ Print only if we are in dev mode!
 
@@ -187,3 +190,20 @@ def print_debug(string: str):
     """
     if DEBUG:
         print(string)
+
+
+def resolve_boolean_value(val: str):
+    """ Resolve a string which represents a boolean value
+
+    Args:
+        val: The value
+    Returns:
+         True, False or None
+    """
+    val = val.upper()
+    if val == "TRUE":
+        return True
+    elif val == "FALSE":
+        return False
+    else:
+        return None
