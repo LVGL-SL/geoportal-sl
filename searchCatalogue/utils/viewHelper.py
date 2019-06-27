@@ -22,18 +22,47 @@ import math
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-from Geoportal.helper import execute_threads
+from Geoportal.helper import execute_threads, write_gml_to_session
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 from Geoportal import helper
-from Geoportal.settings import INTERNAL_PAGES_CATEGORY, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL
+from Geoportal.settings import INTERNAL_PAGES_CATEGORY, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, PRIMARY_SRC_IMG, \
+    DE_SRC_IMG, EU_SRC_IMG
 from searchCatalogue.settings import *
 
 
 ####    SINGLE HELPER FUNCTIONS
 from searchCatalogue.utils.searcher import Searcher, URL_BASE
 
+
+def get_source_catalogues(external_call: bool=False):
+    """ Returns a dict which holds all valid catalogue sources
+
+    Args:
+        external_call (bool): States whether the call is internal or external
+    Returns:
+         sources (OrderedDict): Contains all catalogues as key-value pairs
+    """
+    sources = OrderedDict()
+    sources["primary"] = {
+        "key": _("Own catalogue"),
+        "img": PRIMARY_SRC_IMG,
+    }
+    if not external_call:
+        sources["de"] = {
+            "key": _("Germany"),
+            "img": DE_SRC_IMG,
+        }
+        sources["eu"] = {
+            "key": _("Europe"),
+            "img": EU_SRC_IMG,
+        }
+        sources["info"] = {
+            "key": _("Info"),
+            "title": _("Info pages"),
+        }
+    return sources
 
 def parse_extended_params(params: dict):
     """ Convert one long GET url parameter into a well formed dict.
@@ -693,6 +722,7 @@ def prepare_selected_facets(selected_facets):
         if facet_dict.get("parent_category") not in ret_dict:
             ret_dict[(facet_dict.get("parent_category"))] = []
         ret_dict[facet_dict.get("parent_category")].append(facet_dict)
+
     return ret_dict
 
 def __resolve_single_facet(preselected_categories, all_categories):
@@ -900,3 +930,16 @@ def check_previewUrls(search_results):
             if len(result.get("previewUrl", "")) == 0:
                 result["previewUrl"] = None
     return search_results
+
+
+def check_search_bbox(session_id, bbox):
+    if bbox != '':
+        # set glm to session
+        lat_lon = bbox.split(",")
+        lat_lon = {
+            "minx": lat_lon[0],
+            "miny": lat_lon[1],
+            "maxx": lat_lon[2],
+            "maxy": lat_lon[3],
+        }
+        write_gml_to_session(session_id=session_id, lat_lon=lat_lon)

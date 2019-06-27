@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 {% get_current_language as LANGUAGE_CODE %}
-                <div class="right-header-top">
+                <div class="upper-header">
                     <div class="language-selector-wrapper">
                         <img class="flag-selector {% if LANGUAGE_CODE == 'de' %}active-language{% endif %}" data-id="de" title="Deutsch" src="{% static 'useroperations/images/de_flag.png' %}">
                         <img class="flag-selector {% if LANGUAGE_CODE == 'en' %}active-language{% endif %}" data-id="en" title="English" src="{% static 'useroperations/images/uk_flag.png' %}">
@@ -66,6 +66,7 @@
 
             {% endif %}
             <!-- Body content -->
+            <!--
             <div class="content-tabs -js-tabs">
                 {% for source_key, source_val in sources.items %}
                 <div id="{{ source_key }}" data-id="{{ source_key }}" class="-js-tab-item content-tab-item tab-item {% if forloop.counter == 1 %} active {% endif %}">
@@ -80,6 +81,7 @@
                 </div>
                 {% endfor %}
             </div>
+            -->
             {% if not is_info_search %}
             <!--
                 <div id="extended-search" data-source="rlp" class="">

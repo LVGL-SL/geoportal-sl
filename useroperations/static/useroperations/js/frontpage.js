@@ -23,7 +23,7 @@ function resizeIframe(obj) {
 }
 
 function setCookie(cname, cvalue){
-    document.cookie = cname + "=" + cvalue + ";";
+    document.cookie = cname + "=" + cvalue + ";path=/;";
 }
 
 function startSearch(){
@@ -34,7 +34,12 @@ function startSearch(){
     if(extendedSearchHeader.hasClass("active")){
         extendedSearchHeader.click();
     }
-    prepareAndSearch(); // search and render
+    // since the all.js might be loaded slower or faster, we need to make sure it exists before we call prepareAndSearch()
+    // which lives in all.js
+    var script = $("#all-script");
+    $(script).ready(function(){
+        prepareAndSearch(); // search and render
+    });
 
 }
 
@@ -66,15 +71,18 @@ function resizeMapOverlay(){
 function toggleMapViewers(target){
     var iframe = $("#mapviewer");
     var oldSrc = iframe.attr("data-toggle");
-    iframe.attr("data-toggle", iframe.attr("src"));
-    iframe.attr("src", oldSrc);
-    iframe.toggleClass("mobile-viewer");
+    var src = iframe.attr("src");
+    if(src !== oldSrc){
+        iframe.attr("data-toggle", src);
+        iframe.attr("src", oldSrc);
+        iframe.toggleClass("mobile-viewer");
+    }
 }
 
 $(document).on("click", ".mobile-button", function(){
     // get wmc id
-    var elem = $(this).parents(".tile-content").find(".tile-content-img");
-    var id = elem.find("a").attr("href").split("=")[1];
+    var elem = $(this).parents(".tile").find(".tile-header");
+    var id = elem.attr("data-id");
     openInNewTab("/mapbender/extensions/mobilemap2/index.html?wmc_id=" + id);
 });
 
@@ -141,7 +149,8 @@ $(document).on("click", ".map-viewer-toggler, #mapviewer-sidebar", function(){
     var iframe = $("#mapviewer");
     var src = iframe.attr("src");
     var dataParams = iframe.attr("data-params");
-    if(dataParams !== src){
+    var dataToggler = iframe.attr("data-toggle");
+    if(dataParams !== src && (dataToggler == src || src == "about:blank")){
         iframe.attr("src", dataParams);
     }
     // resize the overlay
@@ -164,6 +173,8 @@ $(document).on("click", ".sidebar-toggler", function(){
     var sidebar = $(".sidebar-wrapper");
     var bodyContent = $("#body-content");
     sidebar.toggleClass("closed");
+    var isClosed = sidebar.hasClass("closed");
+    setCookie("sdbr-clsd", isClosed);
     bodyContent.toggleClass("sidebar-open");
 });
 
@@ -206,26 +217,17 @@ $(document).on("click", "#geoportal-search-button", function(){
 });
 
 
-/**
- * Display info for favourite wmc tiles
- */
- $(document).on("mouseover mouseleave", ".tile-body", function(){
-    var elem = $(this);
-    var popup = elem.parents().children(".tile-info-popup");
-    popup.toggle();
- });
-
- $(document).on("click", ".organizations .tile-content-img", function(){
+ $(document).on("click", ".quickstart.search", function(event){
+     event.preventDefault();
      var elem = $(this);
-     var id = elem.attr("data-id");
-     var name = elem.attr("data-name");
+     var resource = elem.attr("data-resource");
      var searchButton = $("#geoportal-search-button");
-     var facet = ["Organisationen", name, id].join(",");
-     search.setParam("facet", facet);
+     search.setParam("singleResourceRequest", resource);
+     search.setParam("source", "primary");
      searchButton.click();
  });
 
- $(document).on("click", ".topics .tile-content-img", function(){
+ $(document).on("click", ".topics .tile-header", function(){
      var elem = $(this);
      var filterName = elem.attr("data-name");
      var filterId = elem.attr("data-id");
@@ -234,29 +236,27 @@ $(document).on("click", "#geoportal-search-button", function(){
      searchButton.click();
  });
 
- $(document).on("click", ".organizations .data-info-container", function(){
-     var elem = $(this);
-     var datatype = elem.attr("data-resource");
-     search.resources_rlp[datatype] = false;
-     /*
-     * ToDo: THis does not work yet due to the 'great' structure of the search engine...
-     */
-     var tileContentImg = elem.parents(".tile").find(".tile-content-img");
-     tileContentImg.click();
+ $(document).on("hover", ".topics .tile-header", function(){
+     var elem = $(this).children(".tile-header-img").children(".tile-img");
+     elem.toggleClass("highlight");
  });
 
 
- $(document).on("click", ".tile-content-img", function(event){
+ $(document).on("click", ".favourite-wmcs .tile-header", function(event){
     event.preventDefault();
     var elem = $(this);
     if(elem.attr("id") == "show-all-tile-content"){
         $("#geoportal-search-button").click();
         return;
     }
-    href = elem.children("a").attr("href");
+    href = elem.attr("data-id");
+    if($("#mapviewer").hasClass("mobile-viewer")){
+        toggleMapViewers();
+    }
     startAjaxMapviewerCall(href);
 
  });
+
 $(document).on("click", ".message-toggler", function(){
     var elem = $(this);
     elem.toggle();
@@ -341,13 +341,6 @@ $(document).on('click', "#change-form-button", function(){
 
 });
 
-$(document).on("click", ".cookie-button", function(){
-    var cookieBanner = $(".cookie-container");
-    cookieBanner.toggle();
-    // set cookie, so we know that the user already accepted on the next visit
-    setCookie("Geoportal-RLP", true)
-});
-
 
 //captcha refresh
 $(function() {
@@ -420,5 +413,6 @@ $(document).ready(function(){
 
     // show and auto hide messages
     $(".messages-container").delay(500).slideToggle("medium");
+    $(".messages-container").delay(5000).slideToggle("medium");
 });
 

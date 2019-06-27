@@ -10,6 +10,8 @@ from django.http.response import JsonResponse
 
 from Geoportal import helper, settings
 from Geoportal.settings import DEFAULT_GUI, RSS_FILE, HOSTNAME, HTTP_OR_SSL, IFRAME_HEIGHT, IFRAME_WIDTH
+from useroperations.conf import COOKIE_VALUE, GEOPORTAL_IDENTIFIER, LOGO_GEOPORTAL_TITLE, LOGO_COUNTRY_LINK_DE, \
+    LOGO_COUNTRY_LINK_EN
 
 
 class GeoportalJsonResponse:
@@ -48,9 +50,10 @@ class GeoportalContext:
     """
 
     def __init__(self, request):
-        session_data=helper.get_mb_user_session_data(request)
+        session_data = helper.get_mb_user_session_data(request)
         self.data = {
             "navigation": helper.get_navigation_items(),
+            "selected_navigation": request.path,
             "loggedin": session_data.get("loggedin"),
             'user': session_data.get("user", ""),
             'userid': session_data.get("userid", ""),
@@ -63,9 +66,16 @@ class GeoportalContext:
             "DEFAULT_GUI": DEFAULT_GUI,
             "basedir": settings.BASE_DIR,
             "rss_file": RSS_FILE,
-            "cookie": request.COOKIES.get("Geoportal-RLP", None),
+            "cookie": request.COOKIES.get(COOKIE_VALUE, None),
+            "sidebar_closed": helper.resolve_boolean_value(request.COOKIES.get("sdbr-clsd", 'False')),
+            "is_mobile": request.user_agent.is_mobile,
             "IFRAME_HEIGHT": IFRAME_HEIGHT,
             "IFRAME_WIDTH": IFRAME_WIDTH,
+            "COOKIE_VALUE": COOKIE_VALUE,
+            "GEOPORTAL_IDENTIFIER": GEOPORTAL_IDENTIFIER,
+            "LOGO_GEOPORTAL_TITLE": LOGO_GEOPORTAL_TITLE,
+            "LOGO_COUNTRY_LINK_DE": LOGO_COUNTRY_LINK_DE,
+            "LOGO_COUNTRY_LINK_EN": LOGO_COUNTRY_LINK_EN,
         }
 
     def add_context(self, context: dict):

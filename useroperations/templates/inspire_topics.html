@@ -6,19 +6,23 @@
 {% endblock %}
 
 {% block body %}
-<h2>{% trans 'Topics' %}</h2>
+<div class="landing-page-headline">
+    <h2>{% trans 'Topics' %}</h2>
+</div>
 <div class="tile-wrapper topics">
     {% for result in topics.tags %}
         <div class="tile">
-            <div class="tile-header">{{ result.title }}</div>
-            <div class="tile-content">
-                <div class="tile-content-img" data-id="{{ result.id }}" data-name="{{ result.title }}">
+            <div class="tile-header" data-id="{{ result.id }}" data-name="{{ result.title }}">
+                <div class="tile-title">{{ result.title }}</div>
+                <div class="tile-header-img">
                     {% if result.symbolUrl != '' %}
                     <img class="tile-img" src="{{ result.symbolUrl }}">
                     {% else  %}
                     <img class="tile-img" src="{% static 'searchCatalogue/images/no_image.png' %}">
                     {% endif %}
                 </div>
+            </div>
+            <div class="tile-content">
                 <div class="tile-content-abstract">
                     <div class="sub-tile-container">
                         <div class="data-info-container" title="{% trans 'Number of data' %}">
