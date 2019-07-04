@@ -8,7 +8,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Geoportal{% block title %} {{ GEOPORTAL_IDENTIFIER }} {% endblock %}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'useroperations/images/favicon.png' %}">
+    <link rel="icon" href="{% static 'useroperations/images/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'useroperations/images/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{% static '/useroperations/css/base.css' %}" media="all" />
     <link rel="stylesheet" type="text/css" href="{% static '/useroperations/css/forms.css' %}" media="all" />
         <script>
@@ -20,6 +21,10 @@
     <script type="text/javascript" src="{% static 'searchCatalogue/vendor/zebra/javascript/zebra_datepicker.js' %}"></script>
     <script id="all-script" type="text/javascript" src="{% static 'searchCatalogue/js/all.js' %}"></script>
     <script type="text/javascript" src="{% static 'useroperations/js/frontpage.js' %}"></script>
+    <!--[if lt IE 9]>
+	<script src="{% static 'useroperations/js/html5shiv.js' %}"></script>
+	<script src="{% static 'useroperations/js/html5shiv-printshiv.js' %}"></script>
+    <![endif]-->
     {% block head %}
     {% endblock %}
 </head>
@@ -39,7 +44,9 @@
     <div class="middle-header">
         <div class="middle-header-top">
             <input type="text" id="geoportal-search-field" class="simple-search-field -js-simple-search-field" placeholder="{% trans 'Search term' %}">
-            <div id="geoportal-search-button" class="search-submit-button">{% trans 'Search' %}</div>
+            <div id="geoportal-search-button" class="search-submit-button">
+                <img id="geoportal-search-button-icon" src="{% static 'searchCatalogue/images/icons/icn_search_hover.png' %}">
+            </div>
             <div class="simple-search-autocomplete -js-simple-search-autocomplete"></div>
         </div>
         <div id="middle-header-bottom">

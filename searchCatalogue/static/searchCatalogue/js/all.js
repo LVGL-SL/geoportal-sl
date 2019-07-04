@@ -166,7 +166,6 @@ Search.prototype = {
             return val !== '';
         });
         terms = terms.join(',');
-
         this.showLoading();
         jQuery.ajax({
             url: "/search/search/",
@@ -192,12 +191,10 @@ Search.prototype = {
             type: 'post',
             dataType: 'json',
             success: function(data) {
-                self.hideLoadingAfterLoad();
                 self.parseSearchResult(data);
             },
             timeout: 60000,
             error: function(jqXHR, textStatus, errorThrown){
-                self.hideLoadingAfterLoad();
                 if(textStatus === "timeout"){
                     alert("A timeout occured.");
                 }else{
@@ -205,6 +202,7 @@ Search.prototype = {
             },
         })
             .always(function() {
+                self.hideLoadingAfterLoad();
                 self.searching = false;
                 self.setParam("facet", "");
                 self.setParam("keywords", "");
@@ -230,6 +228,9 @@ Search.prototype = {
                 $("#search-results").toggleClass("active");
             }
             jQuery('#search-results .-js-result').html(data.html);
+            if(typeof(data.params) != "undefined" && data.params.directly_open){
+                $(".source--title").click();
+            }
         }
 
         // see if pagination was used than display the current resource the user has used the paginator
@@ -579,16 +580,12 @@ function startInfoCall(){
         format: "json",
         success: function(data){
             var numInfoResults = data["nresults"];
-            var infoTabNumber = $("#info-result-number");
-            infoTabNumber.text(numInfoResults);
-            if(!infoTabNumber.is(":visible")){
-                infoTabNumber.toggleClass("hide");
-            }
         }
     })
 }
 
 function startAjaxMapviewerCall(value){
+    //console.log(value);
     $.ajax({
         url: "/map-viewer/",
         headers: {
@@ -602,6 +599,7 @@ function startAjaxMapviewerCall(value){
         success: function(data) {
             if(data["mapviewer_params"] != "" && data["url"] == ""){
             // internal mapviewer call
+                //console.log(data["mapviewer_params"]);
                 changeMapviewerIframeSrc(data["mapviewer_params"]);
                 window.scrollTo({
                     top:150,
@@ -682,7 +680,9 @@ $(document).ready(function() {
     */
 
      // set the focus on the search bar
-     focus_on_search_input();
+     if(window.location.pathname == "/"){
+        focus_on_search_input();
+     }
 
 
     function toggleCataloguesResources(){
@@ -703,6 +703,9 @@ $(document).ready(function() {
             return;
         }
 
+        // remove '*' from search line, since it would not be necessary!
+        clearAsterisk();
+
         // Check if there is a single resource request. This happens when a user selects the related button on the landing page
         if (search.getParam("singleResourceRequest") !== null){
             var singleResource = search.getParam("singleResourceRequest");
@@ -711,9 +714,6 @@ $(document).ready(function() {
             setAllPrimaryResources(false);
             search.resources_primary[singleResource] = true;
         }
-
-        // remove '*' from search line, since it would not be necessary!
-        clearAsterisk();
 
         // collapse map overlay if open
         var mapOverlay = $(".map-viewer-overlay");
@@ -757,6 +757,14 @@ $(document).ready(function() {
         }
         // overwrite facet parameter
         search.setParam("facet", allFacets.join(";"));
+
+        // if a spatial restriction is set, we need to get it and send back to the backend
+        var spatialRestriction = $(".-js-spatial-restriction");
+        if(spatialRestriction.length > 0){
+            spatialRestriction = spatialRestriction.text().replace("\n", "");
+            search.setParam("searchTypeBbox", spatialRestriction.split(" ")[0]);
+            search.setParam("searchBbox", spatialRestriction.split(" ")[1]);
+        }
 
         var prepareTerm = function(terms) {
            return terms.trim();
@@ -848,6 +856,10 @@ $(document).ready(function() {
      */
     $(document).on("click", '.download-button', function(){
         var btn_id = $(this).attr('id');
+        if(typeof(btn_id) == 'undefined'){
+            return;
+            // ToDo: Make better!!!
+        }
         var id_raw = btn_id.split("_")[1];
         var btn = $(this)
         var group = $(".resource-list." + btn_id);
@@ -947,6 +959,7 @@ $(document).ready(function() {
       */
       $(document).on("click", ".area-title", function(){
         var elem = $(this);
+        elem.find('.accordion').toggleClass('closed').toggleClass('open');
         elem.parent().find(".area-elements").slideToggle("slow");
       });
 
@@ -1059,13 +1072,25 @@ $(document).ready(function() {
         elem_img.attr("src", "/static/searchCatalogue/images/icons/icn_capabilities.png");
     });
 
-    $(document).on("mouseover", ".feed-download", function(){
+    $(document).on("mouseover", ".feed-download-button", function(){
+        var elem = $(this);
+        var elem_img = elem.find(".feed-download-img");
+        elem_img.attr("src", "/static/searchCatalogue/images/icons/icn_capabilities_hover.png");
+    });
+
+    $(document).on("mouseout", ".feed-download-button", function(){
+        var elem = $(this);
+        var elem_img = elem.find(".feed-download-img");
+        elem_img.attr("src", "/static/searchCatalogue/images/icons/icn_capabilities.png");
+    });
+
+    $(document).on("mouseover", ".atom-feed-button", function(){
         var elem = $(this);
         var elem_img = elem.find(".feed-download-img");
         elem_img.attr("src", "/static/searchCatalogue/images/icons/icn_download_hover.png");
     });
 
-    $(document).on("mouseout", ".feed-download", function(){
+    $(document).on("mouseout", ".atom-feed-button", function(){
         var elem = $(this);
         var elem_img = elem.find(".feed-download-img");
         elem_img.attr("src", "/static/searchCatalogue/images/icons/icn_download.png");
@@ -1452,6 +1477,62 @@ $(document).ready(function() {
         prepareAndSearch();
     });
 
+    /*
+    * Toggles the facet search/filter input
+    */
+    function toggleFacetInput(elem){
+        var button = elem.children(".facet-search-icon");
+        var title = elem.children(".facet-search-title");
+        var input = elem.children(".facet-search-input");
+        var filterIcon = elem.children(".facet-search-filter");
+        title.toggleClass("hide");
+        input.toggleClass("hide");
+        button.toggleClass("active");
+        if(!input.hasClass("hide")){
+            input.focus();
+            filterIcon.addClass("hide");
+        }else{
+            if(input.val().length == 0){
+                // show icon that the facets are filtered
+                filterIcon.addClass("hide");
+            }else{
+                filterIcon.removeClass("hide");
+            }
+        }
+    }
+    /*
+    * Show or hide the filter input field for facets when search icon is clicked
+    */
+    $(document).on("click", ".facet-search-icon", function(){
+        var elem = $(this);
+        toggleFacetInput(elem.parent());
+    });
+    /*
+    * Show or hide the filter input field for facets when search icon is clicked
+    */
+    $(document).on("focusout", ".facet-search-input", function(){
+        var elem = $(this);
+        toggleFacetInput(elem.parent());
+    });
+
+    /*
+    * Filter facets
+    */
+    $(document).on("input", ".facet-search-input", function(){
+        var elem = $(this);
+        var val = elem.val().toUpperCase();
+        var facets = elem.closest(".facet-header").siblings("ul").find(".subfacet");
+        facets.each(function(i, elem){
+            var facetObj = $(elem);
+            var facet = facetObj.find("span").text().trim().toUpperCase();
+            if(!facet.includes(val)){
+                facetObj.addClass("hide");
+            }else{
+                facetObj.removeClass("hide");
+            }
+        });
+    });
+
     $(document).on("click", ".subfacet.-js-resource", function() {
         // check that the correct resources are globally available
         toggleCataloguesResources();
@@ -1541,16 +1622,61 @@ $(document).ready(function() {
                 article.slideToggle("slow");
                 // collapse all search results
                 var wrapper = $(".source--title.-js-title").click();
+                window.scrollTo({
+                    top:150,
+                    left:0,
+                    behavior:'smooth'
+                });
             }
         })
     });
+
+    function resolveCoupledResources(resourceArea){
+        var checkAttr = "coupled-resources-loaded";
+        if(resourceArea.attr(checkAttr)){
+            return;
+        }
+        var results = resourceArea.find(".result--item");
+        results.each(function(i, result){
+            result = $(result);
+            var a = result.children("a");
+            var link = a.attr("data-parent");
+            if(link === null){
+                return;
+            }
+            link = encodeURIComponent(link);
+            // start ajax call for resolving coupled resources
+            $.ajax({
+                url: "/search/coupled-resources/",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                data: {
+                    "mdLink": link
+                },
+                type: 'get',
+                dataType: 'json',
+                }).done(function(data){
+                    var html = data["html"];
+                    result.find(".metadata-links").after(html);
+                }).always(function(data){
+
+                });
+         });
+         resourceArea.attr(checkAttr, true);
+     }
+
 
     /**
      * Show and Hide (toggle) results in resources/categories e.g. dataset, services, modules, mapsummary
      */
     jQuery(document).on("click", '.search-header .-js-title', function(e) {
-        var $this = jQuery(this);
-        var thisBody = $this.parents(".search-cat").find(".search--body");
+        var elem = $(this);
+        if(search.getParam("source") !== 'primary' && elem.hasClass("resources-coupled")){
+            resolveCoupledResources(elem.closest(".search-cat"));
+        }
+        elem.find('.accordion').toggleClass('closed').toggleClass('open');
+        var thisBody = elem.parents(".search-cat").find(".search--body");
         thisBody.toggle("slow");
         thisBody.toggleClass("hide");
     });

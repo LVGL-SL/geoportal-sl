@@ -1,32 +1,31 @@
-import binascii
 import hashlib
-import bcrypt
-import smtplib
-import urllib.parse
-from urllib import error
-import re
 import logging
+import re
+import smtplib
 import time
-import requests
+import urllib.parse
+from pprint import pprint
+from urllib import error
 
+import bcrypt
+import requests
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
+from django.utils.translation import gettext as _
 
-from Geoportal import helper
 from Geoportal.decorator import check_browser
 from Geoportal.geoportalObjects import GeoportalJsonResponse, GeoportalContext
-from Geoportal.settings import ROOT_EMAIL_ADDRESS, DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL
+from Geoportal.settings import ROOT_EMAIL_ADDRESS, DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, SESSION_NAME
+from Geoportal.utils import utils, php_session_data, mbConfReader
 from searchCatalogue.utils.url_conf import URL_INSPIRE_DOC
-from useroperations.utils import helper_functions
-
+from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
 from .models import MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
-from django.utils.translation import gettext as _
-from django.core.mail import send_mail
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
+
 
 @check_browser
 def index_view(request, wiki_keyword=""):
@@ -82,14 +81,14 @@ def index_view(request, wiki_keyword=""):
         template = "wiki.html"
         # display the wiki article in the template
         try:
-            output = helper_functions.get_wiki_body_content(wiki_keyword, lang)
+            output = useroperations_helper.get_wiki_body_content(wiki_keyword, lang)
         except error.HTTPError:
             template = "404.html"
             output = ""
     else:
         template = "landing_page.html"
         # display the favourite WMCs in the template
-        results = helper_functions.get_landing_page(lang)
+        results = useroperations_helper.get_landing_page(lang)
 
     context = {
                "content": output,
@@ -101,10 +100,11 @@ def index_view(request, wiki_keyword=""):
     # check if this is an ajax call from info search
     if get_params.get("info_search", "") == 'true':
         category = get_params.get("category", "")
-        output = helper_functions.get_wiki_body_content(wiki_keyword, lang, category)
+        output = useroperations_helper.get_wiki_body_content(wiki_keyword, lang, category)
         return GeoportalJsonResponse(html=output).get_response()
     else:
         return render(request, template, geoportal_context.get_context())
+
 
 @check_browser
 def organizations_view(request: HttpRequest):
@@ -124,10 +124,11 @@ def organizations_view(request: HttpRequest):
     template = "publishing_organizations.html"
     geoportal_context = GeoportalContext(request)
     context = {
-        "organizations": helper_functions.get_all_organizations()
+        "organizations": useroperations_helper.get_all_organizations()
     }
     geoportal_context.add_context(context)
     return render(request, template, geoportal_context.get_context())
+
 
 @check_browser
 def categories_view(request: HttpRequest):
@@ -146,11 +147,12 @@ def categories_view(request: HttpRequest):
 
     template = "inspire_topics.html"
     context = {
-        "topics": helper_functions.get_all_inspire_topics(request.LANGUAGE_CODE),
+        "topics": useroperations_helper.get_all_inspire_topics(request.LANGUAGE_CODE),
         "inspire_doc_uri": URL_INSPIRE_DOC,
     }
     geoportal_context.add_context(context)
     return render(request, template, geoportal_context.get_context())
+
 
 @check_browser
 def login_view(request):
@@ -180,6 +182,7 @@ def login_view(request):
     geoportal_context.add_context(context)
 
     return render(request, "crispy_form_auth.html", geoportal_context.get_context())
+
 
 @check_browser
 def register_view(request):
@@ -263,8 +266,8 @@ def register_view(request):
                 return render(request, 'crispy_form_no_action.html', geoportal_context.get_context())
 
             try:
-                realm = helper_functions.get_mapbender_config_value('REALM')
-                portaladmin = helper_functions.get_mapbender_config_value('PORTAL_ADMIN_USER_ID')
+                realm = mbConfReader.get_mapbender_config_value('REALM')
+                portaladmin = mbConfReader.get_mapbender_config_value('PORTAL_ADMIN_USER_ID')
                 byte_aldigest = (form.cleaned_data['name'] + ":" + realm + ":" + form.cleaned_data['password']).encode('utf-8')
                 user.mb_user_aldigest = hashlib.md5(byte_aldigest).hexdigest()
                 user.mb_user_owner = portaladmin
@@ -278,7 +281,7 @@ def register_view(request):
             user.mb_user_resolution = 72
             user.is_active = False
 
-            user.activation_key = helper_functions.random_string(50)
+            user.activation_key = useroperations_helper.random_string(50)
 
             send_mail(
                  _("Activation Mail"),
@@ -323,6 +326,7 @@ def register_view(request):
 
     return render(request, 'crispy_form_no_action.html', geoportal_context.get_context())
 
+
 @check_browser
 def pw_reset_view(request):
     """ View to reset password
@@ -363,7 +367,7 @@ def pw_reset_view(request):
                 user = MbUser.objects.get(mb_user_name=username, mb_user_email=email)
                 email = user.mb_user_email
 
-                newpassword = helper_functions.random_string(20)
+                newpassword = useroperations_helper.random_string(20)
 
                 user.password = (str(bcrypt.hashpw(newpassword.encode('utf-8'), bcrypt.gensalt(12)),'utf-8'))
 
@@ -385,6 +389,7 @@ def pw_reset_view(request):
 
     return render(request, "crispy_form_no_action.html", geoportal_context.get_context())
 
+
 @check_browser
 def change_profile_view(request):
     """ View to change or delete profile data
@@ -405,8 +410,8 @@ def change_profile_view(request):
 
     request.session["current_page"] = "change_profile"
     form = ChangeProfileForm()
-    if request.COOKIES.get('PHPSESSID') is not None:
-        session_data = helper_functions.get_mapbender_session_by_memcache(request.COOKIES.get('PHPSESSID'))
+    if request.COOKIES.get(SESSION_NAME) is not None:
+        session_data = php_session_data.get_mapbender_session_by_memcache(request.COOKIES.get(SESSION_NAME))
         if session_data != None:
             if b'mb_user_id' in session_data and session_data[b'mb_user_name'] != b'guest':
                 userid = session_data[b'mb_user_id']
@@ -479,9 +484,9 @@ def change_profile_view(request):
                 if form.cleaned_data['dsgvo'] == True:
                     user.timestamp_dsgvo_accepted = time.time()
                     # set session variable dsgvo via session wrapper php script
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get('PHPSESSID')+'&operation=set&key=dsgvo&value=true', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=dsgvo&value=true', verify=INTERNAL_SSL)
                 else:
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get('PHPSESSID') +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
 
@@ -510,6 +515,7 @@ def change_profile_view(request):
     geoportal_context.add_context(context)
     return render(request, 'crispy_form_no_action.html', geoportal_context.get_context())
 
+
 @check_browser
 def delete_profile_view(request):
     """ View for profile deletion
@@ -524,12 +530,12 @@ def delete_profile_view(request):
         DeleteProfileForm
     """
     geoportal_context = GeoportalContext(request=request)
-    if request.COOKIES.get('PHPSESSID') is not None:
-        session_data = helper_functions.get_mapbender_session_by_memcache(request.COOKIES.get('PHPSESSID'))
+    if request.COOKIES.get(SESSION_NAME) is not None:
+        session_data = php_session_data.get_mapbender_session_by_memcache(request.COOKIES.get(SESSION_NAME))
         if session_data != None:
             if b'mb_user_id' in session_data and session_data[b'mb_user_name'] != b'guest':
 
-                session_data = helper.get_mb_user_session_data(request)
+                session_data = utils.get_mb_user_session_data(request)
 
                 request.session["current_page"] = "delete_profile"
 
@@ -544,8 +550,8 @@ def delete_profile_view(request):
                 geoportal_context.add_context(context)
 
                 if request.method == 'POST':
-                    session_id = request.COOKIES.get('PHPSESSID')
-                    session_data = helper_functions.get_mapbender_session_by_memcache(session_id)
+                    session_id = request.COOKIES.get(SESSION_NAME)
+                    session_data = php_session_data.get_mapbender_session_by_memcache(session_id)
                     try:
                         userid = session_data[b'mb_user_id']
                     except KeyError:
@@ -567,7 +573,7 @@ def delete_profile_view(request):
                     if error is False:
                         user = MbUser.objects.get(mb_user_id=userid)
                         user.is_active = False
-                        user.activation_key = helper_functions.random_string(50)
+                        user.activation_key = useroperations_helper.random_string(50)
                         user.timestamp_delete = time.time()
                         user.save()
 
@@ -584,7 +590,7 @@ def delete_profile_view(request):
 
 
                         # user.delete()
-                        helper_functions.delete_mapbender_session_by_memcache(session_id)
+                        useroperations_helper.delete_mapbender_session_by_memcache(session_id)
                         messages.success(request, _("Successfully deleted the user:")
                                          + " {str_name} ".format(str_name=user.mb_user_name)
                                          + _(". In case this was an accident, we sent you a link where you can reactivate "
@@ -597,6 +603,7 @@ def delete_profile_view(request):
         return redirect('useroperations:index')
 
     return render(request, "crispy_form_no_action.html", geoportal_context.get_context())
+
 
 @check_browser
 def logout_view(request):
@@ -614,14 +621,15 @@ def logout_view(request):
     request.session["current_page"] = "logout"
     geoportal_context = GeoportalContext(request=request)
 
-    if request.COOKIES.get('PHPSESSID') is not None:
-        session_id = request.COOKIES.get('PHPSESSID')
-        helper_functions.delete_mapbender_session_by_memcache(session_id)
+    if request.COOKIES.get(SESSION_NAME) is not None:
+        session_id = request.COOKIES.get(SESSION_NAME)
+        useroperations_helper.delete_mapbender_session_by_memcache(session_id)
         messages.success(request, _("Successfully logged out"))
         return redirect('useroperations:index')
     else:
         messages.error(request, _("You are not logged in"))
     return render(request, "crispy_form_no_action.html", geoportal_context.get_context())
+
 
 @check_browser
 def map_viewer_view(request):
@@ -706,6 +714,7 @@ def map_viewer_view(request):
         # for an internal search result selection, where the dynamic map viewer overlay shall be used
         return GeoportalJsonResponse(mapviewer_params=mapviewer_params).get_response()
 
+
 @check_browser
 def activation_view(request, activation_key=""):
     """
@@ -745,7 +754,7 @@ def activation_view(request, activation_key=""):
     context = {
         "headline": _('Account activation'),
         "activated": activated,
-        "navigation": helper.get_navigation_items(),
+        "navigation": utils.get_navigation_items(),
     }
 
     #geoportal_context = GeoportalContext(request=request)
@@ -754,6 +763,7 @@ def activation_view(request, activation_key=""):
     pprint(geoportal_context)
 
     return render(request, template, context=geoportal_context.get_context())
+
 
 @check_browser
 def feedback_view(request: HttpRequest):
@@ -812,6 +822,7 @@ def feedback_view(request: HttpRequest):
         geoportal_context.add_context(params)
         return render(request=request, context=geoportal_context.get_context(), template_name=template)
 
+
 @check_browser
 def service_abo(request: HttpRequest):
 
@@ -833,7 +844,6 @@ def service_abo(request: HttpRequest):
 
     geoportal_context = GeoportalContext(request=request)
     return render(request=request, context=geoportal_context.get_context(), template_name=template)
-
 
 def incompatible_browser(request: HttpRequest):
     """ Renders a template about how the user's browser is a filthy peasants tool.

@@ -10,24 +10,23 @@ Contact: michel.peltriaux@vermkv.rlp.de
 Created on: 22.01.19
 
 """
+import hashlib
+import math
 import threading
 import urllib
-import hashlib
 from collections import OrderedDict
 from urllib.parse import urlparse
-from django.utils.translation import gettext as _
-
-import math
 
 import requests
+from django.utils.translation import gettext as _
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-from Geoportal.helper import execute_threads, write_gml_to_session
+from Geoportal.utils.utils import execute_threads, write_gml_to_session, sha256
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-from Geoportal import helper
-from Geoportal.settings import INTERNAL_PAGES_CATEGORY, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, PRIMARY_SRC_IMG, \
+from Geoportal.utils import utils
+from Geoportal.settings import INTERNAL_PAGES_CATEGORY, INTERNAL_SSL, PRIMARY_SRC_IMG, \
     DE_SRC_IMG, EU_SRC_IMG
 from searchCatalogue.settings import *
 
@@ -565,7 +564,7 @@ def __dataset_srv_disclaimer(srv, language):
     if srv.get("coupledResources", None) is not None:
         for layer in srv["coupledResources"].get("layer", []):
             thread_list.append(threading.Thread(target=__dataset_single_layer_disclaimer, args=(layer, language)))
-    helper.execute_threads(thread_list)
+    utils.execute_threads(thread_list)
 
 
 def __wms_srv_disclaimer(layer, language, resource):
@@ -639,7 +638,7 @@ def __set_single_service_disclaimer_url(search_results, resource):
             thread_list.append(threading.Thread(target=__wfs_srv_disclaimer, args=(srv, language, resource)))
 
     # Run threads
-    helper.execute_threads(thread_list)
+    utils.execute_threads(thread_list)
 
 
 def set_service_disclaimer_url(search_results):
@@ -655,7 +654,7 @@ def set_service_disclaimer_url(search_results):
     for resource in resources:
         #__set_single_service_disclaimer_url(search_results, resource)
         thread_list.append(threading.Thread(target=__set_single_service_disclaimer_url, args=(search_results, resource)))
-    helper.execute_threads(thread_list)
+    utils.execute_threads(thread_list)
     return search_results
 
 
@@ -911,7 +910,7 @@ def hash_inspire_ids(search_results):
                 target=__hash_single_inspire_id, args=(search_result_val[search_result_key],)
             )
         )
-    helper.execute_threads(thread_list)
+    utils.execute_threads(thread_list)
     return search_results
 
 def check_previewUrls(search_results):
@@ -933,6 +932,14 @@ def check_previewUrls(search_results):
 
 
 def check_search_bbox(session_id, bbox):
+    """ Checks whether a bounding box exists for this search and writes the bounding box geometry into the session
+
+    Args:
+        session_id: Which session shall be written to
+        bbox: The bounding box as comma separated string
+    Returns:
+         nothing
+    """
     if bbox != '':
         # set glm to session
         lat_lon = bbox.split(",")
@@ -943,3 +950,43 @@ def check_search_bbox(session_id, bbox):
             "maxy": lat_lon[3],
         }
         write_gml_to_session(session_id=session_id, lat_lon=lat_lon)
+
+
+def resolve_coupled_resources(md_link: str):
+    """ Resolves series and dataset coupled resources for secondary catalogues such as DE and EU
+
+    Args:
+        uri: The metadata uri for which coupled resources shall be resolved
+    Returns:
+         resources (dict): Contains the accessUrl and serviceTitle
+    """
+    val = {
+        "view_links": [],
+        "download_links": [],
+    }
+    searcher = Searcher(host=HOSTNAME)
+    resources = searcher.get_coupled_resource(md_link).get("result", {}).get("service", [])
+    if resources is not None:
+        for resource in resources:
+            _type = resource.get("serviceType", "")
+            uri = resource.get("accessUrl", None)
+            uri_atom = resource.get("accessClient", None)
+            data = {
+                    "uri": uri,
+                    "atom_uri": uri_atom,
+                    "showMapUrl": urllib.parse.quote_plus(uri),
+                    "title": resource.get("serviceTitle", None),
+                    "id": sha256(md_link),
+                    "mdLink": resource.get("mdLink", None),
+                    "htmlLink": resource.get("htmlLink", None),
+                }
+            if _type == "view":
+                # to match the expected variable name in 'search_result_list_entry.html' we need to move some variables around
+                data["mdLink"] = data["htmlLink"]
+                val["view_links"].append(data)
+            elif _type == "download":
+                val["download_links"].append(data)
+            else:
+                pass
+    val["id"] = sha256(str(val["view_links"]) + str(val["download_links"]))
+    return val

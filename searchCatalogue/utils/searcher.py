@@ -13,13 +13,14 @@ from json import JSONDecodeError
 
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 import threading
 
 from copy import copy
 
-from Geoportal import helper
+from Geoportal.utils import utils
 from Geoportal.settings import PRIMARY_CATALOGUE, HOSTNAME, INTERNAL_SSL, SEARCH_API_PROTOCOL
 from searchCatalogue.settings import PROXIES
 from searchCatalogue.utils.url_conf import *
@@ -155,6 +156,11 @@ class Searcher:
         return {}
 
     def get_all_topics(self, language):
+        """ Get a list of all topics that can be found in the database
+
+        Returns:
+             dict: Contains a json list of all topics
+        """
         uri = URL_BASE + URL_GET_TOPICS
         params = {
             "type": "inspireCategories",
@@ -172,6 +178,27 @@ class Searcher:
             return response
         return {}
 
+    def get_coupled_resource(self, md_link):
+        """ Resolve coupled dataset/series resources for secondary catalogues
+
+        Args:
+            md_link: The metadata link of the resource that needs to be resolved
+        Returns:
+            response(dict): The response body as json
+        """
+        uri = URL_BASE + URL_RESOLVE_COUPLED_RESOURCES
+        params = {
+            "getRecordByIdUrl": md_link,
+            "hostName": self.host,
+        }
+        response = requests.get(uri, params, verify=INTERNAL_SSL)
+        if response.status_code == 200:
+            try:
+                response = response.json()
+            except JSONDecodeError:
+                return {}
+            return response
+        return {}
 
     def get_search_results_primary(self, user_id=None):
         """ Performs the search
@@ -223,7 +250,7 @@ class Searcher:
             thread = threading.Thread(target=self.__get_resource_results, args=(url, copy(params), resource, result))
             thread_list.append(thread)
             #self.__get_resource_results(url, params, resource, result)
-        helper.execute_threads(thread_list)
+        utils.execute_threads(thread_list)
         return result
 
     def __get_resource_results_de(self, resource, params: dict, results: dict, url):
@@ -257,7 +284,7 @@ class Searcher:
             "searchText": self.keywords,
             "searchResources": "",
             "searchPages": self.search_pages,
-            "bbox": self.bbox,
+            "searchBbox": self.bbox,
             "typeBbox": self.typeBbox,
             "maxResults": 5,
             "hostName": HOSTNAME,
@@ -275,7 +302,7 @@ class Searcher:
                 params["searchPages"] = 1
             params["searchResources"] = resource
             thread_list.append(threading.Thread(target=self.__get_resource_results_de, args=(resource, copy(params), results, url)))
-        helper.execute_threads(thread_list)
+        utils.execute_threads(thread_list)
 
         return results
 
@@ -386,7 +413,7 @@ class Searcher:
                 params_cp["srwhat"] = what
                 # create thread
                 thread_list.append(threading.Thread(target=self.__get_single_info_result, args=(params_cp, results)))
-        helper.execute_threads(thread_list)
+        utils.execute_threads(thread_list)
         return results
 
     def get_info_all_pages(self):

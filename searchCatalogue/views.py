@@ -7,37 +7,37 @@ Created on: 22.01.19
 
 """
 import json
+import logging
 import smtplib
 import time
-import logging
-from collections import OrderedDict
 
 from django.core.mail import send_mail
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils import translation
-from django_extensions import settings
 from django.utils.translation import gettext as _
+from django_extensions import settings
 
-from Geoportal import helper
 from Geoportal.decorator import check_browser
 from Geoportal.geoportalObjects import GeoportalJsonResponse, GeoportalContext
-from Geoportal.helper import write_gml_to_session, print_debug
-from Geoportal.settings import DE_CATALOGUE, EU_CATALOGUE, PRIMARY_CATALOGUE, PRIMARY_SRC_IMG, DE_SRC_IMG, \
-    EU_SRC_IMG, OPEN_DATA_URL, HOSTNAME, HTTP_OR_SSL
+from Geoportal.settings import DE_CATALOGUE, EU_CATALOGUE, PRIMARY_CATALOGUE, OPEN_DATA_URL, HOSTNAME, HTTP_OR_SSL, SESSION_NAME
+from Geoportal.utils.php_session_data import get_mb_user_session_data
+from Geoportal.utils.utils import write_gml_to_session, print_debug
 from searchCatalogue.utils import viewHelper
 from searchCatalogue.utils.autoCompleter import AutoCompleter
 from searchCatalogue.utils.rehasher import Rehasher
 from searchCatalogue.utils.searcher import Searcher
 from searchCatalogue.utils.viewHelper import check_search_bbox
 from useroperations.models import MbUser
+from Geoportal.utils import utils
 
 EXEC_TIME_PRINT = "Exec time for %s: %1.5fs"
 
 app_name = ""
 
 logger = logging.getLogger(__name__)
+
 
 @check_browser
 def index_external(request: HttpRequest):
@@ -53,9 +53,10 @@ def index_external(request: HttpRequest):
     """
     external_call = True
     params_get = request.GET
-    start_search = helper.resolve_boolean_value(params_get.get("start", "False"))
+    start_search = utils.resolve_boolean_value(params_get.get("start", "False"))
 
     return index(request=request, external_call=external_call, start_search=start_search)
+
 
 @check_browser
 def index(request: HttpRequest, external_call=False, start_search=False):
@@ -104,6 +105,7 @@ def index(request: HttpRequest, external_call=False, start_search=False):
 
     return render(request, template_name, geoportal_context.get_context())
 
+
 @check_browser
 def auto_completion(request: HttpRequest):
     """ Returns suggestions for searchfield input
@@ -140,6 +142,29 @@ def auto_completion(request: HttpRequest):
         results = None
 
     return GeoportalJsonResponse(results=results["results"], resultList=results["resultList"]).get_response()
+
+
+def resolve_coupled_resources(request: HttpRequest):
+    """ Find coupled resources for DE/EU catalogue search results
+
+    Args:
+        request: The incoming request
+        uri: The metadata link
+    Returns:
+         An ajax response
+    """
+    GET_params = request.GET.dict()
+    uri = GET_params.get("mdLink", "")
+    template = "other/coupled_resources.html"
+    coupled_resources = viewHelper.resolve_coupled_resources(uri)
+    params = {
+        "coupled_resources": coupled_resources,
+        "type": "service_DE",
+    }
+    html = render_to_string(template, params, request)
+    return GeoportalJsonResponse(html=html, data=params).get_response()
+
+
 
 @check_browser
 def get_data(request: HttpRequest):
@@ -185,6 +210,7 @@ def get_data(request: HttpRequest):
     else:
         return GeoportalJsonResponse().get_response()
 
+
 @check_browser
 def get_spatial_results(request: HttpRequest):
     """ Returns the data for a spatial search.
@@ -205,6 +231,7 @@ def get_spatial_results(request: HttpRequest):
     view_content = render_to_string(template, spatial_data)
 
     return GeoportalJsonResponse(html=view_content).get_response()
+
 
 @check_browser
 def get_data_other(request: HttpRequest, catalogue_id):
@@ -300,7 +327,7 @@ def get_data_other(request: HttpRequest, catalogue_id):
 
     # check for bounding box
     bbox = post_params.get("searchBbox", '')
-    session_id = request.COOKIES.get("PHPSESSID", "")
+    session_id = request.COOKIES.get(SESSION_NAME, "")
     check_search_bbox(session_id, bbox)
 
     results = {
@@ -320,7 +347,8 @@ def get_data_other(request: HttpRequest, catalogue_id):
     view_content = render_to_string(template_name, results)
     print_debug(EXEC_TIME_PRINT % ("rendering view", time.time() - start_time))
 
-    return GeoportalJsonResponse(resources=requested_resources, html=view_content).get_response()
+    return GeoportalJsonResponse(html=view_content, params={}).get_response()
+
 
 @check_browser
 def get_data_primary(request: HttpRequest):
@@ -343,7 +371,7 @@ def get_data_primary(request: HttpRequest):
     lang_code = request.LANGUAGE_CODE
 
     # get user php session info
-    session_data = helper.get_mb_user_session_data(request)
+    session_data = get_mb_user_session_data(request)
 
     # prepare bbox parameter
     search_bbox = post_params.get("searchBbox", "")
@@ -423,10 +451,10 @@ def get_data_primary(request: HttpRequest):
     pages = viewHelper.calculate_pages_to_render(search_results, requested_page, requested_page_res)
     print_debug(EXEC_TIME_PRINT % ("calculating pages to render", time.time() - start_time))
 
-    start_time = time.time()
-    # generate inspire feed urls
-    search_results = viewHelper.gen_inspire_url(search_results)
-    print_debug(EXEC_TIME_PRINT % ("preparing inspire urls", time.time() - start_time))
+    # start_time = time.time()
+    # # generate inspire feed urls
+    # search_results = viewHelper.gen_inspire_url(search_results)
+    # print_debug(EXEC_TIME_PRINT % ("preparing inspire urls", time.time() - start_time))
 
     start_time = time.time()
     # generate extent graphics url
@@ -445,7 +473,7 @@ def get_data_primary(request: HttpRequest):
 
     # check for bounding box
     bbox = post_params.get("searchBbox", '')
-    session_id = request.COOKIES.get("PHPSESSID", "")
+    session_id = request.COOKIES.get(SESSION_NAME, "")
     check_search_bbox(session_id, bbox)
 
     # prepare data for rendering
@@ -490,7 +518,8 @@ def get_data_primary(request: HttpRequest):
     view_content = render_to_string(template_name, results)
     print_debug(EXEC_TIME_PRINT % ("rendering view", time.time() - start_time))
 
-    return GeoportalJsonResponse(resources=requested_resources, html=view_content).get_response()
+    return GeoportalJsonResponse(html=view_content, params={}).get_response()
+
 
 @check_browser
 def get_data_info(request: HttpRequest):
@@ -524,10 +553,6 @@ def get_data_info(request: HttpRequest):
         search_results = searcher.get_info_search_results()
     search_results = viewHelper.prepare_info_search_results(search_results, list_all, lang)
     search_results = viewHelper.resolve_internal_external_info(search_results, searcher)
-    # calculate number of all info hits
-    nresults = 0
-    for res_val in search_results.values():
-        nresults += len(res_val)
 
     params = {
         "lang": lang,
@@ -543,7 +568,8 @@ def get_data_info(request: HttpRequest):
     view_content = render_to_string(template_name, params)
     #print_debug(EXEC_TIME_PRINT % ("rendering view", time.time() - start_time))
 
-    return GeoportalJsonResponse(html=view_content, nresults=nresults).get_response()
+    return GeoportalJsonResponse(html=view_content, params={"directly_open": True}).get_response()
+
 
 @check_browser
 def get_permission_email_form(request: HttpRequest):
@@ -558,7 +584,7 @@ def get_permission_email_form(request: HttpRequest):
     """
     template = "permission_email_form.html"
     params_GET = request.GET.dict()
-    session_data = helper.get_mb_user_session_data(request)
+    session_data = get_mb_user_session_data(request)
     user = session_data.get("user", "")
     mb_user = MbUser.objects.get(mb_user_name=user)
     mb_user_mail = mb_user.mb_user_email
@@ -580,6 +606,7 @@ def get_permission_email_form(request: HttpRequest):
     html = render_to_string(template_name=template, context=params, request=request)
 
     return GeoportalJsonResponse(html=html).get_response()
+
 
 @check_browser
 def send_permission_email(request: HttpRequest):
@@ -609,6 +636,7 @@ def send_permission_email(request: HttpRequest):
         success = False
 
     return GeoportalJsonResponse(success=success).get_response()
+
 
 @check_browser
 def terms_of_use(request: HttpRequest):
@@ -643,6 +671,9 @@ def terms_of_use(request: HttpRequest):
         html = render_to_string(template_name=template, context=params)
     return GeoportalJsonResponse(html=html).get_response()
 
+
+#ToDo: Check behaviour -> delete after a while
+"""
 @check_browser
 def write_gml_session(request: HttpRequest):
     params_GET = request.GET.dict()
@@ -650,3 +681,4 @@ def write_gml_session(request: HttpRequest):
     lat_lon = json.loads(lat_lon)
     session_id = request.COOKIES.get("sessionid", "")
     write_gml_to_session(lat_lon=lat_lon, session_id=session_id)
+"""

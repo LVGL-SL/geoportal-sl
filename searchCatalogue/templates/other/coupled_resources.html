@@ -1,0 +1,58 @@
+{% load static i18n %}
+    <div class="search-result-action-buttons">
+        {% if coupled_resources.view_links|length > 0 %}
+            <a class='button view-button' id="view_{{ coupled_resources.id }}">
+                <img src="{% static 'searchCatalogue/images/icons/icn_show.png' %}">
+                {% trans 'Show' %}
+            </a>
+        {% endif %}
+        {% if coupled_resources.download_links|length > 0 %}
+            <a id="download_{{ coupled_resources.id }}" class='button download-button'>
+                <img src="{% static 'searchCatalogue/images/icons/icn_download.png' %}">
+                {% trans 'Download' %}
+            </a>
+        {% endif %}
+    </div>
+    <div class="search-result-actions">
+        {% if coupled_resources.view_links|length > 0 %}
+        <div class="resource-list view_{{ coupled_resources.id }}" style="display:none;">
+            <ul style="overflow: hidden;">
+                {% for view in coupled_resources.view_links %}
+                    {% with view as layer_data %}
+                        {% with result as layer_info %}
+                            {% include 'search_result_list_entry.html' %}
+                        {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if coupled_resources.download_links|length > 0 %}
+        <div class="resource-list download_{{ coupled_resources.id }}" style="display:none;">
+            <ul style="overflow: hidden;">
+                {% for download in coupled_resources.download_links %}
+                <li class="resource-element">
+                    <a href="{{ download.htmlLink }}" target="_blank">
+                        <div class="resource-view-title" title="{% trans 'Download' %}">
+                            {{ download.title }}
+                        </div></a>
+                    <div id="download_button_{{ download.id }}" class="feed-download resource-element-data">
+                        <div class="resource-element-info"></div>
+                        <div class="feed-download-wrapper">
+                            <a class="feed-download-button" href="{{ download.uri }}" target="_blank" title="{% trans 'Original atom feed' %}">
+                                <img class="feed-download-img" src="{% static 'searchCatalogue/images/icons/icn_capabilities.png' %}" title="{% trans 'Download' %}"/>
+                            </a>
+                            {% if download.atom_uri is not None %}
+                                <a class="atom-feed-button" href="{{ download.atom_uri }}" target="_blank" title="{% trans 'Open atom feed client' %}">
+                                    <img class="feed-download-img" src="{% static 'searchCatalogue/images/icons/icn_download.png' %}" title="{% trans 'Open atom client' %}"/>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>

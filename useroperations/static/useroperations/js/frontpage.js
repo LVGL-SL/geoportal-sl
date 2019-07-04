@@ -83,6 +83,8 @@ $(document).on("click", ".mobile-button", function(){
     // get wmc id
     var elem = $(this).parents(".tile").find(".tile-header");
     var id = elem.attr("data-id");
+    // get rid of 'WMC=' which is needed for the usual call
+    id = id.split("=")[1];
     openInNewTab("/mapbender/extensions/mobilemap2/index.html?wmc_id=" + id);
 });
 
@@ -402,6 +404,20 @@ $(window).on("load", function(param){
 
 });
 
+$(document).on("scroll", function(){
+    var searchbar = $(".middle-header-top");
+    // check if searchbar is out of viewport
+    var searchbarPositionHeight = searchbar.outerHeight() + searchbar.innerHeight();
+    // get viewport Y offset
+    var viewportOffset = window.pageYOffset;
+    if(searchbarPositionHeight <= viewportOffset){
+        // make searchbar sticky to the viewport top
+        searchbar.addClass("sticky-top");
+    }else{
+        // revert this effect
+        searchbar.removeClass("sticky-top");
+    }
+})
 
 /*
  * Things that should start when the document is fully loaded

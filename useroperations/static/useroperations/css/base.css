@@ -175,19 +175,36 @@ footer{
 }
 
 .left-header{
+    display: flex;
+    justify-content: center;
+    /*
     flex-grow: 1;
-    padding: 0 0 0 5%;
+    */
+    padding: 0 4em 0 2em;
 }
 
 .middle-header{
     display: block;
-    flex-grow: 2;
+    flex-grow: 5;
 }
 
 .middle-header-top{
     display: flex;
     justify-content: center;
     position:relative;
+}
+
+.sticky-top{
+    min-width: 50vw;
+    z-index: 5;
+    position: fixed;
+    top: 0;
+    left: 25%;
+	-webkit-filter: drop-shadow(0 5px 2px rgba(0,0,0,.5));
+	-moz-filter:    drop-shadow(0 5px 2px rgba(0,0,0,.5));
+	-ms-filter:     drop-shadow(0 5px 2px rgba(0,0,0,.5));
+	-o-filter:      drop-shadow(0 5px 2px rgba(0,0,0,.5));
+	filter:         drop-shadow(0 5px 2px rgba(0,0,0,.5));
 }
 
 .right-header{
@@ -199,8 +216,8 @@ footer{
     top: 0;
     right: 0;
     margin: 5px;
-
 }
+
 .right-header-bottom{
     display: flex;
     align-items: flex-end;
@@ -246,6 +263,11 @@ footer{
 .search-submit-button:hover{
     background-color: var(--primary-hover);
     cursor: pointer;
+}
+
+#geoportal-search-button-icon{
+    width: 2em;
+
 }
 
 .simple-search-autocomplete {
@@ -669,9 +691,18 @@ ul {
         font-size: 1em;
     }
 
+    .left-header{
+        padding: 0 3em 0 0;
+    }
+
     .middle-header{
         margin: 3em 0;
-        width: 30em;
+    }
+
+    .sticky-top{
+        min-width: 100vw;
+        left: 0;
+        margin: 0 0 0 0;
     }
 
     #geoportal-search-field{
