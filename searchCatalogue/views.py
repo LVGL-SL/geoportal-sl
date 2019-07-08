@@ -79,8 +79,16 @@ def index(request: HttpRequest, external_call=False, start_search=False):
     template_name = "index.html"
     get_params = request.GET.dict()
     searcher = Searcher()
-    facets = searcher.get_categories_list()
+    facets = searcher.get_categories_list(lang=request.LANGUAGE_CODE)
     preselected_facets = viewHelper.get_preselected_facets(get_params, facets)
+
+    # renaming facet variables for dynamical reasons!
+    for key, value in preselected_facets.items():
+        key_trans = _(key)
+        del preselected_facets[key]
+        for v in value:
+            v["parent_category"] = _(v["parent_category"])
+        preselected_facets[key_trans] = value
 
     sources = viewHelper.get_source_catalogues(external_call)
 
@@ -433,15 +441,19 @@ def get_data_primary(request: HttpRequest):
     facets = rehasher.get_rehashed_categories()
     # set flag to indicate that the facet is one of the selected
     for facet_key, facet_val in selected_facets.items():
-        facet_key = _(facet_key)
+        facet_key_trans = _(facet_key)
+        for k in facet_val:
+            k["parent_category"] = _(k["parent_category"])
+        del selected_facets[facet_key]
         for chosen_facet in facet_val:
             _id = int(chosen_facet["id"])
             if _id < 0:
                 continue
-            for facet in facets[facet_key]:
+            for facet in facets[facet_key_trans]:
                 if int(facet["id"]) == _id:
                     facet["is_selected"] = True
                     break
+        selected_facets[facet_key_trans] = facet_val
     search_filters = rehasher.get_rehashed_filters()
     del rehasher
     print_debug(EXEC_TIME_PRINT % ("rehashing of facets", time.time() - start_time))
