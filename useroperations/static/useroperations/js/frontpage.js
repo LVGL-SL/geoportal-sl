@@ -79,6 +79,65 @@ function toggleMapViewers(target){
     }
 }
 
+function toggleSubMenu(elem){
+    var elem = $(elem);
+    elem.parents().children(".sidebar-area-content").slideToggle("slow");
+}
+
+function toggleMapviewer(){
+    // for dsgvo not accepted
+    if ($("#dsgvo").val() == "False"){
+    window.location.href = "/change-profile";
+    return;
+    }
+
+    // start loading the iframe content
+    var iframe = $("#mapviewer");
+    var src = iframe.attr("src");
+    var dataParams = iframe.attr("data-params");
+    var dataToggler = iframe.attr("data-toggle");
+    if(dataParams !== src && (dataToggler == src || src == "about:blank")){
+        iframe.attr("src", dataParams);
+    }
+    // resize the overlay
+    var mapLayer = $(".map-viewer-overlay");
+    resizeMapOverlay();
+    // let the overlay slide in
+    mapLayer.slideToggle("slow")
+    mapLayer.toggleClass("closed");
+    // close the sidebar
+    if(!$(".sidebar-wrapper").hasClass("closed")){
+        $(".sidebar-toggler").click();
+    }
+}
+
+/**
+ * Reset the search catalogue source back to 'primary'.
+ * If a user selects e.g. the european search catalogue, goes back to the landing page
+ * and reopens the search module again, the european catalogue will still be selected. This is not the
+ * behaviour we want.
+ */
+function resetSearchCatalogue(src){
+    // reset catalogue source to primary if we are not in the search module
+    if(!location.pathname.includes("search") && search.getParam("source") != src){
+        search.setParam("source", src)
+    }
+}
+
+/**
+ * If the search page is reloaded, e.g. due to language changing or normal F5 reload,
+ * we need to make sure the search starts again automatically. Otherwise the users will be confused and cry.
+ */
+function startAutomaticSearch(){
+    if(location.pathname.includes("search")){
+        var searchBody = $(".search-overlay-content");
+        if(searchBody.html().trim().length == 0){
+            prepareAndSearch();
+        }
+    }
+}
+
+
 $(document).on("click", ".mobile-button", function(){
     // get wmc id
     var elem = $(this).parents(".tile").find(".tile-header");
@@ -147,33 +206,6 @@ $(document).on("keypress", "#id_message", function(){
     out.html(restLength);
 });
 
-$(document).on("click", ".map-viewer-toggler, #mapviewer-sidebar", function(){
-    // for dsgvo not accepted
-    if ($("#dsgvo").val() == "False"){
-    window.location.href = "/change_profile";
-    return;
-    }
-
-    // start loading the iframe content
-    var iframe = $("#mapviewer");
-    var src = iframe.attr("src");
-    var dataParams = iframe.attr("data-params");
-    var dataToggler = iframe.attr("data-toggle");
-    if(dataParams !== src && (dataToggler == src || src == "about:blank")){
-        iframe.attr("src", dataParams);
-    }
-    // resize the overlay
-    var mapLayer = $(".map-viewer-overlay");
-    resizeMapOverlay();
-    // let the overlay slide in
-    mapLayer.slideToggle("slow")
-    mapLayer.toggleClass("closed");
-    // close the sidebar
-    if(!$(".sidebar-wrapper").hasClass("closed")){
-        $(".sidebar-toggler").click();
-    }
-});
-
 /*
  * Handles the sidebar toggler functionality
  */
@@ -197,11 +229,6 @@ $(document).on("click", ".map-viewer-button", function(){
 });
 
 $(".body-content").change(function(){
-});
-
-$(document).on("click", ".sidebar-area-title", function(){
-    var elem = $(this);
-    elem.parents().children(".sidebar-area-content").slideToggle("slow");
 });
 
 $(document).on("click", "#geoportal-search-button", function(){
@@ -426,12 +453,16 @@ $(document).on("scroll", function(){
     }
 })
 
+
 /*
  * Things that should start when the document is fully loaded
  */
 $(document).ready(function(){
     resizeSidebar();
     resizeMapOverlay();
+
+    resetSearchCatalogue("primary");
+    startAutomaticSearch();
 
 
     // show and auto hide messages

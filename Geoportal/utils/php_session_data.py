@@ -54,8 +54,6 @@ def get_session_data(request):
     loggedin = False
     session_data = None
 
-
-
     if request.COOKIES.get(SESSION_NAME) is not None:
         session_data = get_mapbender_session_by_memcache(request.COOKIES.get(SESSION_NAME))
         if session_data != None:
@@ -68,7 +66,7 @@ def get_session_data(request):
                     gui = str(session_data[b'mb_user_gui'], 'utf-8')
                     loggedin = False
                 else:
-                    response = requests.post(HTTP_OR_SSL + '127.0.0.1/portal/guiapi.php', verify=INTERNAL_SSL, data=session_data[b'mb_user_guis'])
+                    response = requests.post(HTTP_OR_SSL + '127.0.0.1/local/guiapi.php', verify=INTERNAL_SSL, data=session_data[b'mb_user_guis'])
 
                     if session_data[b'mb_user_guis']:
 

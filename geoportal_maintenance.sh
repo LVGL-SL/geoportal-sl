@@ -281,7 +281,7 @@ if [ $checkout_mapbender_svn = 'true' ]; then
     if [ $? -eq 0 ];then
       echo -e "\n ${green}Successfully downloaded Mapbender Source!${reset} \n"  | tee -a $installation_log
     else
-      echo -e "\n ${red}Downloading of Mapbender failed! Check internet connection and proxy settings!${reset} \n" | tee -a $installation_log
+      echo -e "\n ${red}Downloading of Mapbender failed! Check internet connection and proxy settings in /etc/subversion/servers!${reset} \n" | tee -a $installation_log
       exit
     fi
 fi
@@ -292,7 +292,7 @@ if [ $checkout_mapbender_conf = 'true' ]; then
     if [ $? -eq 0 ];then
       echo -e "\n ${green}Successfully downloaded Mapbender Conf!${reset} \n"  | tee -a $installation_log
     else
-      echo -e "\n ${red}Downloading of Mapbender Conf failed! Check internet connection and proxy settings!${reset} \n" | tee -a $installation_log
+      echo -e "\n ${red}Downloading of Mapbender Conf failed! Check internet connection and proxy settings in /etc/subversion/servers!${reset} \n" | tee -a $installation_log
       exit
     fi
 fi
@@ -899,8 +899,8 @@ fi
   	      </Directory>
 
 
-          DocumentRoot ${installation_folder}portal
-          Alias /portal ${installation_folder}portal
+          DocumentRoot ${installation_folder}/mapbender/http
+          Alias /local ${installation_folder}/mapbender/http/local
 	      <Directory ${installation_folder}portal>
           Options -Indexes -FollowSymlinks
           AllowOverride None
@@ -951,6 +951,14 @@ fi
              # Make sure proxies don't deliver the wrong content
              Header append Vary User-Agent env=!dont-vary
           </Directory>
+
+          <Directory ${installation_folder}mapbender/http/tmp>
+            <Files ~ "(.php|.perl|.rb|.py)">
+              Order allow,deny
+              Deny from all
+            </Files>
+          </Directory>
+
 
           #Part for proxy function
           ProxyPreserveHost On
@@ -1110,12 +1118,32 @@ EOF
     echo  "Header set X-XSS-Protection \"1; mode=block\"" >>/etc/apache2/conf-available/security.conf
   fi
 
+  if  ! grep -q "Timeout"  /etc/apache2/conf-available/security.conf ;then
+    echo  "Timeout 60" >>/etc/apache2/conf-available/security.conf
+  fi
+
   if  ! grep -w "session.cookie_httponly = On"  /etc/php/7.0/apache2/php.ini ;then
     sed -i s/"session.cookie_httponly ="/"session.cookie_httponly = On"/g /etc/php/7.0/apache2/php.ini
   fi
 
-  if  ! grep -q "Timeout"  /etc/apache2/conf-available/security.conf ;then
-    echo  "Timeout 60" >>/etc/apache2/conf-available/security.conf
+  if  ! grep -w "session.cookie_lifetime = 14400"  /etc/php/7.0/apache2/php.ini ;then
+    sed -i s/"session.cookie_lifetime = 0"/"session.cookie_lifetime = 14400"/g /etc/php/7.0/apache2/php.ini
+  fi
+
+  if  ! grep -w "session.hash_function = 0"  /etc/php/7.0/apache2/php.ini ;then
+    sed -i s/"session.hash_function = 0"/"session.hash_function = 1"/g /etc/php/7.0/apache2/php.ini
+  fi
+
+  if  ! grep -w "doc_root = ${installation_folder}/mapbender/http/"  /etc/php/7.0/apache2/php.ini ;then
+    sed -i s@"doc_root ="@"doc_root = ${installation_folder}/mapbender/http/"@g /etc/php/7.0/apache2/php.ini
+  fi
+
+  if  ! grep -w "open_basedir = ${installation_folder}/mapbender"  /etc/php/7.0/apache2/php.ini ;then
+    sed -i "/^doc_root*/a open_basedir = ${installation_folder}/mapbender/" /etc/php/7.0/apache2/php.ini
+  fi
+
+  if  ! grep -w "allow_webdav_methods = Off"  /etc/php/7.0/apache2/php.ini ;then
+    sed -i "/^doc_root*/a allow_webdav_methods = Off" /etc/php/7.0/apache2/php.ini
   fi
 
   #if  ! grep -q "Header always append X-Frame-Options SAMEORIGIN"  /etc/apache2/conf-enabled/security.conf ;then
@@ -1207,7 +1235,7 @@ EOF
 
   echo -e  "\n ${green}Successfully configured Apache! ${reset}\n" | tee -a $installation_log
 fi #end of apache configuration
-  
+
 ############################################################
 # add privileges on search tables to mapbender database user from installation
 ############################################################
@@ -1232,7 +1260,7 @@ EOF
   ############################################################
   # install cronjobs for root account
   ############################################################
-  
+
   ############################################################
   # 1. delete old monitoring xmls
   croncmd1="find ${installation_folder}mapbender/tools/tmp -type f -print | xargs rm -f"
@@ -1331,18 +1359,22 @@ git clone -b SL-specific --progress --single-branch https://git.osgeo.org/gitea/
 if [ $? -eq 0 ];then
   echo -e "\n ${green}Successfully downloaded Modsecurity Ruleset! ${reset}\n" | tee -a $installation_log
 else
-  echo -e "\n ${red}Downloading Geoportal Source faild! Check internet connection or proxy!${reset}\n" | tee -a $installation_log
-  exit
+	if [ -d "${installation_folder}GeoPortal.rlp" ];then
+    	echo -e "\n ${red} Folder ${installation_folder}GeoPortal.rlp found, please remove it!${reset}\n" | tee -a $installation_log
+    else
+  		echo -e "\n ${red}Downloading Geoportal Source faild! Check internet connection or proxy!${reset}\n" | tee -a $installation_log
+  	fi
+  	exit
 fi
 echo -e "\n ${green}Successfully downloaded Geoportal Source to ${installation_folder}! ${reset}\n" | tee -a $installation_log
 
 echo -e "\n Configuring Django. \n" | tee -a $installation_log
 
 # this directory is used to store php helper scripts for the intermediate geoportal solution
-mkdir -pv ${installation_folder}portal | tee -a $installation_log
+mkdir -pv ${installation_folder}mapbender/http/local | tee -a $installation_log
 
 # copy some mapbender related scripts
-cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}portal
+cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}mapbender/http/local
 cp -a ${installation_folder}mapbender/http/geoportal/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php.backup
 cp -a ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
 cp -a ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
@@ -1587,8 +1619,9 @@ sed -i 's/options.helpText = "";/options.helpText = "Orts- und Straßennamen sin
 echo "Mapbender Update Done"
 
 echo "Updating Mapbender Database"
-sed -i "s/set group_id 36/set g_id $mapbender_subadmin_group_id/g" ${installation_folder}GeoPortal.sl/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql
-sed -i "s/set db_owner \"postgres\"/set owner $mapbender_database_user/g" ${installation_folder}GeoPortal.sl/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql
+
+sed -i "s/:group_id/$mapbender_subadmin_group_id/g" ${installation_folder}GeoPortal.sl/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql
+sed -i "s/:db_owner/$mapbender_database_user/g" ${installation_folder}GeoPortal.sl/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql
 
 while true; do
     read -p "Do you use an external Database Server. Be sure to specify mapbender_database_host and superuser if yes. y/n?" yn
@@ -1636,7 +1669,7 @@ if [ $old_ssl_conf == "https://" ];then
 	sed -i s/"HTTP_OR_SSL = \"http:\/\/\""/"HTTP_OR_SSL = \"https:\/\/\""/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
 fi
 
-cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}portal
+cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}mapbender/http/local
 cp -a ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
 cp -a ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
 

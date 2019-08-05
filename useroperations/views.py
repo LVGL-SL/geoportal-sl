@@ -17,7 +17,7 @@ from django.utils.translation import gettext as _
 
 from Geoportal.decorator import check_browser
 from Geoportal.geoportalObjects import GeoportalJsonResponse, GeoportalContext
-from Geoportal.settings import ROOT_EMAIL_ADDRESS, DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, SESSION_NAME
+from Geoportal.settings import ROOT_EMAIL_ADDRESS, DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, SESSION_NAME, PROJECT_DIR
 from Geoportal.utils import utils, php_session_data, mbConfReader
 from searchCatalogue.utils.url_conf import URL_INSPIRE_DOC
 from useroperations.utils import useroperations_helper
@@ -266,8 +266,8 @@ def register_view(request):
                 return render(request, 'crispy_form_no_action.html', geoportal_context.get_context())
 
             try:
-                realm = mbConfReader.get_mapbender_config_value('REALM')
-                portaladmin = mbConfReader.get_mapbender_config_value('PORTAL_ADMIN_USER_ID')
+                realm = mbConfReader.get_mapbender_config_value(PROJECT_DIR,'REALM')
+                portaladmin = mbConfReader.get_mapbender_config_value(PROJECT_DIR,'PORTAL_ADMIN_USER_ID')
                 byte_aldigest = (form.cleaned_data['name'] + ":" + realm + ":" + form.cleaned_data['password']).encode('utf-8')
                 user.mb_user_aldigest = hashlib.md5(byte_aldigest).hexdigest()
                 user.mb_user_owner = portaladmin
@@ -410,37 +410,39 @@ def change_profile_view(request):
 
     request.session["current_page"] = "change_profile"
     form = ChangeProfileForm()
+    user = None
     if request.COOKIES.get(SESSION_NAME) is not None:
         session_data = php_session_data.get_mapbender_session_by_memcache(request.COOKIES.get(SESSION_NAME))
         if session_data != None:
             if b'mb_user_id' in session_data and session_data[b'mb_user_name'] != b'guest':
                 userid = session_data[b'mb_user_id']
                 user = MbUser.objects.get(mb_user_id=userid)
-
-                if request.method == 'GET':
-                    userdata = {'name': user.mb_user_name,
-                                'email': user.mb_user_email,
-                                'department': user.mb_user_department,
-                                'description': user.mb_user_description,
-                                'phone': user.mb_user_phone,
-                                'organization': user.mb_user_organisation_name,
-                                'newsletter': user.mb_user_newsletter,
-                                'survey': user.mb_user_allow_survey,
-                                }
-
-                    if user.timestamp_dsgvo_accepted:
-                        userdata["dsgvo"] = True
-
-                    form = ChangeProfileForm(userdata)
             else:
                 return redirect('useroperations:index')
 
     else:
         return redirect('useroperations:index')
+    if user is None:
+        # we expect it to be read out of the session data until this point!!
+        messages.add_message(request, messages.ERROR, _("The user could not be found. Please contact an administrator!"))
+        return redirect('useroperations:index')
 
     if request.method == 'GET':
         geoportal_context = GeoportalContext(request)
         context_data = geoportal_context.get_context()
+        userdata = {'name': user.mb_user_name,
+                    'email': user.mb_user_email,
+                    'department': user.mb_user_department,
+                    'description': user.mb_user_description,
+                    'phone': user.mb_user_phone,
+                    'organization': user.mb_user_organisation_name,
+                    'newsletter': user.mb_user_newsletter,
+                    'survey': user.mb_user_allow_survey,
+                    }
+        if user.timestamp_dsgvo_accepted:
+            userdata["dsgvo"] = True
+
+        form = ChangeProfileForm(userdata)
 
         if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
             dsgvo_flag = False
@@ -489,7 +491,6 @@ def change_profile_view(request):
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
-
                 user.save()
                 messages.success(request, _("Successfully changed data"))
                 return redirect('useroperations:index')
@@ -510,7 +511,7 @@ def change_profile_view(request):
         'form': form,
         'headline': _("Change data"),
         'small_labels': small_labels,
-        'dsgvo_flag' : dsgvo_flag,
+        'dsgvo_flag': dsgvo_flag,
     }
     geoportal_context.add_context(context)
     return render(request, 'crispy_form_no_action.html', geoportal_context.get_context())

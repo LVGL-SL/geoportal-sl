@@ -24,7 +24,6 @@ from Geoportal.utils import utils
 from Geoportal.settings import PRIMARY_CATALOGUE, HOSTNAME, INTERNAL_SSL, SEARCH_API_PROTOCOL
 from searchCatalogue.settings import PROXIES
 from searchCatalogue.utils.url_conf import *
-from django.utils.translation import gettext as _
 
 
 class Searcher:
@@ -36,6 +35,7 @@ class Searcher:
                  page_res="",
                  selected_facets={},
                  order_by="",
+                 max_results=5,
                  bbox=None,
                  type_bbox=None,
                  language_code="de",
@@ -67,6 +67,7 @@ class Searcher:
         self.search_page_resource = page_res
         self.selected_facets = selected_facets
         self.order_by = order_by
+        self.max_results = max_results
         self.bbox = bbox
         self.typeBbox = type_bbox
         self.catalogue_id = catalogue_id
@@ -224,6 +225,7 @@ class Searcher:
             "customCategories": ",".join(self.custom_ids),
             "inspireThemes": ",".join(self.inspire_ids),
             "orderBy": self.order_by,
+            "maxResults": self.max_results,
             "searchBbox": self.bbox,
             "searchTypeBbox": self.typeBbox,
             "languageCode": self.language_code,

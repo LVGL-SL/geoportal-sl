@@ -183,6 +183,7 @@ Search.prototype = {
                 'resources': self.getParam('resources'),
                 'facet': self.getParam('facet'),
                 'orderBy': self.getParam('orderBy'),
+                'maxResults': self.getParam('maxResults'),
                 'spatial': self.getParam('spatialSearch'),
                 'searchBbox': self.getParam('searchBbox'),
                 'searchTypeBbox': self.getParam('searchTypeBbox'),
@@ -193,10 +194,10 @@ Search.prototype = {
             success: function(data) {
                 self.parseSearchResult(data);
             },
-            timeout: 60000,
+            timeout: 10000,
             error: function(jqXHR, textStatus, errorThrown){
                 if(textStatus === "timeout"){
-                    alert("A timeout occured.");
+                    alert("The catalogue provider didn't respond. Please try again later.");
                 }else{
                 }
             },
@@ -204,7 +205,7 @@ Search.prototype = {
             .always(function() {
                 self.hideLoadingAfterLoad();
                 self.searching = false;
-                self.setParam("facet", "");
+                //self.setParam("facet", "");
                 self.setParam("keywords", "");
                 self.setParam("searchBbox", "");
                 self.setParam("searchTypeBbox", "");
@@ -752,7 +753,8 @@ $(document).ready(function() {
             allFacets.push(facetData);
         });
         // add new selected facet, if not yet selected
-        if(allFacets.indexOf(search.getParam("facet")) === -1){
+        // only perform this on search catalogues that support facets
+        if(allFacets.indexOf(search.getParam("facet")) === -1 && search.getParam("source") == "primary"){
             allFacets.push(search.getParam("facet"));
         }
         // overwrite facet parameter
@@ -795,9 +797,9 @@ $(document).ready(function() {
         $.each(toEncode, function(key, values) {
             extended += '&' + key + '=' + values.join(',');
         });
-        if (search.getParam('maxResults')) {
-            extended += '&maxResults=' + search.getParam('maxResults');;
-        }
+        //if (search.getParam('maxResults')) {
+        //    extended += '&maxResults=' + search.getParam('maxResults');;
+        //}
 
         extended = encodeURIComponent(extended);
         search.setParam('extended', extended);
@@ -920,6 +922,18 @@ $(document).ready(function() {
 
      });
 
+     /*
+      * Remove all facets at once
+      */
+      $(document).on("click", ".filter-remover", function(){
+        search.setParam("facet", "");
+        var facets = $("#chosen-facets .chosen-facet-items");
+        facets.each(function(i, facet){
+            facet.remove();
+        });
+        prepareAndSearch();
+      });
+
     /**
      * Handle facet selection
      */
@@ -950,7 +964,15 @@ $(document).ready(function() {
      * Handle facet removing
      */
      $(document).on("click", ".-js-facet-item", function(){
-        $(this).remove();
+        var elem = $(this);
+        var id = elem.attr("data-id").trim();
+        var dataParent = elem.attr("data-parent").trim();
+        var text = elem.text().trim();
+        var facets = search.getParam("facet").split(";");
+        var removedFacet = [dataParent,text,id].join(",");
+        facets.splice(facets.indexOf(removedFacet));
+        search.setParam("facet", facets);
+        elem.remove();
         prepareAndSearch();
      });
 
@@ -1207,10 +1229,10 @@ $(document).ready(function() {
             success: function(data) {
                 location.reload();
             },
-            timeout: 60000,
+            timeout: 10000,
             error: function(jqXHR, textStatus, errorThrown){
                 if(textStatus === "timeout"){
-                    alert("A timeout occured.");
+                    alert("The catalogue provider didn't respond. Please try again later.");
                 }
                 /*else{
                     alert(errorThrown);
