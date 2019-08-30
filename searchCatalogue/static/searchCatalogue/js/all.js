@@ -181,7 +181,7 @@ Search.prototype = {
                 'data-geoportal': self.getParam('data-id'),
                 'keywords':  self.getParam('keywords'),
                 'resources': self.getParam('resources'),
-                'facet': self.getParam('facet'),
+				'facet': (self.getParam('facet').split(";").unique()).join(";"),
                 'orderBy': self.getParam('orderBy'),
                 'maxResults': self.getParam('maxResults'),
                 'spatial': self.getParam('spatialSearch'),
@@ -397,7 +397,6 @@ var Autocomplete = function(search) {
         if (keyword) {
             _input.val(keyword);
             self.hide();
-            search.setParam("terms", keyword);
             $("#geoportal-search-button").click();
         }
     };
@@ -559,7 +558,6 @@ function changeMapviewerIframeSrc(srcSuffix){
 function clearAsterisk(){
     var searchbar = $(".simple-search-field");
     searchbar.val(searchbar.val().replace("*", ""));
-    search.setParam("terms", search.getParam("terms").replace("*",""));
 }
 
 /*
@@ -586,7 +584,6 @@ function startInfoCall(){
 }
 
 function startAjaxMapviewerCall(value){
-    //console.log(value);
     $.ajax({
         url: "/map-viewer/",
         headers: {
@@ -600,7 +597,6 @@ function startAjaxMapviewerCall(value){
         success: function(data) {
             if(data["mapviewer_params"] != "" && data["url"] == ""){
             // internal mapviewer call
-                //console.log(data["mapviewer_params"]);
                 changeMapviewerIframeSrc(data["mapviewer_params"]);
                 window.scrollTo({
                     top:150,
@@ -684,7 +680,12 @@ $(document).ready(function() {
      if(window.location.pathname == "/"){
         focus_on_search_input();
      }
-
+    //fix for michel ;-)
+    Array.prototype.unique = function() {
+      return this.filter(function (value, index, self) { 
+        return self.indexOf(value) === index;
+      });
+    }
 
     function toggleCataloguesResources(){
         if(search.getParam("source") === null || search.getParam("source") == "primary"){
@@ -736,6 +737,11 @@ $(document).ready(function() {
         if($(".filterarea").is(":visible")){
             toggleFilterArea();
         }
+
+        // get terms from search input field
+        var searchField = $(".simple-search-field");
+        var terms = searchField.val();
+        search.setParam("terms", terms);
 
         // disable input field during search
         disableSearchInputField();
@@ -807,10 +813,12 @@ $(document).ready(function() {
             $farea.find('.-js-keyword').each(function() {
                 keywords.push($(this).text().trim());
             });
+            /*
             $farea.find('.-js-term').each(function() {
                 var term = $(this).text();
                 terms.push(prepareTerm(term.trim()));
             });
+            */
         }
         search.setParam('resources', JSON.stringify(reslist));
         var input = jQuery('.-js-simple-search-field');
@@ -828,8 +836,8 @@ $(document).ready(function() {
 
     /**
      * Start search if search button was clicked
+     * This function is needed for the external search page!
      */
-    // start search if search button clicked
     jQuery(document).on("click", '.-js-search-start', function() {
         var elem = $(this);
         var inputTerms = $(".-js-simple-search-field").val().trim();
@@ -841,6 +849,7 @@ $(document).ready(function() {
         }
         prepareAndSearch(true); // search and render
     });
+
 
     /**
      *  Hide autocomplete form if body, outside was clicked
@@ -998,7 +1007,7 @@ $(document).ready(function() {
         var checkbox = $("#spatial-checkbox");
         checkbox.prop("checked", false);
         searchField.val(searchField.val().replace(locationParam, "").trim());
-        search.setParam("terms", termsParams);
+        //search.setParam("terms", termsParams);
         search.setParam("searchBbox", bboxParams);
         search.setParam("searchTypeBbox", "intersects");
         prepareAndSearch();
@@ -1462,7 +1471,7 @@ $(document).ready(function() {
         var $self = jQuery(this);
         var keyword = $self.text().trim();
         var searchInput = $(".simple-search-field");
-        searchInput.val(searchInput.val() + " " + keyword);
+        searchInput.val(keyword);
         search.setParam("terms", keyword);
         prepareAndSearch();
     });
@@ -1598,24 +1607,11 @@ $(document).ready(function() {
             }
         });
         var searchTextNew = searchTextArrNew.join(" ");
-
+        searchField.val(searchTextNew);
         // remove search word from search.keyword
         if (search.keyword == text){
             search.keyword = null;
         }
-
-        // remove search word from search parameter
-        var searchParam = search.getParam("terms");
-        var searchTextArr = searchParam.split(" ");
-        var searchTextArrNew = []
-        $.each(searchTextArr, function(i, elem){
-            if (elem.trim() != text){
-                searchTextArrNew.push(elem);
-            }
-        });
-        var searchTextNew = searchTextArrNew.join(" ");
-        search.setParam("terms", searchTextNew);
-        searchField.val(searchTextNew);
 
         $this.remove();
         prepareAndSearch();
@@ -1653,6 +1649,8 @@ $(document).ready(function() {
         })
     });
 
+  
+  
     function resolveCoupledResources(resourceArea){
         var checkAttr = "coupled-resources-loaded";
         if(resourceArea.attr(checkAttr)){

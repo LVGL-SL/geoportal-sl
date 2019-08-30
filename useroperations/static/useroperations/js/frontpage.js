@@ -27,17 +27,17 @@ function setCookie(cname, cvalue){
 }
 
 function startSearch(){
-    var inputTerms = $(".-js-simple-search-field").val().trim();
-    search.setParam("terms", inputTerms);
-    // collapse extended search if open
-    var extendedSearchHeader = $(".-js-extended-search-header");
-    if(extendedSearchHeader.hasClass("active")){
-        extendedSearchHeader.click();
-    }
     // since the all.js might be loaded slower or faster, we need to make sure it exists before we call prepareAndSearch()
     // which lives in all.js
     var script = $("#all-script");
     $(script).ready(function(){
+        var inputTerms = $(".-js-simple-search-field").val().trim();
+        search.setParam("terms", inputTerms);
+        // collapse extended search if open
+        var extendedSearchHeader = $(".-js-extended-search-header");
+        if(extendedSearchHeader.hasClass("active")){
+            extendedSearchHeader.click();
+        }
         prepareAndSearch(); // search and render
     });
 
@@ -129,12 +129,16 @@ function resetSearchCatalogue(src){
  * we need to make sure the search starts again automatically. Otherwise the users will be confused and cry.
  */
 function startAutomaticSearch(){
-    if(location.pathname.includes("search")){
-        var searchBody = $(".search-overlay-content");
-        if(searchBody.html().trim().length == 0){
-            prepareAndSearch();
+    // wait until the document is loaded completely, then start the automatic search!
+    $(document).ready(function(){
+        if(location.pathname.includes("search")){
+            var searchBody = $(".search-overlay-content");
+            if(searchBody.html().trim().length == 0){
+                prepareAndSearch();
+            }
         }
-    }
+
+    });
 }
 
 
@@ -234,22 +238,22 @@ $(".body-content").change(function(){
 $(document).on("click", "#geoportal-search-button", function(){
     // for dsgvo not accepted
     if ($("#dsgvo").val() == "False"){
-        window.location.href = "/change_profile";
+        window.location.href = "/change-profile";
         return;
     }
     var elem = $(this);
     // check if the index page is already opened
-    var index = $(".content-tabs.-js-tabs");
-    if(index.length == 0){
+    if(!window.location.pathname.includes("/search")){
         // no index page loaded for search -> load it!
         // we lose all searchbar data on reloading, so we need to save it until the page is reloaded
-        window.sessionStorage.setItem("startSearch", true);
+        //window.sessionStorage.setItem("startSearch", true);
         window.sessionStorage.setItem("searchbarBackup", $(".-js-simple-search-field").val().trim());
         window.sessionStorage.setItem("isSpatialCheckboxChecked", $("#spatial-checkbox").is(":checked"));
         window.location.pathname = "/search";
     }else{
         startSearch();
     }
+
 });
 
 
@@ -301,15 +305,13 @@ $(document).on("click", ".message-toggler", function(){
 
 
 // Password message popup
-$(document).on('focus', "#id_password", function(){
-    $("#password_message").fadeIn("slow");
-    //document.getElementById("password_message").style.display = "block";
+$(document).on('focus blur', "#id_password", function(){
+    // use nice transition css hack from
+    // https://css-tricks.com/content-jumping-avoid/
+    $("#password_message").toggleClass("in");
+    setTimeout(resizeSidebar, 1000);
 });
 
-$(document).on('blur', "#id_password", function(){
-    $("#password_message").fadeOut("slow");
-    //document.getElementById("password_message").style.display = "none";
-});
 
 // Client side password validation
 $(document).on('keyup', "#id_password", function(){
@@ -365,7 +367,7 @@ $(document).on('click', "#change-form-button", function(){
   var PasswordInput = document.getElementById("id_password");
   var PasswordInputConfirm = document.getElementById("id_passwordconfirm");
 
-
+  /*
   if(PasswordInput.value != PasswordInputConfirm.value) {
     if(userLang == "de") {
       alert("Passwörter stimmen nicht überein");
@@ -373,7 +375,9 @@ $(document).on('click', "#change-form-button", function(){
       alert("Passwords do not match");
     }
     event.preventDefault();
+
   }
+  */
 
 });
 
@@ -417,7 +421,17 @@ $(window).on("load", function(param){
     resizeSidebar();
     resizeMapOverlay();
 
+    var searchbar = $(".-js-simple-search-field");
+    var checkbox = $("#spatial-checkbox");
+    if (window.sessionStorage.getItem("isSpatialCheckboxChecked") == 'true'){
+        checkbox.prop("checked", true);
+    }
+    searchbar.val(window.sessionStorage.getItem("searchbarBackup"));
+    window.sessionStorage.removeItem("searchbarBackup");
+    window.sessionStorage.removeItem("isSpatialCheckboxChecked");
+
     // check if there was a search call from a non-search-index page on the geoportal
+    /*
     var checkForSearchStart = window.sessionStorage.getItem("startSearch");
     window.sessionStorage.removeItem("startSearch");
     if(checkForSearchStart){
@@ -432,6 +446,7 @@ $(window).on("load", function(param){
         window.sessionStorage.removeItem("isSpatialCheckboxChecked");
         startSearch();
     }
+    */
 
     var current_page_area = $(".current-page").parents(".sidebar-area-content");
     current_page_area.show();
