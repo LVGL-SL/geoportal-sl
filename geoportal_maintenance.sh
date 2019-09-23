@@ -1170,7 +1170,7 @@ EOF
   sed -i s/"ServerTokens OS"/"ServerTokens Prod"/g /etc/apache2/conf-available/security.conf
   sed -i s/"ServerSignature On"/"ServerSignature Off"/g /etc/apache2/conf-available/security.conf
   cp -a  /etc/modsecurity/modsecurity.conf-recommended  /etc/modsecurity/modsecurity.conf
-  sed -i s/"SecRuleEngine DetectionOnly"/"SecRuleEngine On"/g /etc/modsecurity/modsecurity.conf
+  #sed -i s/"SecRuleEngine DetectionOnly"/"SecRuleEngine On"/g /etc/modsecurity/modsecurity.conf
   rm -rf /usr/share/modsecurity-crs
   echo -e "\n Downloading Modsecurity Ruleset! \n" | tee -a $installation_log
   git clone --progress https://github.com/SpiderLabs/owasp-modsecurity-crs.git /usr/share/modsecurity-crs >> $installation_log 2>&1
@@ -1183,63 +1183,9 @@ EOF
   cd /usr/share/modsecurity-crs
   mv crs-setup.conf.example crs-setup.conf
 
-  if [ ! -f "/etc/apache2/mods-available/security2.conf_backup_$(date +"%d_%m_%Y")"  ]; then
-    mv /etc/apache2/mods-available/security2.conf /etc/apache2/mods-available/security2.conf_backup_$(date +"%d_%m_%Y")
-  fi
-
-  echo "<IfModule security2_module>
-  SecDataDir /var/cache/modsecurity
-  IncludeOptional /etc/modsecurity/*.conf
-  IncludeOptional /usr/share/modsecurity-crs/*.conf
-  IncludeOptional /usr/share/modsecurity-crs/rules/*.conf
-  SecRequestBodyNoFilesLimit 10485760
-  SecRuleRemoveById 920350
-
-  <LocationMatch '/mapbender/php/mod_savewmc_server.php'>
-  SecRuleRemoveById 932110 932115 941140 941160 942190 941350
-  </LocationMatch>
-
-  <LocationMatch '/mapbender/extensions/mobilemap/mod_mapbender/search_proxy.php'>
-  SecRuleRemoveById 942360
-  </LocationMatch>
-
-
-  <LocationMatch '/mapbender/php/wms.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-
-
-  <LocationMatch '/mapbender/php/wfs.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-
-
-  <LocationMatch '/mapbender/php/mod_sessionWrapper.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-
-  <LocationMatch '/search/search/'>
-  SecRuleRemoveById 959100
-  </LocationMatch>
-
-  <LocationMatch '/mapbender/print/printFactory.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-
-  <LocationMatch '/mapbender/php/mod_createJSObjFromXML.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-
-
-  <LocationMatch '/mapbender/php/mod_loadCapabilities.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-
-  <LocationMatch '/mapbender/php/mod_loadwms.php'>
-  SecRuleRemoveById 949110
-  </LocationMatch>
-  </IfModule>" > /etc/apache2/mods-available/security2.conf
-
+  #if [ ! -f "/etc/apache2/mods-available/security2.conf_backup_$(date +"%d_%m_%Y")"  ]; then
+  #  mv /etc/apache2/mods-available/security2.conf /etc/apache2/mods-available/security2.conf_backup_$(date +"%d_%m_%Y")
+  #fi
 
 
   ############################################################
@@ -1395,6 +1341,11 @@ cp -a ${installation_folder}mapbender/http/geoportal/authentication.php ${instal
 cp -a ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
 cp -a ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
 cp -a ${installation_folder}mapbender/conf/mapbender.conf /${installation_folder}mapbender/conf/mapbender.conf.backup
+cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/javascripts/
+cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/plugins/
+cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/style.css ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
+cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/move.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
+cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/select.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
 
 # change mapbender login path
 sed -i "s/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/g" ${installation_folder}mapbender/conf/mapbender.conf

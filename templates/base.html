@@ -67,7 +67,7 @@
 
 <body>
     <nav>
-    <div class="map-viewer-toggler" onclick="toggleMapviewer()">
+    <div class="map-viewer-toggler" onclick="toggleMapviewer()" data-gui="{{ preferred_gui }}">
         <img alt="{% trans 'A lying map icon' %}" src="{% static 'useroperations/images/icn_map_viewer_toggler_transp.png' %}" title="{% trans 'Open and close map viewer' %}">
     </div>
     <div class="map-viewer-overlay closed">
@@ -122,6 +122,19 @@
                 {% endif %}
             </div>
         </div>
+
+        <a style="color:white;text-decoration:none;" href="/article/Meldungen/">
+	        <div class="sidebar-area" id="news">
+                <div class="sidebar-area-title">
+                    <div class="sidebar-area-title-icon">
+                        <img alt="{% trans 'A newspaper' %}" width="40px" src="{% static 'useroperations/images/icn_news.png' %}">
+                    </div>
+                    <div class="sidebar-area-title-text">{% trans 'News' %}
+                    </div>
+                </div>
+            </div>
+        </a>
+	
         <div class="sidebar-area" id="mapviewer-sidebar" onclick="toggleMapviewer()">
             <div class="sidebar-area-title">
                 <div class="sidebar-area-title-icon">
@@ -178,6 +191,8 @@
     {% endif %}
     <div id="info-overlay" class="modalDialog">
 
+    </div>
+    <div class="search-overlay-content">
     </div>
     <div id="body-content" class="body-content {% if not sidebar_closed %} sidebar-open {% endif %}">
 
