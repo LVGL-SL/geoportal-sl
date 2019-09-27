@@ -75,7 +75,6 @@ def index_view(request, wiki_keyword=""):
     if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True and wiki_keyword not in dsgvo_list:
         return redirect('useroperations:change_profile')
 
-
     if wiki_keyword == "viewer":
         template = "geoportal.html"
     elif wiki_keyword != "":
@@ -95,7 +94,6 @@ def index_view(request, wiki_keyword=""):
                "content": output,
                "results": results,
                }
-
     geoportal_context.add_context(context=context)
 
     # check if this is an ajax call from info search
@@ -385,7 +383,7 @@ def pw_reset_view(request):
                 )
 
 
-                messages.success(request, _("Password reset was successful, check your mails. Password: " + newpassword))
+                messages.success(request, _("Password reset was successful, check your mails."))
                 return redirect('useroperations:login')
 
     return render(request, "crispy_form_no_action.html", geoportal_context.get_context())
@@ -440,6 +438,7 @@ def change_profile_view(request):
                     'newsletter': user.mb_user_newsletter,
                     'survey': user.mb_user_allow_survey,
                     'create_digest' : user.create_digest,
+                    'preferred_gui' : user.fkey_preferred_gui_id,
                     }
         if user.timestamp_dsgvo_accepted:
             userdata["dsgvo"] = True
@@ -495,6 +494,7 @@ def change_profile_view(request):
                 user.mb_user_newsletter = form.cleaned_data['newsletter']
                 user.mb_user_allow_survey = form.cleaned_data['survey']
                 user.create_digest = form.cleaned_data['create_digest']
+                user.fkey_preferred_gui_id = form.cleaned_data['preferred_gui']
 
 
                 if form.cleaned_data['dsgvo'] == True:
@@ -505,6 +505,13 @@ def change_profile_view(request):
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
+                    
+                if form.cleaned_data['preferred_gui'] == 'Geoportal-RLP_2019':
+                    # set session variable preferred_gui via session wrapper php script
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-RLP_2019', verify=INTERNAL_SSL)
+                else:
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value='+DEFAULT_GUI, verify=INTERNAL_SSL)
+                
                 user.save()
                 messages.success(request, _("Successfully changed data"))
                 return redirect('useroperations:index')
@@ -682,12 +689,14 @@ def map_viewer_view(request):
     is_external_search = "external" in request.META.get("HTTP_REFERER", "")
     request_get_params_dict = request.GET.dict()
 
+    # get default gui
+    #user = MbUser.objects.get(mb_user_id=context_data['userid'])
+
     # is regular call means the request comes directly from the navigation menu in the page, without selecting a search result
     is_regular_call = len(request_get_params_dict) == 0 or request_get_params_dict.get("searchResultParam", None) is None
     request_get_params = dict(urllib.parse.parse_qsl(request_get_params_dict.get("searchResultParam")))
     template = "geoportal_external.html"
-    gui_id = request_get_params_dict.get("g", DEFAULT_GUI) # get selected gui from params, use default gui otherwise!
-
+    gui_id = context_data.get("preferred_gui", DEFAULT_GUI)  # get selected gui from params, use default gui otherwise!
 
     # check if the request comes from a mobile device
     is_mobile = geoportal_context.get_context().get("is_mobile")

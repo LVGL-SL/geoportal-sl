@@ -13,7 +13,7 @@ if($_COOKIE[session_name()]=="") {
 
 $isAuthenticated = authenticate($name,$pw);
 
-if($isAuthenticated != false) {
+if(is_array($isAuthenticated) != false) {
 	setSession();
 	Mapbender::session()->set("mb_user_password",$pw);
   	Mapbender::session()->set("mb_user_id",$isAuthenticated["mb_user_id"]);
@@ -43,6 +43,8 @@ if($isAuthenticated != false) {
 	Mapbender::session()->set("mb_user_postal_code",$isAuthenticated["mb_user_postal_code"]);
 	Mapbender::session()->set("epsg","EPSG:31466");
 	Mapbender::session()->set("HTTP_HOST",$_SERVER["HTTP_HOST"]);
+	Mapbender::session()->set("preferred_gui",$isAuthenticated["fkey_preferred_gui_id"]);
+	Mapbender::session()->set("django","true");
 //INSERT LAST LOGIN DATE AND TIME
 //NEW Filed required "ALTER TABLE mapbender.mb_user ADD COLUMN mb_user_last_login_date date;"
 	$sql = "UPDATE mb_user SET";
@@ -70,10 +72,17 @@ if($isAuthenticated != false) {
 	}
 	session_write_close();
 
+} else if (strpos($isAuthenticated,'Account for') !== false){
+
+	$URLAdd="?status=notactive";
+	if($_SERVER["HTTPS"] != "on") {
+		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
+	} else {
+		header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
+	}
+
 } else {
-
 	$URLAdd="?status=fail";
-
 	if($_SERVER["HTTPS"] != "on") {
 		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
 	} else  {
@@ -86,19 +95,11 @@ function authenticate ($name,$pw){
 	$user = new User();
 	$returnObject = json_decode($user->authenticateUserByName($name, $pw));
 	if ($returnObject->success !== false) {
-		return json_decode(json_encode($returnObject->result), JSON_OBJECT_AS_ARRAY);
+		$returnObject = json_decode(json_encode($returnObject->result), JSON_OBJECT_AS_ARRAY);
 	} else {
-	        $message = $returnObject->error->message;
-		if (strpos($message,'Account for') == 0) {
-			$URLAdd="?status=notactive";
-			if($_SERVER["HTTPS"] != "on") {
-				header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
-			} else {
-				header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
-			}
-		}
-		return false;
+	  $returnObject = $returnObject->error->message;
 	}
+	return $returnObject;
 }
 function setSession(){
 	session_start(); //function is ok cause the session will be closed directly after starting it!

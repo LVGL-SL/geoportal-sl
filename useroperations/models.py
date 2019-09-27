@@ -61,6 +61,7 @@ class MbUser(models.Model):
     timestamp_delete = models.BigIntegerField(blank=True, null=True)
     timestamp_dsgvo_accepted = models.BigIntegerField(blank=True, null=True)
     create_digest = models.BooleanField(blank=True, null=True)
+    fkey_preferred_gui_id = models.CharField(max_length=100, blank=True, null=True, default="Geoportal-RLP")
 
     class Meta:
         managed = False
@@ -264,3 +265,9 @@ class Gui(models.Model):
         managed = False
         db_table = 'gui'
 
+class InspireDownloads(models.Model):
+    user_id = models.IntegerField()
+    user_email = models.EmailField(max_length=255)
+    service_name = models.CharField(max_length=250)
+    no_of_tiles = models.IntegerField()
+    date = models.DateTimeField(default=timezone.now)
