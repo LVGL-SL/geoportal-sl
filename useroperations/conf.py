@@ -10,10 +10,10 @@ This file contains all constant values for the 'useroperations' app
 """
 
 
-COOKIE_VALUE = "geoportal-rlp-dsgvo"    # the name for the dsgvo cookie
-GEOPORTAL_IDENTIFIER = "RLP"            # used in the browser tab title
+COOKIE_VALUE = "geoportal-sl-dsgvo"    # the name for the dsgvo cookie
+GEOPORTAL_IDENTIFIER = "SL"            # used in the browser tab title
 
-LOGO_COUNTRY_LINK_DE = "https://www.rlp.de/"                # logo country link german
-LOGO_COUNTRY_LINK_EN = "https://www.rlp.de/en/english/"     # logo country link english
+LOGO_COUNTRY_LINK_DE = "http://lapllgeopt01.lkvk.saarland.de/"     # logo country link german
+LOGO_COUNTRY_LINK_EN = "http://lapllgeopt01.lkvk.saarland.de/"     # logo country link english
 
-LOGO_GEOPORTAL_TITLE = "Geoportal Rheinland-Pfalz"      # logo geoportal title
+LOGO_GEOPORTAL_TITLE = "Geoportal Saarland"      # logo geoportal title

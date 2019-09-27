@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-30 05:35+0000\n"
+"POT-Creation-Date: 2019-09-03 13:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -351,7 +351,7 @@ msgid "Cancel"
 msgstr ""
 
 #: searchCatalogue/templates/permission_email_form.html:35
-#: useroperations/views.py:845 useroperations/views.py:856
+#: useroperations/views.py:860 useroperations/views.py:871
 msgid "Send"
 msgstr ""
 
@@ -822,14 +822,14 @@ msgstr ""
 msgid "Not signed in"
 msgstr ""
 
-#: templates/base.html:119 useroperations/views.py:174
-#: useroperations/views.py:180
+#: templates/base.html:119 useroperations/views.py:175
+#: useroperations/views.py:181
 msgid "Login"
 msgstr ""
 
-#: templates/base.html:120 useroperations/views.py:204
-#: useroperations/views.py:216 useroperations/views.py:259
-#: useroperations/views.py:319
+#: templates/base.html:120 useroperations/views.py:205
+#: useroperations/views.py:217 useroperations/views.py:260
+#: useroperations/views.py:320
 msgid "Registration"
 msgstr ""
 
@@ -1134,39 +1134,39 @@ msgstr ""
 msgid "A short explanation of the benefits of an account for Geoportal.rlp!"
 msgstr ""
 
-#: useroperations/templates/crispy_form_no_action.html:36
+#: useroperations/templates/crispy_form_no_action.html:21
+msgid "Password must contain the following:"
+msgstr ""
+
+#: useroperations/templates/crispy_form_no_action.html:22
+msgid "A lowercase letter"
+msgstr ""
+
+#: useroperations/templates/crispy_form_no_action.html:23
+msgid "A uppercase letter"
+msgstr ""
+
+#: useroperations/templates/crispy_form_no_action.html:24
+msgid "A number"
+msgstr ""
+
+#: useroperations/templates/crispy_form_no_action.html:25
+msgid "Minimum 9 characters"
+msgstr ""
+
+#: useroperations/templates/crispy_form_no_action.html:43
 msgid "* The field is required."
 msgstr ""
 
-#: useroperations/templates/crispy_form_no_action.html:40
+#: useroperations/templates/crispy_form_no_action.html:47
 msgid ""
 "For additional information regarding your privacy and the GDPR, please read "
 "our "
 msgstr ""
 
-#: useroperations/templates/crispy_form_no_action.html:41
+#: useroperations/templates/crispy_form_no_action.html:48
 #: useroperations/templates/feedback_form.html:33
 msgid "privacy rules"
-msgstr ""
-
-#: useroperations/templates/crispy_form_no_action.html:58
-msgid "Password must contain the following:"
-msgstr ""
-
-#: useroperations/templates/crispy_form_no_action.html:59
-msgid "A lowercase letter"
-msgstr ""
-
-#: useroperations/templates/crispy_form_no_action.html:60
-msgid "A uppercase letter"
-msgstr ""
-
-#: useroperations/templates/crispy_form_no_action.html:61
-msgid "A number"
-msgstr ""
-
-#: useroperations/templates/crispy_form_no_action.html:62
-msgid "Minimum 9 characters"
 msgstr ""
 
 #: useroperations/templates/feedback_form.html:5
@@ -1311,7 +1311,7 @@ msgid "Start a search and explore all results. Let's go!"
 msgstr ""
 
 #: useroperations/templates/open_linked_data.html:5
-msgid "OpenLinkedData"
+msgid "LinkedOpenData"
 msgstr ""
 
 #: useroperations/templates/publishing_organizations.html:12
@@ -1334,105 +1334,109 @@ msgstr ""
 msgid "Published wmcs"
 msgstr ""
 
-#: useroperations/views.py:65
+#: useroperations/views.py:66
 msgid "Login failed"
 msgstr ""
 
-#: useroperations/views.py:68
+#: useroperations/views.py:69
 msgid "Successfully logged in"
 msgstr ""
 
-#: useroperations/views.py:70
+#: useroperations/views.py:71
 msgid "Account not active"
 msgstr ""
 
-#: useroperations/views.py:173
+#: useroperations/views.py:174
 msgid "Forgot Password?"
 msgstr ""
 
-#: useroperations/views.py:212
+#: useroperations/views.py:213
 msgid ""
 "Personal data will not be transmitted to other parties or services. Further "
 "information can be found in our "
 msgstr ""
 
-#: useroperations/views.py:226
+#: useroperations/views.py:227
 msgid "Log out to register a new user"
 msgstr ""
 
-#: useroperations/views.py:234
+#: useroperations/views.py:235
 msgid "The Username"
 msgstr ""
 
-#: useroperations/views.py:234
+#: useroperations/views.py:235
 msgid "is already taken"
 msgstr ""
 
-#: useroperations/views.py:238
+#: useroperations/views.py:239
 msgid ""
 "Password does not meet specified criteria, you need at least one uppercase "
 "letter, one lowercase letter, one number, you should have at least 9 "
 "characters, allowed special chars are: @#$%&+=!"
 msgstr ""
 
-#: useroperations/views.py:265 useroperations/views.py:484
+#: useroperations/views.py:266 useroperations/views.py:484
 msgid "Passwords do not match"
 msgstr ""
 
-#: useroperations/views.py:287
+#: useroperations/views.py:288
 msgid "Activation Mail"
 msgstr ""
 
-#: useroperations/views.py:288 useroperations/views.py:378
+#: useroperations/views.py:289 useroperations/views.py:379
 #: useroperations/views.py:602
 msgid "Hello "
 msgstr ""
 
-#: useroperations/views.py:290
+#: useroperations/views.py:291
 msgid ""
 "This is your activation link. It will be valid until the end of the day, "
 "please click it!"
 msgstr ""
 
-#: useroperations/views.py:311
+#: useroperations/views.py:312
 msgid ""
 "Account creation was successful. You have to activate your account via email "
 "before you can login!"
 msgstr ""
 
-#: useroperations/views.py:325 useroperations/views.py:841
+#: useroperations/views.py:326 useroperations/views.py:856
 msgid "Captcha was wrong! Please try again"
 msgstr ""
 
-#: useroperations/views.py:349
+#: useroperations/views.py:350
 msgid "Submit"
 msgstr ""
 
-#: useroperations/views.py:365
+#: useroperations/views.py:366
 msgid "No Account with this Username or Email found"
 msgstr ""
 
-#: useroperations/views.py:377
+#: useroperations/views.py:378
 msgid "Lost Password"
 msgstr ""
 
-#: useroperations/views.py:380
+#: useroperations/views.py:381
 msgid ""
 "This is your new password, please change it immediately!\n"
 " Password: "
 msgstr ""
 
-#: useroperations/views.py:387
+#: useroperations/views.py:388
 msgid "Password reset was successful, check your mails. Password: "
 msgstr ""
 
-#: useroperations/views.py:427
+#: useroperations/views.py:428
 msgid "The user could not be found. Please contact an administrator!"
 msgstr ""
 
-#: useroperations/views.py:450
+#: useroperations/views.py:451
 msgid ""
 "Please accept the General Data Protection Regulation or delete your account!"
+msgstr ""
+
+#: useroperations/views.py:462
+msgid "Your old Password was wrong"
 msgstr ""
 
 #: useroperations/views.py:477
@@ -1468,7 +1472,7 @@ msgstr ""
 msgid "Delete Profile?"
 msgstr ""
 
-#: useroperations/views.py:575 useroperations/views.py:653
+#: useroperations/views.py:575 useroperations/views.py:651
 msgid "You are not logged in"
 msgstr ""
 
@@ -1500,37 +1504,37 @@ msgid ""
 "clicking this link!"
 msgstr ""
 
-#: useroperations/views.py:614
+#: useroperations/views.py:612
 msgid "Successfully deleted the user:"
 msgstr ""
 
-#: useroperations/views.py:616
+#: useroperations/views.py:614
 msgid ""
 ". In case this was an accident, we sent you a link where you can reactivate "
 "your account for 24 hours!"
 msgstr ""
 
-#: useroperations/views.py:621
+#: useroperations/views.py:619
 msgid "Password invalid. Profile not deleted."
 msgstr ""
 
-#: useroperations/views.py:650
+#: useroperations/views.py:648
 msgid "Successfully logged out"
 msgstr ""
 
-#: useroperations/views.py:768
+#: useroperations/views.py:782
 msgid "Account already active"
 msgstr ""
 
-#: useroperations/views.py:773
+#: useroperations/views.py:787
 msgid "Invalid data"
 msgstr ""
 
-#: useroperations/views.py:785
+#: useroperations/views.py:799
 msgid "Account activation"
 msgstr ""
 
-#: useroperations/views.py:815
+#: useroperations/views.py:827
 msgid ""
 "Personal data will not be transmitted to other parties or services. The "
 "data, you provided during the feedback process, will only be used to stay in "
@@ -1538,11 +1542,19 @@ msgid ""
 "Further information can be found in our "
 msgstr ""
 
-#: useroperations/views.py:822
+#: useroperations/views.py:834
 msgid "Feedback sent. Thank you!"
 msgstr ""
 
-#: useroperations/views.py:838
+#: useroperations/views.py:843
+msgid "Geoportal Feedback"
+msgstr ""
+
+#: useroperations/views.py:844
+msgid "Feedback from "
+msgstr ""
+
+#: useroperations/views.py:853
 msgid "An error occured during sending. Please inform an administrator."
 msgstr ""
 
@@ -1559,5 +1571,5 @@ msgstr ""
 #~ msgstr "News"
 
 # Navigation items
-#~ msgid "Das Geoportal RLP"
-#~ msgstr "Geoportal RLP"
+#~ msgid "Das Geoportal SL"
+#~ msgstr "Geoportal Sl"

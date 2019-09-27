@@ -16,7 +16,7 @@ from django.utils.log import DEFAULT_LOGGING
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR = "/data/"
+PROJECT_DIR = "/opt/geoportal/"
 SESSION_NAME = 'PHPSESSID'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -28,14 +28,14 @@ SECRET_KEY = '#m+rso_^a!ii6fg97kd7woxa$ttr&jn^!=_(!wgrukal81q(9+'
 DEBUG = True
 DEFAULT_LOGGING['handlers']['console']['filters'] = []
 
-HOSTNAME = "localhost"
-HOSTIP = "127.0.0.1"
+HOSTNAME = "lapllgeopt01.lkvk.saarland.de"
+HOSTIP = "192.168.118.85"
 HTTP_OR_SSL = "http://"
 SEARCH_API_PROTOCOL = "http"
 # HTTPS will fail on self signed certs, uncomment all occurrences of "verify=False"
-# in /opt/GeoPortal.rlp/searchCatalogue/utils/searcher.py if you want to bypass validation
+# in /opt/geoportal/GeoPortal.sl/searchCatalogue/utils/searcher.py if you want to bypass validation
 
-ALLOWED_HOSTS = [HOSTIP, HOSTNAME, '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [HOSTIP, HOSTNAME, '127.0.0.1', 'localhost', 'lapllgeopt01', 'lapllgeopt01.lkvk.saarland.de', 'lapllgeopt01.saarland.de']
 
 # Mediawiki
 INTERNAL_PAGES_CATEGORY = "Portalseite"
@@ -48,7 +48,7 @@ IFRAME_WIDTH = 2000
 INTERNAL_SSL = False
 
 # Search module settings
-PRIMARY_CATALOGUE = 3
+PRIMARY_CATALOGUE = 2
 PRIMARY_SRC_IMG = "primary_results.png"
 DE_CATALOGUE = 4
 DE_SRC_IMG = "de_results.png"
@@ -57,10 +57,10 @@ EU_SRC_IMG = "eu_results.png"
 OPEN_DATA_URL = "https://okfn.org/opendata/"
 
 # Mailing settings
-ROOT_EMAIL_ADDRESS = "root@debian"
+ROOT_EMAIL_ADDRESS = "root@geoportal."
 
 # Gui settings
-DEFAULT_GUI = "Geoportal-RLP"
+DEFAULT_GUI = "Geoportal-SL"
 
 # Social networking and news feeds
 TWITTER_NAME = "GeoPortalRLP"
@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'searchCatalogue',
     'captcha',
     'django_user_agents',
+    'clear_cache',
 ]
 
 MIDDLEWARE = [
@@ -135,8 +136,8 @@ DATABASES = {
                     'options': '-c search_path=django,mapbender,public'
                     },
         'NAME':'mapbender',
-        'USER':'mapbenderdbuser',
-        'PASSWORD':'mapbenderdbpassword',
+        'USER':'u_mapbender',
+        'PASSWORD':'dH5xpQ%33',
         'HOST':'127.0.0.1',
         'PORT':''
     }

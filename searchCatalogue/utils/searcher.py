@@ -151,7 +151,8 @@ class Searcher:
         """
         # get overview of all organizations
         uri = URL_BASE + URL_GET_ORGANIZATIONS
-        response = requests.get(uri, {}, verify=INTERNAL_SSL)
+        # response = requests.get(uri, {}, verify=INTERNAL_SSL)
+        response = requests.get(uri, {}, verify=INTERNAL_SSL, proxies={"http":None,"https://":None,})
         if response.status_code == 200:
             response = response.json().get("organizations")
             return response

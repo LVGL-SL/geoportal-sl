@@ -15,8 +15,8 @@
       "model":"useroperations.navigation",
       "pk":3,
       "fields":{  
-         "name":"Das Geoportal RLP",
-         "url":"/article/Das-Geoportal-RLP",
+         "name":"Das Geoportal SL",
+         "url":"/article/Das-Geoportal",
          "page_identifier":"geoportal_info",
          "parent":11,
          "icon_name":"",
