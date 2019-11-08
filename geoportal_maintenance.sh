@@ -1347,7 +1347,7 @@ if [ -d "${installation_folder}GeoPortal.sl" ];then
 fi
 
 echo -e "\n Downloading Geoportal Source to ${installation_folder}! \n" | tee -a $installation_log
-git clone -b dev --progress --single-branch https://git.osgeo.org/gitea/LVGL/GeoPortal.sl >> $installation_log 2>&1
+git clone -b master --progress --single-branch https://git.osgeo.org/gitea/LVGL/GeoPortal.sl >> $installation_log 2>&1
 if [ $? -eq 0 ];then
   echo -e "\n ${green}Successfully downloaded Geoportal Source! ${reset}\n" | tee -a $installation_log
 else
@@ -1552,7 +1552,7 @@ update(){
 
      rm /tmp/settings.py
      cd /tmp/
-     wget https://git.osgeo.org/gitea/LVGL/GeoPortal.sl/raw/branch/dev/Geoportal/settings.py
+     wget https://git.osgeo.org/gitea/LVGL/GeoPortal.sl/raw/branch/master/Geoportal/settings.py
 
      while IFS="" read -r p || [ -n "$p" ]
        do
