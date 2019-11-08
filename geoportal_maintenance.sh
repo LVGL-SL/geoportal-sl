@@ -8,7 +8,6 @@
 # Michel Peltriaux
 ############################################################
 
-
 # Variables
 ipaddress="127.0.0.1"
 hostname="127.0.0.1"
@@ -43,10 +42,8 @@ bbox_current_epsg_space="$minx $miny $maxx $maxy"
 ############################################################
 # define name of the default gui -
 # don't use spaces, cause the gui names are used for filenames!!!! - TBD not already operabel!
-#default_gui_name="Geoportal-Default-GUI"
-#extended_search_default_gui_name="Geoportal-Extended-Search-GUI"
-default_gui_name="Geoportal-RLP"
-extended_search_default_gui_name="Geoportal-RLP_erwSuche2"
+default_gui_name="Geoportal-SL"
+extended_search_default_gui_name="Geoportal-SL-extended-search"
 ############################################################
 
 # atomFeedClient.conf / config.js - mm2_config.js
@@ -65,12 +62,14 @@ http_proxy_host=""
 http_proxy_port=""
 http_proxy_user=""
 http_proxy_pass=""
+
 # misc
-webadmin_email="test@test.de"
+webadmin_email="s.vancrombrugge@lvgl.saarland.de"
 use_ssl="false"
 not_proxy_hosts="localhost,127.0.0.1"
-installation_folder="/data/"
-installation_log=${installation_folder}"geoportal_install_$(date +"%m_%d_%Y").log"
+installation_folder="/opt/geoportal/"
+mkdir -pv "/var/log/geoportal/"
+installation_log="/var/log/geoportal/install_$(date +"%m_%d_%Y").log"
 
 # what should be done
 install_system_packages="true"
@@ -368,9 +367,9 @@ if [ $install_mapbender_database = 'true' ]; then
   cat << EOF > "/etc/postgresql/9.6/main/pg_hba.conf"
   # Database administrative login by Unix domain socket
   local   all             postgres                                peer
-
+  
   # TYPE  DATABASE        USER            ADDRESS                 METHOD
-
+  
   # "local" is for Unix domain socket connections only
   local   all             postgres                                peer
   local   $mapbender_database_name        $mapbender_database_user                        md5
@@ -378,11 +377,11 @@ if [ $install_mapbender_database = 'true' ]; then
   host    all             postgres        127.0.0.1/32            trust
   host    $mapbender_database_name             $mapbender_database_user 127.0.0.1/32            md5
   # IPv6 local connections:
-
+  
   host    all             postgres        ::1/128                 trust
   host    $mapbender_database_name             $mapbender_database_user ::1/128                 md5
 EOF
-
+  
   #####################
   service postgresql restart
   #####################
@@ -910,9 +909,9 @@ fi
           RewriteRule ^/icons/maki/([^/]+)/([^/]+)/([^[/]+).png$ ${REQUEST_SCHEME}://127.0.0.1/mapbender/php/mod_getSymbolFromRepository.php?marker-color=\$1&marker-size=\$2&marker-symbol=\$3 [P,L,QSA,NE]
 
 
-  	      Alias /static/ ${installation_folder}GeoPortal.rlp/static/
+  	      Alias /static/ ${installation_folder}GeoPortal.sl/static/
 
-  	      <Directory ${installation_folder}GeoPortal.rlp/static>
+  	      <Directory ${installation_folder}GeoPortal.sl/static>
   		  Options -Indexes -FollowSymlinks
 	      Require all granted
   	      </Directory>
@@ -1027,10 +1026,10 @@ fi
           </Directory>
 
           #wsgi config
-          WSGIDaemonProcess $hostname  python-path=${installation_folder}GeoPortal.rlp/ python-home=${installation_folder}env processes=2 threads=15 display-name=%{GROUP}
+          WSGIDaemonProcess $hostname  python-path=${installation_folder}GeoPortal.sl/ python-home=${installation_folder}env processes=2 threads=15 display-name=%{GROUP}
           WSGIProcessGroup $hostname
-          WSGIScriptAlias / ${installation_folder}GeoPortal.rlp/Geoportal/wsgi.py
-          <Directory ${installation_folder}GeoPortal.rlp/Geoportal>
+          WSGIScriptAlias / ${installation_folder}GeoPortal.sl/Geoportal/wsgi.py
+          <Directory ${installation_folder}GeoPortal.sl/Geoportal>
           Options +ExecCGI
           Require all granted
           </Directory>
@@ -1342,18 +1341,17 @@ apt-get install -y apache2 apache2-dev python3 python3-dev git python3-pip virtu
 echo -e "\n ${green}Successfully installed Debian packages for Django! ${reset}\n" | tee -a $installation_log
 cd ${installation_folder}
 
-if [ -d "${installation_folder}GeoPortal.rlp" ];then
-	echo -e "\n ${red} Folder ${installation_folder}GeoPortal.rlp found, please remove it!${reset}\n" | tee -a $installation_log
+if [ -d "${installation_folder}GeoPortal.sl" ];then
+	echo -e "\n ${red} Folder ${installation_folder}GeoPortal.sl found, please remove it!${reset}\n" | tee -a $installation_log
   exit
 fi
 
 echo -e "\n Downloading Geoportal Source to ${installation_folder}! \n" | tee -a $installation_log
-git clone --progress https://git.osgeo.org/gitea/armin11/GeoPortal.rlp | tee -a $installation_log
-
+git clone -b dev --progress --single-branch https://git.osgeo.org/gitea/LVGL/GeoPortal.sl >> $installation_log 2>&1
 if [ $? -eq 0 ];then
   echo -e "\n ${green}Successfully downloaded Geoportal Source! ${reset}\n" | tee -a $installation_log
 else
-  echo -e "\n ${red}Downloading Geoportal Source faild! Check internet connection or proxy!${reset}\n" | tee -a $installation_log
+  echo -e "\n ${red}Downloading Geoportal Source failed! Check internet connection or proxy!${reset}\n" | tee -a $installation_log
   exit
 fi
 
@@ -1363,30 +1361,29 @@ echo -e "\n Configuring Django. \n" | tee -a $installation_log
 mkdir -pv ${installation_folder}mapbender/http/local | tee -a $installation_log
 
 # copy some mapbender related scripts
-cp -a ${installation_folder}GeoPortal.rlp/scripts/guiapi.php ${installation_folder}mapbender/http/local
+cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}mapbender/http/local
 cp -a ${installation_folder}mapbender/http/geoportal/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php.backup
-cp -a ${installation_folder}GeoPortal.rlp/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
-cp -a ${installation_folder}GeoPortal.rlp/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
+cp -a ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
+cp -a ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
 cp -a ${installation_folder}mapbender/conf/mapbender.conf /${installation_folder}mapbender/conf/mapbender.conf.backup
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/javascripts/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/plugins/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/style.css ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/move.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/select.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/javascripts/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/plugins/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/style.css ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/move.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/select.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
 
 # change mapbender login path
 sed -i "s/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/g" ${installation_folder}mapbender/conf/mapbender.conf
 sed -i "s/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/g" ${installation_folder}mapbender/conf/mapbender.conf
 
 # django code
-sed -i s/"HOSTIP = \"127.0.0.1\""/"HOSTIP = \"$ipaddress\""/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-sed -i s/"HOSTNAME = \"localhost\""/"HOSTNAME = \"$hostname\""/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-sed -i "s#PROJECT_DIR = \"/data/\"#PROJECT_DIR = \"${installation_folder}\"#g" ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-sed -i s/"        'USER':'mapbenderdbuser',"/"        'USER':'$mapbender_database_user',"/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-sed -i s/"        'PASSWORD':'mapbenderdbpassword',"/"        'PASSWORD':'$mapbender_database_password',"/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-sed -i s/"        'NAME':'mapbender',"/"        'NAME':'$mapbender_database_name',"/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-
+sed -i s/"HOSTIP = \"127.0.0.1\""/"HOSTIP = \"$ipaddress\""/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+sed -i s/"HOSTNAME = \"localhost\""/"HOSTNAME = \"$hostname\""/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+sed -i "s#PROJECT_DIR = \"/data/\"#PROJECT_DIR = \"${installation_folder}\"#g" ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+sed -i s/"        'USER':'mapbenderdbuser',"/"        'USER':'$mapbender_database_user',"/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+sed -i s/"        'PASSWORD':'mapbenderdbpassword',"/"        'PASSWORD':'$mapbender_database_password',"/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+sed -i s/"        'NAME':'mapbender',"/"        'NAME':'$mapbender_database_name',"/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
 
 # enable php_serialize
 if ! grep -q "php_serialize"  /etc/php/7.0/apache2/php.ini;then
@@ -1398,7 +1395,7 @@ sed -i s/"session.save_handler = files"/"session.save_handler = memcached"/g /et
 sed -i s"/;     session.save_path = \"N;\/path\""/"session.save_path = \"127.0.0.1:11211\""/g /etc/php/7.0/apache2/php.ini
 sed -i s/"Require ip 192.168.56.222"/"Require ip $ipaddress"/g /etc/apache2/sites-available/geoportal-apache.conf
 
-cd ${installation_folder}GeoPortal.rlp/
+cd ${installation_folder}GeoPortal.sl/
 echo -e "\n Creating Virtualenv in ${installation_folder}env. \n"
 # create and activate virtualenv
 virtualenv -ppython3 ${installation_folder}env | tee -a $installation_log
@@ -1417,7 +1414,7 @@ echo -e "\n Installing needed python libraries. \n" | tee -a $installation_log
 pip install -r requirements.txt | tee -a $installation_log
 echo -e "\n ${green} Successfully installed python libraries!${reset} \n" | tee -a $installation_log
 
-rm -r ${installation_folder}GeoPortal.rlp/static | tee -a $installation_log
+rm -r ${installation_folder}GeoPortal.sl/static | tee -a $installation_log
 python manage.py collectstatic | tee -a $installation_log
 python manage.py migrate --fake sessions zero | tee -a $installation_log
 python manage.py migrate --fake-initial | tee -a $installation_log
@@ -1441,8 +1438,8 @@ echo -e "\n Installing Mediawiki! \n" | tee -a $installation_log
 apt-get update | tee -a $installation_log
 apt-get install -y -t stretch-backports mediawiki | tee -a $installation_log
 echo -e "\n ${green}Successfully installed Mediawiki${reset} ! \n" | tee -a $installation_log
-#mysql_secure_installation
 
+#mysql_secure_installation
 echo -e "\n Configuring Mysql! \n" | tee -a $installation_log
 mysql -uroot -e "UPDATE mysql.user SET Password=PASSWORD('$mysqlpw') WHERE User='root';"
 mysql -uroot -e "update mysql.user set plugin='' where user='root';"
@@ -1455,7 +1452,7 @@ mysql -uroot -p$mysqlpw -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%
 mysql -uroot -p$mysqlpw -e "FLUSH PRIVILEGES;"
 
 mysql -uroot -p$mysqlpw -e "create database Geoportal;"
-mysql -uroot -p$mysqlpw Geoportal < ${installation_folder}GeoPortal.rlp/scripts/geoportal.sql
+mysql -uroot -p$mysqlpw Geoportal < ${installation_folder}GeoPortal.sl/scripts/geoportal.sql
 
 echo -e "\n ${green}Successfully configured Mysql! ${reset}\n" | tee -a $installation_log
 
@@ -1474,8 +1471,8 @@ cp -a /tmp/extensions/* /usr/share/mediawiki/extensions
 rm -r /tmp/extensions
 rm /tmp/MediaWikiLanguageExtensionBundle-2019.01.tar.bz2
 
-cp -a ${installation_folder}GeoPortal.rlp/scripts/LocalSettings.php /etc/mediawiki/LocalSettings.php
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mediawiki_css/* /usr/share/mediawiki/skins/
+cp -a ${installation_folder}GeoPortal.sl/scripts/LocalSettings.php /etc/mediawiki/LocalSettings.php
+cp -a ${installation_folder}GeoPortal.sl/scripts/mediawiki_css/* /usr/share/mediawiki/skins/
 
 echo -e "\n Configuring Composer for SemanticMediaWiki extension! \n" | tee -a $installation_log
 cd /usr/share/mediawiki
@@ -1525,7 +1522,7 @@ fi
 
 echo -e "\n Details can be found in $installation_log \n" | tee -a $installation_log
 
-}
+} # end of install_full function
 
 update(){
 
@@ -1536,7 +1533,7 @@ update(){
     -U $mapbender_database_superuser \
     -h $mapbender_database_host \
     -p $mapbender_database_port \
-    -f ${installation_folder}GeoPortal.rlp/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql \
+    -f ${installation_folder}GeoPortal.sl/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql \
     --echo-all \
      $mapbender_database_name
 
@@ -1555,12 +1552,12 @@ update(){
 
      rm /tmp/settings.py
      cd /tmp/
-     wget https://git.osgeo.org/gitea/armin11/GeoPortal.rlp/raw/branch/master/Geoportal/settings.py
+     wget https://git.osgeo.org/gitea/LVGL/GeoPortal.sl/raw/branch/dev/Geoportal/settings.py
 
      while IFS="" read -r p || [ -n "$p" ]
        do
           h=`printf '%s\n' "$p" | cut -d = -f 1`
-          if ! grep -Fq "$h" ${installation_folder}/GeoPortal.rlp/Geoportal/settings.py
+          if ! grep -Fq "$h" ${installation_folder}/GeoPortal.sl/Geoportal/settings.py
           then
               missing_items+=("$h")
            fi
@@ -1629,17 +1626,16 @@ chown -R www-data ${installation_folder}mapbender/http/extensions/mobilemap2/
 #set read possibility for locales
 chmod -R 755 ${installation_folder}mapbender/resources/locale/
 #cause the path of the login script has another path than the relative pathes must be adopted:
-#sed -i "s/\/..\/php\/mod_showMetadata.php?/\/..\/..\/mapbender\/php\/mod_showMetadata.php?/g" /data/mapbender/http/classes/class_wms.php
 sed -i "s/LOGIN.\"\/..\/..\/php\/mod_showMetadata.php?resource=layer\&id=\"/str_replace(\"portal\/anmelden.html\",\"\",LOGIN).\"layer\/\"/g" ${installation_folder}mapbender/http/classes/class_wms.php
 sed -i "s/LOGIN.\"\/..\/..\/php\/mod_showMetadata.php?resource=wms\&id=\"/str_replace(\"portal\/anmelden.html\",\"\",LOGIN).\"wms\/\"/g" ${installation_folder}mapbender/http/classes/class_wms.php
 #overwrite login url with baseurl for export to openlayers link
 sed -i 's/url = url.replace("http\/frames\/login.php", "");/url = Mapbender.baseUrl + "\/mapbender\/";/g' ${installation_folder}mapbender/http/javascripts/mod_loadwmc.js
-sed -i "s/href = 'http:\/\/www.mapbender.org'/href = 'http:\/\/www.geoportal.rlp.de'/g" ${installation_folder}mapbender/http/php/mod_wmc2ol.php
-#sed -i 's/http:\/\/www.mapbender.org/http:\/\/www.geoportal.rlp.de/g' /data/mapbender/http/php/mod_wmc2ol.php
+sed -i "s/href = 'http:\/\/www.mapbender.org'/href = 'http:\/\/geoportal.saarland.de'/g" ${installation_folder}mapbender/http/php/mod_wmc2ol.php
+#sed -i 's/http:\/\/www.mapbender.org/http:\/\/geoportal.saarland.de/g' /data/mapbender/http/php/mod_wmc2ol.php
 sed -i 's/Mapbender_logo_and_text.png/logo_geoportal_neu.png/g' ${installation_folder}mapbender/http/php/mod_wmc2ol.php
 sed -i 's/$maxResults = 5;/$maxResults = 20;/' ${installation_folder}mapbender/http/php/mod_callMetadata.php
-sed -i 's/\/\/metadataUrlPlaceholder/$metadataUrl="http:\/\/www.geoportal.rlp.de\/layer\/";/' ${installation_folder}mapbender/http/php/mod_abo_show.php
-sed -i 's/http:\/\/ws.geonames.org\/searchJSON?lang=de&/http:\/\/www.geoportal.rlp.de\/mapbender\/geoportal\/gaz_geom_mobile.php/' ${installation_folder}mapbender/http/plugins/mod_jsonAutocompleteGazetteer.php
+sed -i 's/\/\/metadataUrlPlaceholder/$metadataUrl="http:\/\/geoportal.saarland.de\/layer\/";/' ${installation_folder}mapbender/http/php/mod_abo_show.php
+sed -i 's/http:\/\/ws.geonames.org\/searchJSON?lang=de&/http:\/\/geoportal.saarland.de\/mapbender\/geoportal\/gaz_geom_mobile.php/' ${installation_folder}mapbender/http/plugins/mod_jsonAutocompleteGazetteer.php
 sed -i 's/options.isGeonames = true;/options.isGeonames = false;/' ${installation_folder}mapbender/http/plugins/mod_jsonAutocompleteGazetteer.php
 sed -i 's/options.helpText = "";/options.helpText = "Orts- und Straßennamen sind bei der Adresssuche mit einem Komma voneinander zu trennen!<br><br>Auch Textfragmente der gesuchten Adresse reichen hierbei aus.<br><br>\&nbsp\&nbsp\&nbsp\&nbsp Beispiel:<br>\&nbsp\&nbsp\&nbsp\&nbsp\&nbsp\\"Am Zehnthof 10 , St. Goar\\" oder<br>\&nbsp\&nbsp\&nbsp\&nbsp\&nbsp\\"zehnt 10 , goar\\"<br><br>Der passende Treffer muss in der erscheinenden Auswahlliste per Mausklick ausgewählt werden!";/' ${installation_folder}mapbender/http/plugins/mod_jsonAutocompleteGazetteer.php
 sed -i "s/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/g" ${installation_folder}mapbender/conf/mapbender.conf
@@ -1649,47 +1645,47 @@ echo "Mapbender Update Done"
 
 #update django
 echo "Updating Geoportal Project"
-cd ${installation_folder}GeoPortal.rlp
-cp -a ${installation_folder}GeoPortal.rlp/Geoportal/settings.py ${installation_folder}settings.py_$(date +"%m_%d_%Y")
-cp -a ${installation_folder}GeoPortal.rlp/useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y")
+cd ${installation_folder}GeoPortal.sl
+cp -a ${installation_folder}GeoPortal.sl/Geoportal/settings.py ${installation_folder}settings.py_$(date +"%m_%d_%Y")
+cp -a ${installation_folder}GeoPortal.sl/useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y")
 
 git reset --hard
 git pull
 
-cp -a ${installation_folder}settings.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-cp -a ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.rlp/useroperations/conf.py
+cp -a ${installation_folder}settings.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+cp -a ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.sl/useroperations/conf.py
 
 # copy some scripts that are needed for django mapbender integration
-cp -a ${installation_folder}GeoPortal.rlp/scripts/guiapi.php ${installation_folder}mapbender/http/local
-cp -a ${installation_folder}GeoPortal.rlp/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
-cp -a ${installation_folder}GeoPortal.rlp/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}mapbender/http/javascripts/mb_downloadFeedClient.php
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}mapbender/http/plugins/mb_downloadFeedClient.php
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/move.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/select.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/style.css ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
-cp -a ${installation_folder}GeoPortal.rlp/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
+cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}mapbender/http/local
+cp -a ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
+cp -a ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}mapbender/http/javascripts/mb_downloadFeedClient.php
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}mapbender/http/plugins/mb_downloadFeedClient.php
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/move.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/select.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/style.css ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
+cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
 
 # create and activate virtualenv
 virtualenv -ppython3 ${installation_folder}env
 source ${installation_folder}env/bin/activate
 
 # install needed python packages
-cd ${installation_folder}GeoPortal.rlp
+cd ${installation_folder}GeoPortal.sl
 pip install -r requirements.txt
-rm -r ${installation_folder}GeoPortal.rlp/static
+rm -r ${installation_folder}GeoPortal.sl/static
 python manage.py collectstatic
 python manage.py compilemessages
 /etc/init.d/apache2 restart
 echo "Update Complete"
 
-}
+} # end of update function
 
 delete(){
 
 #django deletion
 rm -r ${installation_folder}env
-rm -r ${installation_folder}GeoPortal.rlp
+rm -r ${installation_folder}GeoPortal.sl
 
 # mapbender deletion
 cd ${installation_folder}
@@ -1750,7 +1746,7 @@ cp /etc/subversion/servers_backup_geoportal /etc/subversion/servers
 # drop MySQL
 mysql -uroot -p$mysqlpw -e "DROP DATABASE Geoportal;"
 
-}
+} # end of delete function
 
 backup () {
 
@@ -1765,12 +1761,12 @@ mkdir -pv ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/
 mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/mapbender/conf
 mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/mapbender/http/extensions/mobilemap2/scripts/
 mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/mapbender/tools/wms_extent/
-mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.rlp/Geoportal/
-mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.rlp/useroperations/
+mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.sl/Geoportal/
+mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.sl/useroperations/
 
 # Django Backup
-cp -av ${installation_folder}GeoPortal.rlp/Geoportal/settings.py ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.rlp/Geoportal/
-cp -av ${installation_folder}GeoPortal.rlp/useroperations/conf.py ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.rlp/useroperations/conf.py
+cp -av ${installation_folder}GeoPortal.sl/Geoportal/settings.py ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.sl/Geoportal/
+cp -av ${installation_folder}GeoPortal.sl/useroperations/conf.py ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/GeoPortal.sl/useroperations/conf.py
 # Mapbender config files
 cp -av ${installation_folder}mapbender/conf/* ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/mapbender/conf/
 cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/mapbender/http/extensions/mobilemap2/scripts/
@@ -1791,7 +1787,7 @@ while true; do
 done
 
 echo "Backup Done!."
-}
+} # end of backup function
 
 check_mode() {
 
@@ -1814,7 +1810,7 @@ elif [ $mode = "backup" ];then
   backup
 fi
 
-}
+} # end of check_mode function
 
 usage () {
 
@@ -1822,44 +1818,44 @@ echo "
 This script is for installing and maintaining your geoportal solution
 You can choose from the following options:
 
-    	--ip=ipaddress             		| Default \"127.0.0.1\"
-        --hostname=hostname              		| Default \"127.0.0.1\"
-    	--proxy=Proxy IP:Port  	 			| Default \"None\" ; Syntax --proxy=1.2.3.4:5555
-        --proxyuser=username                            | Default \"\" ; Password will be prompted
-        --mapbenderdbname=mapbender						| Default \"mapbender\"
-    	--mapbenderdbuser=User for Database access	| Default \"mapbenderdbuser\"
+    	--ip=ipaddress             		                  | Default \"127.0.0.1\"
+      --hostname=hostname              		            | Default \"127.0.0.1\"
+    	--proxy=Proxy IP:Port  	 			                  | Default \"None\" ; Syntax --proxy=1.2.3.4:5555
+      --proxyuser=username                            | Default \"\" ; Password will be prompted
+      --mapbenderdbname=mapbender						          | Default \"mapbender\"
+    	--mapbenderdbuser=User for Database access	    | Default \"mapbenderdbuser\"
     	--mapbenderdbpw=Password for database access    | Default \"mapbenderdbpassword\"
-    	--phppgadmin_user=User for PGAdmin web access	| Default \"postgresadmin\"
+    	--phppgadmin_user=User for PGAdmin web access	  | Default \"postgresadmin\"
     	--phppgadmin_pw=Password for PGAdmin web access | Default \"postgresadmin_password\"
-	--install_dir=Directory for installation	| Default \"/data/\"
-    	--mysqlpw=database password for MySQL		| Default \"root\"
-    	--mode=what you want to do			| Default \"none\" [install,update,delete,backup]
+	    --install_dir=Directory for installation	      | Default \"/data/\"
+    	--mysqlpw=database password for MySQL		        | Default \"root\"
+    	--mode=what you want to do			                | Default \"none\" [install,update,delete,backup]
 
 "
 
-}
+} # end of usage function
 
 while getopts h-: arg; do
   case $arg in
     h )  usage;exit;;
     - )  LONG_OPTARG="${OPTARG#*=}"
-         case $OPTARG in
-	   help				)  usage;;
-     	   proxy=?*     		)  http_proxy=$LONG_OPTARG;;
-     	   proxyuser=?*       		)  http_proxy_user=$LONG_OPTARG;;
-           mapbenderdbname=?*		)  mapbender_database_name=$LONG_OPTARG;;
-	   mapbenderdbuser=?*		)  mapbender_database_user=$LONG_OPTARG;;
-	   mapbenderdbpw=?*		)  mapbender_database_password=$LONG_OPTARG;;
-	   phppgadmin_user=?*		)  phppgadmin_user=$LONG_OPTARG;;
-	   phppgadmin_pw=?*		)  phppgadmin_password=$LONG_OPTARG;;
-	   install_dir=?*		)  installation_folder=$LONG_OPTARG;;
-	   ip=?*			)  ipaddress=$LONG_OPTARG;;
-     	   hostname=?*			)  hostname=$LONG_OPTARG;;
-	   mysqlpw=?*			)  mysqlpw=$LONG_OPTARG;;
-	   mode=?*			)  mode=$LONG_OPTARG;;
-           '' 				)  break ;; # "--" terminates argument processing
-           * 				)  echo "Illegal option --$OPTARG" >&2; usage; exit 2 ;;
-         esac ;;
+        case $OPTARG in
+	      help				          )  usage;;
+     	  proxy=?*     		      )  http_proxy=$LONG_OPTARG;;
+     	  proxyuser=?*       		)  http_proxy_user=$LONG_OPTARG;;
+        mapbenderdbname=?*		)  mapbender_database_name=$LONG_OPTARG;;
+	      mapbenderdbuser=?*		)  mapbender_database_user=$LONG_OPTARG;;
+	      mapbenderdbpw=?*		  )  mapbender_database_password=$LONG_OPTARG;;
+	      phppgadmin_user=?*		)  phppgadmin_user=$LONG_OPTARG;;
+	      phppgadmin_pw=?*		  )  phppgadmin_password=$LONG_OPTARG;;
+	      install_dir=?*		    )  installation_folder=$LONG_OPTARG;;
+	      ip=?*			            )  ipaddress=$LONG_OPTARG;;
+     	  hostname=?*			      )  hostname=$LONG_OPTARG;;
+	      mysqlpw=?*			      )  mysqlpw=$LONG_OPTARG;;
+	      mode=?*			          )  mode=$LONG_OPTARG;;
+         '' 				          )  break ;; # "--" terminates argument processing
+         * 				            )  echo "Illegal option --$OPTARG" >&2; usage; exit 2 ;;
+        esac ;;
     \? ) exit 2 ;;  # getopts already reported the illegal option
   esac
 done
