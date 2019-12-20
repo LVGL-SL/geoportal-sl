@@ -65,14 +65,15 @@ body{
 footer{
     border-top: 5px solid var(--primary);
     padding: 20px;
-    background-image: linear-gradient(var(--secondary), white);
+    background-image: linear-gradient(var(--secondary), var(--secondary-light));
     display: flex;
     justify-content: space-evenly;
 }
 
 #logo_geoportal{
-    max-height: 50px;
+    max-height: 100px;
 }
+
 #logo_gdi{
     max-height: 100px;
     max-width: 100%;
@@ -80,7 +81,7 @@ footer{
 }
 
 #logo_country{
-    max-height: 75px;
+    max-height: 100px;
 }
 
 .cookie-container{
@@ -149,7 +150,7 @@ footer{
     display: flex;
     justify-content: space-between;
     align-items:center;
-    background-image: linear-gradient(to bottom left, white, var(--secondary));
+    background-image: linear-gradient(to bottom left, var(--secondary-light), var(--secondary));
     border-bottom: 5px solid var(--primary);
     /*background-color: var(--secondary);*/
 }
@@ -268,15 +269,13 @@ footer{
 
 #geoportal-search-button-icon{
     width: 2em;
-
 }
 
 .simple-search-autocomplete {
-
     box-shadow: 0px 5px 5px 0px var(--primary);
-    border-left: 1px solid #d5d5d5;
-    border-right: 1px solid #d5d5d5;
-    border-bottom: 1px solid #d5d5d5;
+    border-left: 1px solid #002966;
+    border-right: 1px solid #002966;
+    border-bottom: 1px solid #002966;
     background-color: #fff;
     width: 100%;
     position: absolute;
@@ -335,7 +334,7 @@ ul {
 .map-viewer-overlay{
     width: 100%;
     height: 100%;
-    background-color: #e2e2e2;
+    background-color: #002966;
     position: absolute;
     margin: 0;
     /*
@@ -361,14 +360,14 @@ ul {
     z-index: 2;
 }
 
-.map-viewer-toggler img, .sidebar-toggler img, .mobile-map-toggler img, .map-applications-toggler img{
+.map-viewer-toggler img, .sidebar-toggler img, .map-viewer-selector img, .map-applications-toggler img{
     background-color: var(--primary);
     padding: 0.1em;
     border-radius: 100%;
     width: 3em;
 }
 
-.mobile-map-toggler{
+.map-viewer-selector{
     margin: 5px 0 0 0;
 }
 
@@ -385,10 +384,10 @@ ul {
     flex-direction: column;
     align-items: flex-end;
 }
-.map-applications-list{
+.map-applications-list, .map-viewer-list{
     display: none;
 }
-.map-applications-list-entry{
+.map-applications-list-entry, .map-viewer-list-entry{
     color: white;
     font-weight: bold;
     padding: 10px;
@@ -396,7 +395,7 @@ ul {
     background-color: var(--primary-light);
     border-radius: 10px;
 }
-.map-applications-list-entry:hover{
+.map-applications-list-entry:hover, .map-viewer-list-entry:hover {
     background-color: var(--primary-light-hover);
     cursor: pointer;
 }
@@ -474,7 +473,7 @@ ul {
 }
 
 
-.sidebar-toggler:hover, .map-viewer-toggler:hover, .map-applications-toggler:hover, .mobile-map-toggler:hover{
+.sidebar-toggler:hover, .map-viewer-toggler:hover, .map-applications-toggler:hover, .map-viewer-selector:hover{
     transform: scale(1.05);
     transition: all 0.1s ease-in-out;
     cursor: pointer;
@@ -582,9 +581,6 @@ ul {
 .current-page{
     background-color: var(--primary-light-hover);
     color: white;
-    /*
-    padding: 15px 0 15px 45px;
-    */
 }
 
 .sidebar-list-element:hover{
@@ -695,7 +691,7 @@ ul {
 }
 
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 700px){
 
     #logo_gdi{
         display: none;
@@ -733,7 +729,7 @@ ul {
 
     #sidebar{
         font-size: 1.25em;
-        width: 60vw;
+        width: 65vw;
     }
     .sidebar-list-element{
         font-size: 0.9em;
@@ -744,7 +740,7 @@ ul {
         margin-right: unset;
     }
 
-    .sidebar-toggler img, .map-viewer-toggler img, .mobile-map-toggler img{
+    .sidebar-toggler img, .map-viewer-toggler img, .map-viewer-selector img{
         width: 3.5em;
     }
 

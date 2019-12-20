@@ -1,13 +1,12 @@
 import threading
 import random
 import string
-import ssl
-
-from urllib import request
 
 import bcrypt
+import requests
 from lxml import html
-from Geoportal.settings import HOSTNAME, HOSTIP, HTTP_OR_SSL
+from Geoportal.settings import HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, MULTILINGUAL
+from Geoportal.utils import utils
 from searchCatalogue.utils.searcher import Searcher
 from useroperations.models import MbUser
 
@@ -17,15 +16,16 @@ def random_string(stringLength=15):
     return ''.join(random.choice(letters) for i in range(stringLength))
 
 
-
 def __set_tag(dom, tag, attribute, prefix):
     """ Checks the DOM for a special tag and changes the attribute according to the provided value
 
-    :param dom:
-    :param tag:
-    :param attribute:
-    :param value:
-    :return:
+    Args:
+        dom: The document object model
+        tag: The tag which we are looking for (e.g. <a>)
+        attribute: The attribute that has to be changed
+        prefix: The 'https://xyz' prefix of a route
+    Returns:
+        Nothing, dom is mutable
     """
     protocol = "http"
     searcher = Searcher()
@@ -34,18 +34,20 @@ def __set_tag(dom, tag, attribute, prefix):
         attrib = elem.get(attribute)
         if tag == 'a':
             # check if the page we want to go to is an internal or external page
-            title = attrib.split("/")
-            title = title[len(title) - 1]
+            title = elem.get("title").replace(" ", "_")
             if searcher.is_article_internal(title):
                 attrib = "/article/" + title
         if protocol not in attrib:
             elem.set(attribute, prefix + attrib)
 
-def set_links_in_dom(dom):
-    """ Since the wiki (where the DOM comes from) is currently(!!!) not on the same machine as the Geoportal, we need to change all links to the machine where the wiki lives
 
-    :param dom:
-    :return:
+def set_links_in_dom(dom):
+    """ Since the wiki (where the DOM comes from) is currently(!!!) not on the same machine as the Geoportal,
+    we need to change all links to the machine where the wiki lives
+
+    Args:
+        dom:
+    Returns:
     """
     prefix = HTTP_OR_SSL + HOSTNAME
 
@@ -53,19 +55,8 @@ def set_links_in_dom(dom):
     thread_list = []
     thread_list.append(threading.Thread(target=__set_tag, args=(dom, "a", "href", prefix)))
     thread_list.append(threading.Thread(target=__set_tag, args=(dom, "img", "src", prefix)))
-    __execute_threads(thread_list)
+    utils.execute_threads(thread_list)
 
-
-def __execute_threads(thread_list):
-    """ Executes a given list of threads
-
-    :param thread_list:
-    :return:
-    """
-    for thread in thread_list:
-        thread.start()
-    for thread in thread_list:
-        thread.join()
 
 def get_wiki_body_content(wiki_keyword, lang, category=None):
     """ Returns the HTML body content of the corresponding mediawiki page
@@ -78,10 +69,16 @@ def get_wiki_body_content(wiki_keyword, lang, category=None):
         str: The html content of the wiki article
     """
     # get mediawiki html
-    url = HTTP_OR_SSL + HOSTIP + "/mediawiki/index.php/" + wiki_keyword + "/" + lang + "#bodyContent"
-    html_raw = request.urlopen(url, context=ssl._create_unverified_context())
-    html_raw = html_raw.read()
-    html_con = html.fromstring(html_raw)
+    if MULTILINGUAL:
+        url = HTTP_OR_SSL + HOSTIP + "/mediawiki/index.php/" + wiki_keyword + "/" + lang + "#bodyContent"
+    else:
+        url = HTTP_OR_SSL + HOSTIP + "/mediawiki/index.php/" + wiki_keyword + "#bodyContent"
+    html_raw = requests.get(url, verify=INTERNAL_SSL)
+    if html_raw.status_code != 200:
+        raise FileNotFoundError
+
+    html_con = html.fromstring(html_raw.content)
+
     # get body html div - due to translation module on mediawiki, we need to fetch the parser output
     try:
         body_con = html_con.cssselect(".mw-parser-output")
@@ -91,17 +88,21 @@ def get_wiki_body_content(wiki_keyword, lang, category=None):
         return "Error: Check if mediawiki translation package is installed!"
     except TypeError:
         return "Error: mw-parser-output ist not unique"
+
     # set correct src/link for all <img> and <a> tags
     set_links_in_dom(body_con)
+
     # render back to html
     return html.tostring(doc=body_con, method='html', encoding='unicode')
 
 
-def get_landing_page(lang):
+def get_landing_page(lang: str):
     """ Returns the landing page content (favourite wmcs)
 
-    :param lang:
-    :return:
+    Args:
+        lang (str): The language for which the data shall be fetched
+    Returns:
+        A dict containing an overview of how many organizations, topics, wmcs, services and so on are available
     """
     ret_dict = {}
     # get favourite wmcs
@@ -114,6 +115,9 @@ def get_landing_page(lang):
 
     # get number of organizations
     ret_dict["num_orgs"] = len(get_all_organizations())
+
+    # get number of applications
+    ret_dict["num_apps"] = len(get_all_applications())
 
     # get number of topics
     ret_dict["num_topics"] = len(get_all_inspire_topics(lang).get("tags", []))
@@ -140,6 +144,17 @@ def get_all_organizations():
     searcher = Searcher(keywords="", resource_set=["wmc"], page=1, order_by="rank", host=HOSTNAME)
 
     return searcher.get_all_organizations()
+
+
+def get_all_applications():
+    """ Returns a list of all available applications
+
+    Returns:
+         A list of all applications
+    """
+    searcher = Searcher(keywords="", resource_set=["application"], host=HOSTNAME, max_results=50)
+    return searcher.get_search_results_primary().get("application", {}).get("application", {}).get("application", {}).get("srv", [])
+
 
 def get_all_inspire_topics(language):
     """ Returns a list of all inspire topics available

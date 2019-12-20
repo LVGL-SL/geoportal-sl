@@ -72,9 +72,18 @@ if(is_array($isAuthenticated) != false) {
 	}
 	session_write_close();
 
-} else if (strpos($isAuthenticated,'Account for') !== false){
+} else if (strpos($isAuthenticated,'Account for user with name') !== false){
 
 	$URLAdd="?status=notactive";
+	if($_SERVER["HTTPS"] != "on") {
+		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
+	} else {
+		header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
+	}
+
+} else if (strpos($isAuthenticated,'Password failed third time for') !== false){
+
+	$URLAdd="?status=fail3";
 	if($_SERVER["HTTPS"] != "on") {
 		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
 	} else {

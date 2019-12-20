@@ -7,9 +7,11 @@ Created on: 11.03.19
 
 """
 from django.http.response import JsonResponse
+from django.utils.translation import ugettext_lazy as _, activate, LANGUAGE_SESSION_KEY
 
 from Geoportal import settings
-from Geoportal.settings import DEFAULT_GUI, RSS_FILE, HOSTNAME, HTTP_OR_SSL, IFRAME_HEIGHT, IFRAME_WIDTH
+from Geoportal.settings import DEFAULT_GUI, RSS_FILE, HOSTNAME, HTTP_OR_SSL, IFRAME_HEIGHT, IFRAME_WIDTH, MODERN_GUI, \
+    MULTILINGUAL, LANGUAGE_CODE
 from Geoportal.utils import utils, php_session_data
 from useroperations.conf import COOKIE_VALUE, GEOPORTAL_IDENTIFIER, LOGO_GEOPORTAL_TITLE, LOGO_COUNTRY_LINK_DE, \
     LOGO_COUNTRY_LINK_EN
@@ -60,9 +62,15 @@ class GeoportalContext:
             'userid': session_data.get("userid", ""),
             'gui': session_data.get("gui", None),
             'guis': session_data.get("guis", ""),
+            'mapviewers': {
+                _("Modern"): MODERN_GUI,
+                _("Klassik"): DEFAULT_GUI,
+                _("Mobil"): HTTP_OR_SSL + HOSTNAME + "/mapbender/extensions/mobilemap2/index.html?wmc_id=current",
+            },
             'dsgvo': session_data.get("dsgvo", "no"),
-            'preferred_gui': session_data.get("preferred_gui", "Geoportal-RLP"),
-            'lang': request.LANGUAGE_CODE,
+            'preferred_gui': session_data.get("preferred_gui", DEFAULT_GUI),
+            'LANGUAGE_CODE': request.LANGUAGE_CODE,
+            'MULTILINGUAL': MULTILINGUAL,
             "HOSTNAME": HOSTNAME,
             "HTTP_OR_SSL": HTTP_OR_SSL,
             "DEFAULT_GUI": DEFAULT_GUI,
@@ -79,6 +87,9 @@ class GeoportalContext:
             "LOGO_COUNTRY_LINK_DE": LOGO_COUNTRY_LINK_DE,
             "LOGO_COUNTRY_LINK_EN": LOGO_COUNTRY_LINK_EN,
         }
+        if not MULTILINGUAL:
+            activate(LANGUAGE_CODE)
+            request.session[LANGUAGE_SESSION_KEY] = LANGUAGE_CODE
 
     def add_context(self, context: dict):
         """ Adds a complete dict to the default configuration

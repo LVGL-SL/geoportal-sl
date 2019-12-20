@@ -522,6 +522,10 @@ def gen_extent_graphic_url(search_results):
                 srv["bbox"] = srv.get("bbox", EXTENT_SERVICE_BBOX)[0]
                 srv["extent_url"] = __gen_single_extent_graphic_url(srv)
                 layers = None
+            elif resource == "application":
+                srv["bbox"] = srv.get("bbox", EXTENT_SERVICE_BBOX)[0]
+                srv["extent_url"] = __gen_single_extent_graphic_url(srv)
+                layers = None
             else:  # == wfs
                 srv["extent_url"] = __gen_single_extent_graphic_url(srv)
                 layers = srv.get("ftype", None)
@@ -850,6 +854,11 @@ def prepare_info_search_results(search_results, list_all: bool, lang: str):
         for search_result_key, search_result_val in search_results.items():
             ret_list[search_result_key] = []
             for result in search_result_val:
+                if result.get("query", None) is None:
+                    result["title"] = result["canonicaltitle"]
+                    del result["canonicaltitle"]
+                    ret_list[search_result_key].append(result)
+                    continue
                 res = result["query"].get("search", [])
                 if len(res) > 0:
                     for hit in res:

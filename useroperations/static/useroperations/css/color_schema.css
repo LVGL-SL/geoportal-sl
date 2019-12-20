@@ -2,17 +2,17 @@
 DECLARE FIX COLOR CODES FOR CORPORATE DESIGN
 */
 :root{
-    --primary: #871d33;
-    --primary-invert: #78e2cc;
-    --primary-hover: #b77784;
-    --primary-light: #a7233f;
-    --primary-light-hover: #c82a4b;
+    --primary: #002966;
+    --primary-invert: #ffd699;
+    --primary-hover: #4c6993;
+    --primary-light: #193e75;
+    --primary-light-hover: #325384;
 
-    --secondary: #e2e2e2;
-    --secondary-font: #666;
-    --secondary-hover: #aeaeae;
-    --secondary-placeholder: #868686;
-    --secondary-light: #EFEFEF;
+    --secondary: #8392b2;
+    --secondary-font: #000;
+    --secondary-hover: #8f9cb9;
+    --secondary-placeholder: #68748e;
+    --secondary-light: #a8b2c9;
 
     --success-green: #1d873c;
     --error-red: #D70000;

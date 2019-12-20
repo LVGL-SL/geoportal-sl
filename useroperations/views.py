@@ -4,6 +4,7 @@ import re
 import smtplib
 import time
 import urllib.parse
+from collections import OrderedDict
 from pprint import pprint
 from urllib import error
 
@@ -12,15 +13,16 @@ import requests
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpRequest
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.shortcuts import render, redirect, render_to_response
 from django.utils.translation import gettext as _
 
 from Geoportal.decorator import check_browser
 from Geoportal.geoportalObjects import GeoportalJsonResponse, GeoportalContext
-from Geoportal.settings import ROOT_EMAIL_ADDRESS, DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, SESSION_NAME, PROJECT_DIR
+from Geoportal.settings import DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, \
+    SESSION_NAME, PROJECT_DIR, MULTILINGUAL, LANGUAGE_CODE
 from Geoportal.utils import utils, php_session_data, mbConfReader
 from searchCatalogue.utils.url_conf import URL_INSPIRE_DOC
+from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
 from .models import MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
@@ -54,21 +56,33 @@ def index_view(request, wiki_keyword=""):
     """
 
     request.session["current_page"] = "index"
-    lang = request.LANGUAGE_CODE
+    if MULTILINGUAL:
+        lang = request.LANGUAGE_CODE
+    else:
+        lang = LANGUAGE_CODE
     get_params = request.GET.dict()
     dsgvo_list = ["Datenschutz", "Kontakt", "Impressum", "Rechtshinweis", "Transparenzgesetz"]
 
     output = ""
     results = []
 
+    # In a first run, we check if the mapbender login has worked, which is indicated by a 'status' GET parameter.
+    # Since this is not nice to have in your address bar, we exchange the GET parameter with a pretty message for the user
+    # and reload the same route simply again to get rid of the GET parameter.
     if request.method == 'GET' and 'status' in request.GET:
         if request.GET['status'] == "fail":
             messages.error(request, _("Login failed"))
             return redirect('useroperations:login')
         elif request.GET['status'] == "success":
             messages.success(request, _("Successfully logged in"))
+            return redirect('useroperations:index')
         elif request.GET['status'] == "notactive":
             messages.error(request, _("Account not active"))
+            return redirect('useroperations:index')
+        elif request.GET['status'] == "fail3":
+            messages.error(request, _("Password failed too many times! Account is deactivated! Activation mail was sent to you!"))
+            return redirect('useroperations:index')
+
 
     geoportal_context = GeoportalContext(request)
     context_data = geoportal_context.get_context()
@@ -78,16 +92,16 @@ def index_view(request, wiki_keyword=""):
     if wiki_keyword == "viewer":
         template = "geoportal.html"
     elif wiki_keyword != "":
-        template = "wiki.html"
         # display the wiki article in the template
+        template = "wiki.html"
         try:
             output = useroperations_helper.get_wiki_body_content(wiki_keyword, lang)
-        except error.HTTPError:
+        except (error.HTTPError, FileNotFoundError) as e:
             template = "404.html"
             output = ""
     else:
-        template = "landing_page.html"
         # display the favourite WMCs in the template
+        template = "landing_page.html"
         results = useroperations_helper.get_landing_page(lang)
 
     context = {
@@ -103,6 +117,33 @@ def index_view(request, wiki_keyword=""):
         return GeoportalJsonResponse(html=output).get_response()
     else:
         return render(request, template, geoportal_context.get_context())
+
+
+@check_browser
+def applications_view(request: HttpRequest):
+    """ Renders the view for showing all available applications
+
+    Args:
+        request: The incoming request
+    Returns:
+         A rendered view
+    """
+    geoportal_context = GeoportalContext(request)
+
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
+    apps = useroperations_helper.get_all_applications()
+    params = {
+        "apps": apps,
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
+    }
+    template = "applications.html"
+    geoportal_context.add_context(params)
+    return render(request, template, geoportal_context.get_context())
 
 
 @check_browser
@@ -122,8 +163,15 @@ def organizations_view(request: HttpRequest):
 
     template = "publishing_organizations.html"
     geoportal_context = GeoportalContext(request)
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
     context = {
-        "organizations": useroperations_helper.get_all_organizations()
+        "organizations": useroperations_helper.get_all_organizations(),
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
     }
     geoportal_context.add_context(context)
     return render(request, template, geoportal_context.get_context())
@@ -144,10 +192,17 @@ def categories_view(request: HttpRequest):
     if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
         return redirect('useroperations:change_profile')
 
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
     template = "inspire_topics.html"
     context = {
         "topics": useroperations_helper.get_all_inspire_topics(request.LANGUAGE_CODE),
         "inspire_doc_uri": URL_INSPIRE_DOC,
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
     }
     geoportal_context.add_context(context)
     return render(request, template, geoportal_context.get_context())
@@ -496,7 +551,6 @@ def change_profile_view(request):
                 user.create_digest = form.cleaned_data['create_digest']
                 user.fkey_preferred_gui_id = form.cleaned_data['preferred_gui']
 
-
                 if form.cleaned_data['dsgvo'] == True:
                     user.timestamp_dsgvo_accepted = time.time()
                     # set session variable dsgvo via session wrapper php script
@@ -505,7 +559,6 @@ def change_profile_view(request):
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
-                    
                 if form.cleaned_data['preferred_gui'] == 'Geoportal-RLP_2019':
                     # set session variable preferred_gui via session wrapper php script
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-RLP_2019', verify=INTERNAL_SSL)
@@ -689,20 +742,28 @@ def map_viewer_view(request):
     is_external_search = "external" in request.META.get("HTTP_REFERER", "")
     request_get_params_dict = request.GET.dict()
 
-    # get default gui
-    #user = MbUser.objects.get(mb_user_id=context_data['userid'])
-
     # is regular call means the request comes directly from the navigation menu in the page, without selecting a search result
     is_regular_call = len(request_get_params_dict) == 0 or request_get_params_dict.get("searchResultParam", None) is None
     request_get_params = dict(urllib.parse.parse_qsl(request_get_params_dict.get("searchResultParam")))
     template = "geoportal_external.html"
     gui_id = context_data.get("preferred_gui", DEFAULT_GUI)  # get selected gui from params, use default gui otherwise!
 
+    wmc_id = request_get_params.get("WMC", "") or request_get_params.get("wmc", "")
+    if len(request_get_params) > 1:
+        wms_id = urllib.parse.quote(request_get_params_dict.get("searchResultParam", "").replace("WMS=", ""), safe="")
+    else:
+        wms_id = urllib.parse.quote(request_get_params.get("WMS", "") or request_get_params.get("wms", ""), safe="")
+
     # check if the request comes from a mobile device
-    is_mobile = geoportal_context.get_context().get("is_mobile")
+    is_mobile = request.user_agent.is_mobile
     if is_mobile:
+
         # if so, just call the mobile map viewer in a new window
-        mobile_viewer_url = "{}{}/mapbender/extensions/mobilemap2/index.html?wmc_id={}".format(HTTP_OR_SSL, HOSTNAME, request_get_params.get("WMC",""))
+        mobile_viewer_url = "{}{}/mapbender/extensions/mobilemap2/index.html?".format(HTTP_OR_SSL, HOSTNAME)
+        if wmc_id != "":
+            mobile_viewer_url += "&wmc_id={}".format(wmc_id)
+        if wms_id != "":
+            mobile_viewer_url += "&wms_id={}".format(wms_id)
         return GeoportalJsonResponse(url=mobile_viewer_url).get_response()
 
     # if the call targets a DE catalogue result, we need to adjust a little thing here to restore the previously splitted url
@@ -713,14 +774,13 @@ def map_viewer_view(request):
                 continue
             request_get_params["WMS"] += "&" + request_get_params_key + "=" + request_get_params_val
 
-
     mapviewer_params_dict = {
         "LAYER[id]": request_get_params.get("LAYER[id]", None),
         "LAYER[zoom]": request_get_params.get("LAYER[zoom]", None),
         "LAYER[visible]": request_get_params.get("LAYER[visible]", 1),
         "LAYER[querylayer]": request_get_params.get("LAYER[querylayer]", 1),
-        "WMS": urllib.parse.quote(request_get_params.get("WMS", "") or request_get_params.get("wms", ""), safe=""),
-        "WMC": request_get_params.get("WMC", "") or request_get_params.get("wmc", ""),
+        "WMS": wms_id,
+        "WMC": wmc_id,
         "GEORSS": urllib.parse.urlencode(request_get_params.get("GEORSS", "")),
         "KML": urllib.parse.urlencode(request_get_params.get("KML", "")),
         "FEATURETYPE": request_get_params.get("FEATURETYPE[id]", ""),
@@ -728,8 +788,9 @@ def map_viewer_view(request):
         "GEOJSON": request_get_params.get("GEOJSON", None),
         "GEOJSONZOOM": request_get_params.get("GEOJSONZOOM", None),
         "GEOJSONZOOMOFFSET": request_get_params.get("GEOJSONZOOMOFFSET", None),
+        "gui_id": request_get_params.get("gui_id", gui_id),
     }
-    mapviewer_params = gui_id
+    mapviewer_params = ""
     for param_key, param_val in mapviewer_params_dict.items():
         if param_val is not None:
             if isinstance(param_val, int):
@@ -741,7 +802,7 @@ def map_viewer_view(request):
         # an internal call from our geoportal should lead to the map viewer page without problems
         params = {
             "mapviewer_params": mapviewer_params,
-            "mapviewer_src":  HTTP_OR_SSL + HOSTIP + "/mapbender/frames/index.php?lang=" + lang + "&mb_user_myGui=" + mapviewer_params,
+            "mapviewer_src":  HTTP_OR_SSL + HOSTIP + "/mapbender/frames/index.php?lang=" + lang + "&" + mapviewer_params,
         }
         geoportal_context.add_context(context=params)
         return render(request, template, geoportal_context.get_context())
@@ -929,6 +990,7 @@ def open_linked_data(request: HttpRequest):
     geoportal_context = GeoportalContext(request=request)
     return render(request=request, context=geoportal_context.get_context(), template_name=template)
 
+
 def incompatible_browser(request: HttpRequest):
     """ Renders a template about how the user's browser is a filthy peasants tool.
 
@@ -943,3 +1005,17 @@ def incompatible_browser(request: HttpRequest):
 
     }
     return render(request, template_name=template, context=params)
+
+
+def handle500(request: HttpRequest, template_name="500.html"):
+    """ Handles a 404 page not found error using a custom template
+
+    Args:
+        request:
+        exception:
+        template_name:
+    Returns:
+    """
+    response = render_to_response(template_name, GeoportalContext(request).get_context())
+    response.status_code = 500
+    return response

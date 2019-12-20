@@ -46,7 +46,8 @@ var Search = function() {
         wms: true,
         wfs: true,
         wmc: true,
-        dataset: true
+        dataset: true,
+        application: true,
     };
     this.resources_de = {
         dataset: true,
@@ -540,14 +541,14 @@ function enableSearchInputField(){
 function changeMapviewerIframeSrc(srcSuffix){
     // replace the src from "Geoportal-RLP" on
     var mapviewer = $("#mapviewer");
-    var src = mapviewer.attr("data-params");
+    var src = mapviewer.attr("data-resource");
     if(src != null){
-        var srcArr = src.split("mb_user_myGui");
-        var newSrc = srcArr[0] + "mb_user_myGui=" + srcSuffix;
+        var srcArr = src.split("gui_id");
+        var newSrc = srcArr[0] + "gui_id=" + srcSuffix;
         if(mapviewer.hasClass("mobile-viewer")){
             toggleMapViewers();
         }
-        mapviewer.attr("data-params", newSrc);
+        mapviewer.attr("data-resource", newSrc);
         mapviewer.attr("src", newSrc);
     }
 }
@@ -605,7 +606,7 @@ function startAjaxMapviewerCall(value, mobile){
                 });
                 $(".map-viewer-toggler").click();
                 if(mobile){
-                    $(".mobile-map-toggler").click();
+                    $(".map-viewer-selector").click();
                 }
             }else if(data["url"] != ""){
             // external mapviewer call
@@ -637,20 +638,16 @@ function checkForExternalMapviewerCall(){
 
 
 $(document).ready(function() {
-
     /**
      * Observe for changes in body content and resize sidebar if needed
      *
      */
-    var target = document.querySelector('.body-content');
+    var target = document.querySelector('#body-content');
     if(target !== null){
-        var observer = window.MutationObserver;
-        observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            resizeSidebar();
-          });
-        });
         var config = {attributes: true, subtree: true, childList: true, characterData: true};
+        var observer = new MutationObserver(function(mutations) {
+          setTimeout(resizeSidebar, 250);
+        });
         observer.observe(target, config);
     }
 
@@ -744,6 +741,14 @@ $(document).ready(function() {
         // get terms from search input field
         var searchField = $(".simple-search-field");
         var terms = searchField.val();
+
+        // Make sure terms are set before search starts!
+        // Racing condition might occur, when page is not completely loaded and the value of searchbarBackup
+        // has not been pasted in the searchbar, yet. Check this in here!
+        var searchbarBackup = search.getParam("searchbarBackup");
+        if(searchbarBackup !== null && terms != searchbarBackup){
+            terms = searchbarBackup
+        }
         search.setParam("terms", terms);
 
         // disable input field during search
