@@ -19,10 +19,24 @@ mapbender_database_name="mapbender"
 mapbender_database_host="127.0.0.1"
 mapbender_database_port="5432"
 mapbender_database_user="mapbenderdbuser"
-mapbender_database_superuser="postgres"
 mapbender_database_password="mapbenderdbpassword"
 phppgadmin_user="postgresadmin"
 phppgadmin_password="postgresadmin_password"
+
+#proxy config
+http_proxy=""
+http_proxy_host=""
+http_proxy_port=""
+http_proxy_user=""
+http_proxy_pass=""
+
+# misc
+webadmin_email="test@test.de"
+email_hosting_server="mail.domain.tld"
+use_ssl="false"
+not_proxy_hosts="localhost,127.0.0.1"
+installation_folder="/data/"
+installation_log=${installation_folder}"geoportal_install_$(date +"%m_%d_%Y").log"
 
 # mapbender specific stuff
 mapbender_guest_user_id="2"
@@ -107,6 +121,11 @@ red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
 
+determineEmailSettings(){
+  sed -i s/"EMAIL_HOST = 'server.domain.tld'"/"EMAIL_HOST = \"$email_hosting_server\""/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
+  sed -i s/"EMAIL_HOST_USER = 'geoportal@server.domain.tld'"/"EMAIL_HOST_USER = \"$webadmin_email\""/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
+}
+
 install_full(){
 
 ##################### Geoportal-RLP
@@ -131,8 +150,8 @@ if [ $create_folders = 'true' ]; then
     ############################################################
     # create folder structure
     ############################################################
-    mkdir -pv $installation_folder | tee -a $installation_log
     touch $installation_log | tee -a $installation_log
+    mkdir -pv $installation_folder | tee -a $installation_log
     mkdir -pv ${installation_folder}svn/ | tee -a $installation_log
     mkdir -pv ${installation_folder}access/ | tee -a $installation_log
 
@@ -632,10 +651,13 @@ EOF
 
   # recreate the guis via psql
   cp ${installation_folder}mapbender/resources/db/gui_Geoportal-RLP.sql ${installation_folder}gui_${default_gui_name}.sql
+  cp ${installation_folder}mapbender/resources/db/gui_Geoportal-RLP_2019.sql ${installation_folder}gui_${default_gui_name}_2019.sql
   # exchange all occurences of old default gui name in sql
   sed -i "s/Geoportal-RLP/${default_gui_name}/g" ${installation_folder}gui_${default_gui_name}.sql
+  sed -i "s/Geoportal-RLP_2019/${default_gui_name}_2019/g" ${installation_folder}gui_${default_gui_name}_2019.sql
   # recreate the guis via psql - default gui definition is in installation folder!
   sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}gui_${default_gui_name}.sql | tee -a $installation_log
+  sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}gui_${default_gui_name}_2019.sql | tee -a $installation_log
   # do the same for extended search gui
   # alter the name of the default extended search gui in the gui definition
   cp ${installation_folder}mapbender/resources/db/gui_Geoportal-RLP_erwSuche2.sql ${installation_folder}gui_${extended_search_default_gui_name}.sql
@@ -656,6 +678,11 @@ EOF
   sudo -u postgres PGOPTIONS='--client-min-messages=warning' psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/gui_PortalAdmin_DE.sql | tee -a $installation_log
   sudo -u postgres PGOPTIONS='--client-min-messages=warning' psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/gui_Administration_DE.sql | tee -a $installation_log
   #####################
+
+  # changes for 2019 gui
+  sudo -u postgres psql -d mapbender -c "INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) values ('${default_gui_name}_2019',1,'owner')"
+  sudo -u postgres psql -d mapbender -c "INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) values ('${default_gui_name}_2019',$mapbender_guest_group_id)"
+  sudo -u postgres psql -d mapbender -c "INSERT INTO gui_gui_category (fkey_gui_id, fkey_gui_category_id) values ('${default_gui_name}_2019',2);"
 
   #####################
   sudo -u postgres psql -q -d $mapbender_database_name -f ${installation_folder}geoportal_database_adoption_2.sql | tee -a $installation_log
@@ -881,6 +908,12 @@ fi
     sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -c "INSERT INTO gui_element_vars(fkey_gui_id, fkey_e_id, var_name, var_value, context, var_type) VALUES('${default_gui_name}', 'resizeMapsize', 'max_width', '1000', 'define a max mapframe width (units pixel) f.e. 700 or false' ,'var')" | tee -a $installation_log
     sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -c "INSERT INTO gui_element_vars(fkey_gui_id, fkey_e_id, var_name, var_value, context, var_type) VALUES('${default_gui_name}', 'resizeMapsize', 'max_height', '600', 'define a max mapframe height (units pixel) f.e. 700 or false' ,'var')" | tee -a $installation_log
 
+    # run these two update scripts again to fix Administration_GUI, 2.7.4 to 2.8 destroys search_wms_view, change mapbender_subadmin_group_id
+    sed -i "s/s.fkey_mb_group_id = 36/s.fkey_mb_group_id = ${mapbender_subadmin_group_id}/g" ${installation_folder}mapbender/resources/db/pgsql/UTF-8/update/update_2.7.4_to_2.8_pgsql_UTF-8.sql
+    sudo -u postgres PGOPTIONS='--client-min-messages=warning' psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/pgsql/UTF-8/update/update_2.7.4_to_2.8_pgsql_UTF-8.sql | tee -a $installation_log
+    sudo -u postgres PGOPTIONS='--client-min-messages=warning' psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/pgsql/UTF-8/update/update_2.8_pgsql_UTF-8.sql | tee -a $installation_log
+
+
     echo -e "\n ${green}Successfully configured Mapbender! ${reset}\n" | tee -a $installation_log
   fi
 
@@ -919,7 +952,7 @@ fi
 
           DocumentRoot ${installation_folder}/mapbender/http
           Alias /local ${installation_folder}/mapbender/http/local
-	      <Directory ${installation_folder}portal>
+	      <Directory ${installation_folder}/mapbender/http/local>
           Options -Indexes -FollowSymlinks
           AllowOverride None
   		  Require ip 127.0.0.1
@@ -1384,6 +1417,7 @@ sed -i "s#PROJECT_DIR = \"/data/\"#PROJECT_DIR = \"${installation_folder}\"#g" $
 sed -i s/"        'USER':'mapbenderdbuser',"/"        'USER':'$mapbender_database_user',"/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
 sed -i s/"        'PASSWORD':'mapbenderdbpassword',"/"        'PASSWORD':'$mapbender_database_password',"/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
 sed -i s/"        'NAME':'mapbender',"/"        'NAME':'$mapbender_database_name',"/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+determineEmailSettings
 
 # enable php_serialize
 if ! grep -q "php_serialize"  /etc/php/7.0/apache2/php.ini;then
@@ -1393,7 +1427,6 @@ fi
 # activate memcached
 sed -i s/"session.save_handler = files"/"session.save_handler = memcached"/g /etc/php/7.0/apache2/php.ini
 sed -i s"/;     session.save_path = \"N;\/path\""/"session.save_path = \"127.0.0.1:11211\""/g /etc/php/7.0/apache2/php.ini
-sed -i s/"Require ip 192.168.56.222"/"Require ip $ipaddress"/g /etc/apache2/sites-available/geoportal-apache.conf
 
 cd ${installation_folder}GeoPortal.sl/
 echo -e "\n Creating Virtualenv in ${installation_folder}env. \n"
@@ -1525,27 +1558,6 @@ echo -e "\n Details can be found in $installation_log \n" | tee -a $installation
 
 update(){
 
-  external_db_update(){
-
-  psql \
-    -X \
-    -U $mapbender_database_superuser \
-    -h $mapbender_database_host \
-    -p $mapbender_database_port \
-    -f ${installation_folder}GeoPortal.sl/scripts/update_2.7.4_to_2.8_pgsql_UTF-8.sql \
-    --echo-all \
-     $mapbender_database_name
-
-     psql_exit_status=$?
-
-     if [ $psql_exit_status != 0 ]; then
-       echo "Update of remote Database failed! Exiting." 1>&2
-       exit $psql_exit_status
-     fi
-     echo "sql script successful"
-
-  }
-
   check_django_settings(){
      missing_items=()
 
@@ -1558,7 +1570,7 @@ update(){
           h=`printf '%s\n' "$p" | cut -d = -f 1`
           if ! grep -Fq "$h" ${installation_folder}/GeoPortal.sl/Geoportal/settings.py
           then
-              missing_items+=("$h")
+              missing_items+=("$h_full")
            fi
 
      done < /tmp/settings.py
@@ -1594,7 +1606,7 @@ check_django_settings
 
 #update mapbender
 echo "Backing up Mapbender Configs"
-cp -av ${installation_folder}mapbender/conf/mapbender.conf ${installation_folder}mapbender.conf_$(date +"%m_%d_%Y") 
+cp -av ${installation_folder}mapbender/conf/mapbender.conf ${installation_folder}mapbender.conf_$(date +"%m_%d_%Y")
 cp -av ${installation_folder}mapbender/conf/geoportal.conf ${installation_folder}geoportal.conf_$(date +"%m_%d_%Y")
 cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map ${installation_folder}extents_geoportal_rlp.map_$(date +"%m_%d_%Y")
 cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${installation_folder}extent_service_geoportal_rlp.conf_$(date +"%m_%d_%Y")
@@ -1605,6 +1617,8 @@ echo "Updating Mapbender Sources"
 cd ${installation_folder}svn/mapbender
 su -c 'svn -q update'
 cp -a ${installation_folder}svn/mapbender ${installation_folder}
+
+echo "Restoring Mapbender Configs"
 cp -av ${installation_folder}mapbender.conf_$(date +"%m_%d_%Y") ${installation_folder}mapbender/conf/mapbender.conf
 cp -av ${installation_folder}geoportal.conf_$(date +"%m_%d_%Y") ${installation_folder}mapbender/conf/geoportal.conf
 cp -av ${installation_folder}extents_geoportal_rlp.map_$(date +"%m_%d_%Y") ${installation_folder}mapbender/tools/wms_extent/extents.map
@@ -1703,29 +1717,37 @@ rm ${installation_folder}geoportal-apache.conf
 rm ${installation_folder}install.log
 
 if [ -e "/etc/apt/apt.conf_backup_geoportal" ]; then
-        echo "Backup version of file exists - overwrite it with the original one"
+        echo "Restoring APT Conf"
         cp /etc/apt/apt.conf_backup_geoportal /etc/apt/apt.conf
 fi
 
 if [ -e "/etc/apache2/apache2.conf_backup_geoportal" ]; then
-        echo "Backup version of file exists - overwrite it with the original one"
+        echo "Restoring Apache2 Conf"
         cp /etc/apache2/apache2.conf_backup_geoportal /etc/apache2/apache2.conf
 fi
 if [ -e "/etc/apache2/phppgadmin.conf_backup_geoportal" ]; then
-        echo "Backup version of file exists - overwrite it with the original one"
+        echo "Restoring Apache Conf for PHPPgAdmin"
         cp /etc/apache2/conf-available/phppgadmin.conf_backup_geoportal /etc/apache2/conf-available/phppgadmin.conf
 fi
 if [ -e "/etc/php/7.0/apache2/php.ini_geoportal_backup" ]; then
-        echo "Backup version of file exists - overwrite it with the original one"
+        echo "Restoring Apache2 PHP.ini"
         cp /etc/php/7.0/apache2/php.ini_geoportal_backup /etc/php/7.0/apache2/php.ini
 fi
 if [ -e "/etc/php/7.0/cli/php.ini_geoportal_backup" ]; then
-        echo "Backup version of file exists - overwrite it with the original one"
+        echo "Restoring CLI PHP.ini"
         cp /etc/php/7.0/cli/php.ini_geoportal_backup /etc/php/7.0/cli/php.ini
 fi
 if [ -e "/etc/phppgadmin/config.inc.php_geoportal_backup" ]; then
-        echo "Backup version of file exists - overwrite it with the original one"
+        echo "Restoring PHPPgAdmin Conf"
         cp  /etc/phppgadmin/config.inc.php_geoportal_backup /etc/phppgadmin/config.inc.php
+fi
+
+if [ -e "/etc/apache2/sites-enabled/geoportal-apache.conf" ]; then
+        echo "Restoring Apache Site Conf"
+        a2dissite geoportal-apache
+        a2ensite 000-default
+        service apache2 restart
+
 fi
 
 rm *.tar.gz*
@@ -1751,7 +1773,7 @@ backup () {
 
 if [ -d ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y") ]; then
   echo "I have found a Backup for today. You should remove or rename it if you want to use this function.
-  Do sth like: mv ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y") ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")_old"
+  Do something like: mv ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y") ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")_old"
   exit
 fi
 
@@ -1773,7 +1795,7 @@ cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${in
 cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/mapbender/tools/wms_extent/
 
 while true; do
-    read -p "Do you want to dump the databases y/n?" yn
+    read -p "Do you want to dump the databases (mysqlpw neeeded, postgres needs to be local with no pw from root)y/n?" yn
     case $yn in
         [Yy]* )
         su - postgres -c "pg_dump mapbender > /tmp/geoportal_mapbender_backup.psql";
@@ -1817,19 +1839,21 @@ echo "
 This script is for installing and maintaining your geoportal solution
 You can choose from the following options:
 
-    	--ip=ipaddress             		                  | Default \"127.0.0.1\"
-      --hostname=hostname              		            | Default \"127.0.0.1\"
-    	--proxy=Proxy IP:Port  	 			                  | Default \"None\" ; Syntax --proxy=1.2.3.4:5555
+    	--ip=ipaddress             		| Default \"127.0.0.1\"
+      --hostname=hostname              		| Default \"127.0.0.1\"
+    	--proxy=Proxy IP:Port  	 			| Default \"None\" ; Syntax --proxy=1.2.3.4:5555
       --proxyuser=username                            | Default \"\" ; Password will be prompted
-      --mapbenderdbname=mapbender						          | Default \"mapbender\"
-    	--mapbenderdbuser=User for Database access	    | Default \"mapbenderdbuser\"
+      --mapbenderdbname=mapbender						| Default \"mapbender\"
+    	--mapbenderdbuser=User for Database access	| Default \"mapbenderdbuser\"
     	--mapbenderdbpw=Password for database access    | Default \"mapbenderdbpassword\"
     	--phppgadmin_user=User for PGAdmin web access	  | Default \"postgresadmin\"
     	--phppgadmin_pw=Password for PGAdmin web access | Default \"postgresadmin_password\"
-	    --install_dir=Directory for installation	      | Default \"/data/\"
-    	--mysqlpw=database password for MySQL		        | Default \"root\"
-    	--mode=what you want to do			                | Default \"none\" [install,update,delete,backup]
-
+	    --install_dir=Directory for installation	| Default \"/data/\"
+      --webadmin_email=email address for send mail      | Default \"test@test.de\"
+    	--mysqlpw=database password for MySQL		| Default \"root\"
+    	--mode=what you want to do			| Default \"none\" [install,update,delete,backup]
+      --email_hosting_server=your mailing server        | Default \"mail.domain.tld\"
+      
 "
 
 } # end of usage function
@@ -1838,23 +1862,25 @@ while getopts h-: arg; do
   case $arg in
     h )  usage;exit;;
     - )  LONG_OPTARG="${OPTARG#*=}"
-        case $OPTARG in
-	      help				          )  usage;;
-     	  proxy=?*     		      )  http_proxy=$LONG_OPTARG;;
-     	  proxyuser=?*       		)  http_proxy_user=$LONG_OPTARG;;
-        mapbenderdbname=?*		)  mapbender_database_name=$LONG_OPTARG;;
-	      mapbenderdbuser=?*		)  mapbender_database_user=$LONG_OPTARG;;
-	      mapbenderdbpw=?*		  )  mapbender_database_password=$LONG_OPTARG;;
-	      phppgadmin_user=?*		)  phppgadmin_user=$LONG_OPTARG;;
-	      phppgadmin_pw=?*		  )  phppgadmin_password=$LONG_OPTARG;;
-	      install_dir=?*		    )  installation_folder=$LONG_OPTARG;;
-	      ip=?*			            )  ipaddress=$LONG_OPTARG;;
-     	  hostname=?*			      )  hostname=$LONG_OPTARG;;
-	      mysqlpw=?*			      )  mysqlpw=$LONG_OPTARG;;
-	      mode=?*			          )  mode=$LONG_OPTARG;;
-         '' 				          )  break ;; # "--" terminates argument processing
-         * 				            )  echo "Illegal option --$OPTARG" >&2; usage; exit 2 ;;
-        esac ;;
+         case $OPTARG in
+	   help				)  usage;;
+     	   proxy=?*     		)  http_proxy=$LONG_OPTARG;;
+     	   proxyuser=?*       		)  http_proxy_user=$LONG_OPTARG;;
+           mapbenderdbname=?*		)  mapbender_database_name=$LONG_OPTARG;;
+	   mapbenderdbuser=?*		)  mapbender_database_user=$LONG_OPTARG;;
+	   mapbenderdbpw=?*		)  mapbender_database_password=$LONG_OPTARG;;
+	   phppgadmin_user=?*		)  phppgadmin_user=$LONG_OPTARG;;
+	   phppgadmin_pw=?*		)  phppgadmin_password=$LONG_OPTARG;;
+	   install_dir=?*		)  installation_folder=$LONG_OPTARG;;
+     webadmin_email=?*          )   webadmin_email=$LONG_OPTARG;;
+     email_hosting_server=?*    )   email_hosting_server=$LONG_OPTARG;
+	   ip=?*			)  ipaddress=$LONG_OPTARG;;
+     	   hostname=?*			)  hostname=$LONG_OPTARG;;
+	   mysqlpw=?*			)  mysqlpw=$LONG_OPTARG;;
+	   mode=?*			)  mode=$LONG_OPTARG;;
+           '' 				)  break ;; # "--" terminates argument processing
+           * 				)  echo "Illegal option --$OPTARG" >&2; usage; exit 2 ;;
+         esac ;;
     \? ) exit 2 ;;  # getopts already reported the illegal option
   esac
 done
