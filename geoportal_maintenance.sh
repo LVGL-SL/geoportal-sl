@@ -1380,7 +1380,7 @@ if [ -d "${installation_folder}GeoPortal.sl" ];then
 fi
 
 echo -e "\n Downloading Geoportal Source to ${installation_folder}! \n" | tee -a $installation_log
-git clone -b development --progress --single-branch https://git.osgeo.org/gitea/LVGL/GeoPortal.sl >> $installation_log 2>&1
+git clone -b production --progress --single-branch https://git.osgeo.org/gitea/LVGL/GeoPortal.sl >> $installation_log 2>&1
 if [ $? -eq 0 ];then
   echo -e "\n ${green}Successfully downloaded Geoportal Source! ${reset}\n" | tee -a $installation_log
 else
