@@ -1563,7 +1563,7 @@ update(){
 
      rm /tmp/settings.py
      cd /tmp/
-     wget https://git.osgeo.org/gitea/LVGL/GeoPortal.sl/raw/branch/master/Geoportal/settings.py
+     wget https://git.osgeo.org/gitea/LVGL/GeoPortal.sl/raw/branch/production/Geoportal/settings.py
 
      while IFS="" read -r p || [ -n "$p" ]
        do

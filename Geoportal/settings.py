@@ -16,7 +16,7 @@ from django.utils.log import DEFAULT_LOGGING
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR = "/opt/geoportal/"
+PROJECT_DIR = "/data/"
 SESSION_NAME = 'PHPSESSID'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -28,14 +28,14 @@ SECRET_KEY = '#m+rso_^a!ii6fg97kd7woxa$ttr&jn^!=_(!wgrukal81q(9+'
 DEBUG = True
 DEFAULT_LOGGING['handlers']['console']['filters'] = []
 
-HOSTNAME = "lapllgeopt01.lkvk.saarland.de"
-HOSTIP = "192.168.118.85"
+HOSTNAME = "localhost"
+HOSTIP = "127.0.0.1"
 HTTP_OR_SSL = "http://"
 SEARCH_API_PROTOCOL = "http"
 # HTTPS will fail on self signed certs, uncomment all occurrences of "verify=False"
-# in /opt/geoportal/GeoPortal.sl/searchCatalogue/utils/searcher.py if you want to bypass validation
+# in /opt/GeoPortal.rlp/searchCatalogue/utils/searcher.py if you want to bypass validation
 
-ALLOWED_HOSTS = [HOSTIP, HOSTNAME, '127.0.0.1', 'localhost', 'lapllgeopt01', 'lapllgeopt01.lkvk.saarland.de', 'lapllgeopt01.saarland.de']
+ALLOWED_HOSTS = [HOSTIP, HOSTNAME, '127.0.0.1', 'localhost']
 
 # Mediawiki
 INTERNAL_PAGES_CATEGORY = "Portalseite"
@@ -48,7 +48,7 @@ IFRAME_WIDTH = 2000
 INTERNAL_SSL = False
 
 # Search module settings
-PRIMARY_CATALOGUE = 2
+PRIMARY_CATALOGUE = 3
 PRIMARY_SRC_IMG = "primary_results.png"
 DE_CATALOGUE = 4
 DE_SRC_IMG = "de_results.png"
@@ -66,8 +66,8 @@ EMAIL_PORT = 25
 ROOT_EMAIL_ADDRESS = "geoportal-root@server.domain.tld"
 
 # Gui settings
-DEFAULT_GUI = "Geoportal-SL"
-MODERN_GUI = "Geoportal-SL-2020"
+MODERN_GUI = "Geoportal-RLP_2019"
+DEFAULT_GUI = "Geoportal-RLP"
 
 # Social networking and news feeds
 TWITTER_NAME = "GeoPortalRLP"
@@ -143,8 +143,8 @@ DATABASES = {
                     'options': '-c search_path=django,mapbender,public'
                     },
         'NAME':'mapbender',
-        'USER':'u_mapbender',
-        'PASSWORD':'dH5xpQ%33',
+        'USER':'mapbenderdbuser',
+        'PASSWORD':'mapbenderdbpassword',
         'HOST':'127.0.0.1',
         'PORT':''
     }
