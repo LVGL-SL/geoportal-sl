@@ -150,8 +150,8 @@ if [ $create_folders = 'true' ]; then
     ############################################################
     # create folder structure
     ############################################################
-    touch $installation_log | tee -a $installation_log
-    mkdir -pv $installation_folder | tee -a $installation_log
+    mkdir -pv $installation_folder
+    touch $installation_log
     mkdir -pv ${installation_folder}svn/ | tee -a $installation_log
     mkdir -pv ${installation_folder}access/ | tee -a $installation_log
 
@@ -227,7 +227,7 @@ if [ "$http_proxy" != "" ];then
     fi
 
 apt-get update | tee -a $installation_log
-apt-get install subversion | tee -a $installation_log
+apt-get install -y subversion | tee -a $installation_log
 
     if [ "$custom_proxy" == true ];then
       if [ "$svn_proxy" != "" ];then
@@ -927,20 +927,19 @@ fi
           ServerName $hostname
           ServerAdmin $webadmin_email
           ReWriteEngine On
-          RewriteRule ^/registry/wfs/([\d]+)\/?$ ${REQUEST_SCHEME}://127.0.0.1/http_auth/http/index.php?wfs_id=\$1 [P,L,QSA,NE]
-          RewriteRule ^/layer/(.*) ${REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=layer&languageCode=de&id=\$1
-          RewriteRule ^/wms/(.*) ${REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=wms&languageCode=de&id=\$1
-          RewriteRule ^/wmc/(.*) ${REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=wmc&languageCode=de&id=\$1
-          RewriteRule ^/dataset/(.*) ${REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_dataISOMetadata.php?outputFormat=iso19139&id=\$1
+          RewriteRule ^/registry/wfs/([\d]+)\/?$ %{REQUEST_SCHEME}://127.0.0.1/http_auth/http/index.php?wfs_id=\$1 [P,L,QSA,NE]
+          RewriteRule ^/layer/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=layer&languageCode=de&id=\$1
+          RewriteRule ^/wms/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=wms&languageCode=de&id=\$1
+          RewriteRule ^/wmc/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=wmc&languageCode=de&id=\$1
+          RewriteRule ^/dataset/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_dataISOMetadata.php?outputFormat=iso19139&id=\$1
 
           # for mobilemap2 api
           RewriteCond %{QUERY_STRING} ^(.*)wmcid(.*)$
-          RewriteRule /mapbender/extensions/mobilemap/map.php ${REQUEST_SCHEME}://%{HTTP_HOST}/mapbender/extensions/mobilemap2/index.html?%1wmc_id%2
+          RewriteRule /mapbender/extensions/mobilemap/map.php %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/extensions/mobilemap2/index.html?%1wmc_id%2
           RewriteCond %{QUERY_STRING} ^(.*)layerid(.*)$
-          RewriteRule /mapbender/extensions/mobilemap/map.php ${REQUEST_SCHEME}://%{HTTP_HOST}/mapbender/extensions/mobilemap2/index.html?%1layerid%2
+          RewriteRule /mapbender/extensions/mobilemap/map.php %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/extensions/mobilemap2/index.html?%1layerid%2
           # for digitizing module
-          RewriteRule ^/icons/maki/([^/]+)/([^/]+)/([^[/]+).png$ ${REQUEST_SCHEME}://127.0.0.1/mapbender/php/mod_getSymbolFromRepository.php?marker-color=\$1&marker-size=\$2&marker-symbol=\$3 [P,L,QSA,NE]
-
+          RewriteRule ^/icons/maki/([^/]+)/([^/]+)/([^[/]+).png$ %{REQUEST_SCHEME}://127.0.0.1/mapbender/php/mod_getSymbolFromRepository.php?marker-color=\$1&marker-size=\$2&marker-symbol=\$3 [P,L,QSA,NE]
 
   	      Alias /static/ ${installation_folder}GeoPortal.sl/static/
 
@@ -948,7 +947,6 @@ fi
   		  Options -Indexes -FollowSymlinks
 	      Require all granted
   	      </Directory>
-
 
           DocumentRoot ${installation_folder}/mapbender/http
           Alias /local ${installation_folder}/mapbender/http/local
@@ -958,13 +956,11 @@ fi
   		  Require ip 127.0.0.1
   	      </Directory>
 
-
-
           ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
           <Directory "/usr/lib/cgi-bin">
                   AllowOverride None
                   Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-                  #SetEnv http_proxy http://[IP}:{PORT}
+                  #SetEnv http_proxy http://IP:PORT
                   Order allow,deny
                   Allow from all
           </Directory>
@@ -1010,7 +1006,6 @@ fi
             </Files>
           </Directory>
 
-
           #Part for proxy function
           ProxyPreserveHost On
           #ReWriteEngine On
@@ -1028,7 +1023,7 @@ fi
                   Options +FollowSymLinks
                   ReWriteEngine On
                   RewriteBase /owsproxy
-                  RewriteRule  ^([\w\d]+)\/([\w\d]+)\/?$ ${REQUEST_SCHEME}://127.0.0.1/owsproxy/http/index.php?sid=\$1\&wms=\$2\& [P,L,QSA,NE]
+                  RewriteRule  ^([\w\d]+)\/([\w\d]+)\/?$ %{REQUEST_SCHEME}://127.0.0.1/owsproxy/http/index.php?sid=\$1\&wms=\$2\& [P,L,QSA,NE]
                   Options +Indexes
                   Allow from all
           </Directory>
@@ -1053,7 +1048,7 @@ fi
                   Options +FollowSymLinks +Indexes
                   ReWriteEngine On
                   RewriteBase /http_auth
-                  RewriteRule  ^([\w\d]+)\/?$ ${REQUEST_SCHEME}://127.0.0.1/http_auth/http/index.php?layer_id=\$1 [P,L,QSA,NE]
+                  RewriteRule  ^([\w\d]+)\/?$ %{REQUEST_SCHEME}://127.0.0.1/http_auth/http/index.php?layer_id=\$1 [P,L,QSA,NE]
                   Order allow,deny
                   Allow from all
           </Directory>
@@ -1066,7 +1061,6 @@ fi
           Options +ExecCGI
           Require all granted
           </Directory>
-
 
   </VirtualHost>
 EOF
@@ -1558,6 +1552,41 @@ echo -e "\n Details can be found in $installation_log \n" | tee -a $installation
 
 update(){
 
+  custom_update(){
+
+    if [ -e ${installation_folder}"custom_files.txt" ];then
+        if [ "$1" == "save" ];then
+          input="${installation_folder}/custom_files.txt"
+          while IFS= read -r line
+          do
+            directory=`echo $line | cut -d / -f 3-`
+            filename=`echo $line | cut -d / -f 3- | rev | cut -d / -f -1 | rev`
+            directory=${directory%$filename}
+
+            mkdir -p /tmp/custom_files/$directory
+            cp -a $line /tmp/custom_files/
+          done < "$input"
+        fi
+
+        if [ "$1" == "restore" ];then
+            cp -a /tmp/custom_files/* ${installation_folder}
+        fi
+      fi
+
+
+    if [ "$1" == "script" ];then
+
+      while true; do
+          read -p "Do you want to use a custom update script? Should lie under ${installation_folder}custom_update.sh y/n?" yn
+          case $yn in
+              [Yy]* ) source ${installation_folder}custom_update.sh;break;;
+              [Nn]* ) exit;break;;
+              * ) echo "Please answer yes or no.";;
+          esac
+      done
+    fi
+}
+
   check_django_settings(){
      missing_items=()
 
@@ -1600,6 +1629,8 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
+
+custom_update "save"
 
 echo "Checking differences in config files"
 check_django_settings
@@ -1678,6 +1709,9 @@ cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/move.png 
 cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/select.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
 cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/style.css ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
 cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
+
+# restore custom Files
+custom_update "restore"
 
 # create and activate virtualenv
 virtualenv -ppython3 ${installation_folder}env
@@ -1853,7 +1887,7 @@ You can choose from the following options:
     	--mysqlpw=database password for MySQL		| Default \"root\"
     	--mode=what you want to do			| Default \"none\" [install,update,delete,backup]
       --email_hosting_server=your mailing server        | Default \"mail.domain.tld\"
-      
+
 "
 
 } # end of usage function
@@ -1873,7 +1907,7 @@ while getopts h-: arg; do
 	   phppgadmin_pw=?*		)  phppgadmin_password=$LONG_OPTARG;;
 	   install_dir=?*		)  installation_folder=$LONG_OPTARG;;
      webadmin_email=?*          )   webadmin_email=$LONG_OPTARG;;
-     email_hosting_server=?*    )   email_hosting_server=$LONG_OPTARG;
+     email_hosting_server=?*    )   email_hosting_server=$LONG_OPTARG;;
 	   ip=?*			)  ipaddress=$LONG_OPTARG;;
      	   hostname=?*			)  hostname=$LONG_OPTARG;;
 	   mysqlpw=?*			)  mysqlpw=$LONG_OPTARG;;
