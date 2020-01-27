@@ -37,7 +37,7 @@ Fast install on local system (only for testing, default passwords!):
 ```shell
 wget --no-check-certificate https://git.osgeo.org/gitea/armin11/GeoPortal.rlp/raw/branch/master/geoportal_maintenance.sh
 chmod +x geoportal_maintenance.sh
-./geoportal_maintenance.sh --mode=install --ipaddress=127.0.0.1 [options]
+./geoportal_maintenance.sh --mode=install --ip=127.0.0.1 [options]
 ```
 
 
@@ -97,6 +97,17 @@ geoportal_maintenance.sh --ip=192.168.0.2 --proxy=192.168.0.254:3128 --mapbender
 Update:
 ```shell
 geoportal_maintenance.sh --mode=update
+
+You can create a file called custom_files.txt in the $installation_directory.  
+Files mentioned in this document are saved before update and restored afterwards.  
+You need to specify the full path, one file each line!  
+
+eg.
+cat /data/custom_files.txt
+/data/mapbender/http/geoportal/geoportal_logo.png
+/data/GeoPortal.rlp/templates/base.html
+
+
 ```
 
 Delete:  

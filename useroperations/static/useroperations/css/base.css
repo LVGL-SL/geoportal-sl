@@ -12,28 +12,34 @@
 /*
 CHANGE PLACEHOLDER COLORS
 */
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--secondary-placeholder);
-  text-align: center;
-  opacity: 1; /* Firefox */
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--secondary-placeholder);
+    text-align: center;
+    opacity: 1;
+    /* Firefox */
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: var(--secondary-placeholder);
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: var(--secondary-placeholder);
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
-  color: var(--secondary-placeholder);
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: var(--secondary-placeholder);
 }
 
-*{font-family:Arial,Helvetica,"Sans Serif" !important;}
+* {
+    font-family: Arial, Helvetica, "Sans Serif" !important;
+}
 
-html{
+html {
     height: 100%;
     font-family: sans-serif;
 }
 
-body{
+body {
     margin: 0;
     /*
     background-color: var(--secondary-light);
@@ -42,8 +48,9 @@ body{
     position: relative;
 }
 
-.body-content{
-    min-height: 800px;      /* ToDO: As long as the iframe mapviewer is used, we need to provide a minimum height for the body content */
+.body-content {
+    min-height: 800px;
+    /* ToDO: As long as the iframe mapviewer is used, we need to provide a minimum height for the body content */
     background-color: white;
     /*
     min-width: 60%;
@@ -57,46 +64,47 @@ body{
     margin: 0 200px 0 200px;
     */
 }
-.body-content.sidebar-open{
+
+.body-content.sidebar-open {
     transform: translateX(200px);
     margin-right: 200px;
 }
 
-footer{
+footer {
     border-top: 5px solid var(--primary);
     padding: 20px;
-    background-image: linear-gradient(var(--secondary), var(--secondary-light));
+    background-color: white;
     display: flex;
     justify-content: space-evenly;
 }
 
-#logo_geoportal{
+#logo_geoportal {
     max-height: 100px;
 }
 
-#logo_gdi{
+#logo_gdi {
     max-height: 100px;
     max-width: 100%;
     height: auto;
 }
 
-#logo_country{
+#logo_country {
     max-height: 100px;
 }
 
-.cookie-container{
+.cookie-container {
     z-index: 100;
     position: fixed;
     font-size: 1.2em;
     bottom: 0;
-    min-height:200px;
+    min-height: 200px;
     width: 100%;
     background-image: linear-gradient(var(--secondary), white);
     color: var(--primary);
     padding: 10px;
-    -webkit-box-shadow: 0px -20px 45px 0px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px -20px 45px 0px rgba(0,0,0,0.5);
-    box-shadow: 0px -20px 45px 0px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px -20px 45px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px -20px 45px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px -20px 45px 0px rgba(0, 0, 0, 0.5);
     text-align: center;
     opacity: 0.95;
     display: flex;
@@ -105,20 +113,20 @@ footer{
     flex-direction: column;
 }
 
-.cookie-text{
+.cookie-text {
     padding: 30px;
 }
 
-.cookie-button{
+.cookie-button {
     max-width: 400px;
 }
 
-.message-container{
+.message-container {
     display: flex;
     justify-content: center;
 }
 
-.alert-error{
+.alert-error {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -130,32 +138,33 @@ footer{
     width: 50%;
     min-width: 150px;
 }
-.alert-error:hover{
+
+.alert-error:hover {
     cursor: default;
     background-color: red;
 }
 
-.image-text-container{
+.image-text-container {
     display: flex;
     align-items: center;
 }
 
 
-.show{
+.show {
     display: block;
 }
 
-.header{
+.header {
     height: 150px;
     display: flex;
     justify-content: space-between;
-    align-items:center;
+    align-items: center;
     background-image: linear-gradient(to bottom left, var(--secondary-light), var(--secondary));
     border-bottom: 5px solid var(--primary);
     /*background-color: var(--secondary);*/
 }
 
-.logo-geoportal-wrapper{
+.logo-geoportal-wrapper {
     position: absolute;
     left: 0;
     top: 0;
@@ -163,20 +172,22 @@ footer{
 }
 
 /* FOR MOBILE USERS */
-@media only screen and (max-width: 1000px){
-    .body-content{
+@media only screen and (max-width: 1000px) {
+    .body-content {
         margin: 0 0 0 0;
         padding: 20px;
     }
-    #logo_country{
+
+    #logo_country {
         width: 100%;
     }
-    #logo_geoportal{
+
+    #logo_geoportal {
         width: 100%;
     }
 }
 
-.left-header{
+.left-header {
     display: flex;
     justify-content: center;
     /*
@@ -185,42 +196,42 @@ footer{
     padding: 0 4em 0 2em;
 }
 
-.middle-header{
+.middle-header {
     display: block;
     flex-grow: 5;
 }
 
-.middle-header-top{
+.middle-header-top {
     display: flex;
     justify-content: center;
-    position:relative;
+    position: relative;
 }
 
-.sticky-top{
+.sticky-top {
     min-width: 50vw;
     z-index: 5;
     position: fixed;
     top: 0;
     left: 25%;
-	-webkit-filter: drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	-moz-filter:    drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	-ms-filter:     drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	-o-filter:      drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	filter:         drop-shadow(0 5px 2px rgba(0,0,0,.5));
+    -webkit-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    -moz-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    -ms-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    -o-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
 }
 
-.right-header{
+.right-header {
     flex-grow: 1;
 }
 
-.upper-header{
+.upper-header {
     position: absolute;
     top: 0;
     right: 0;
     margin: 5px;
 }
 
-.right-header-bottom{
+.right-header-bottom {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
@@ -228,21 +239,23 @@ footer{
 }
 
 
-.sub-header-wrapper{
+.sub-header-wrapper {
     padding: 5px 0 10px 0;
     margin: 0 0 10px 0;
 }
 
 .inline {
-  margin: 10px 0 0 4px;
-  display: inline-block;
-  position: relative; }
+    margin: 10px 0 0 4px;
+    display: inline-block;
+    position: relative;
+}
 
 .simple-search-field{
     font: inherit;
     width: 100%;
     color: #000;
-    border: 0px solid;
+    border: 0.5px solid;
+    border-color: var(--primary);
     background-color: #fff;
     border-radius: 0px;
     height: 50px;
@@ -250,24 +263,25 @@ footer{
     padding: 0 10px 0 10px;
 }
 
-.simple-search-field:focus{
+.simple-search-field:focus {
     border-color: var(--primary);
     box-shadow: 0 0 10px var(--primary);
 }
 
-.search-submit-button{
+.search-submit-button {
     display: flex;
     align-items: center;
     background-color: var(--primary);
     color: white;
     padding: 10px;
 }
-.search-submit-button:hover{
+
+.search-submit-button:hover {
     background-color: var(--primary-hover);
     cursor: pointer;
 }
 
-#geoportal-search-button-icon{
+#geoportal-search-button-icon {
     width: 2em;
 }
 
@@ -283,36 +297,40 @@ footer{
     display: none;
     cursor: pointer;
     z-index: 3;
-  }
+}
 
 .simple-search-autocomplete div {
     width: 100%;
     overflow: hidden;
     padding: 10px;
-    display: block; }
+    display: block;
+}
 
-.simple-search-autocomplete div:hover, .simple-search-autocomplete div.active {
-  /*background-color: #f2f2f2; */
-  background-color: var(--primary);
-  color: white;
-  }
+.simple-search-autocomplete div:hover,
+.simple-search-autocomplete div.active {
+    /*background-color: #f2f2f2; */
+    background-color: var(--primary);
+    color: white;
+}
 
 .simple-search-autocomplete.active {
-  display: block; }
+    display: block;
+}
 
 /* LANGUAGE SELECTOR */
-.flag-selector{
+.flag-selector {
     -ms-filter: grayscale(1);
     -webkit-filter: grayscale(1);
     filter: grayscale(1);
 }
 
 
-.flag-selector:hover{
+.flag-selector:hover {
     opacity: 0.5;
     cursor: pointer;
 }
-.active-language{
+
+.active-language {
     -ms-filter: grayscale(0);
     -webkit-filter: grayscale(0);
     filter: grayscale(0);
@@ -324,14 +342,14 @@ ul {
     padding: 0;
 }
 
-.mapbender{
+.mapbender {
     opacity: 1;
     display: flex;
     justify-content: center;
 
 }
 
-.map-viewer-overlay{
+.map-viewer-overlay {
     width: 100%;
     height: 100%;
     background-color: #002966;
@@ -344,15 +362,16 @@ ul {
     display: none;
 }
 
-#mapviewer{
+#mapviewer {
     margin: 50px;
 }
-#mapviewer-external{
+
+#mapviewer-external {
     width: 100%;
     height: 600px;
 }
 
-.map-viewer-toggler{
+.map-viewer-toggler {
     drop-shadow: 0px 0px 0px;
     position: absolute;
     top: 150px;
@@ -360,34 +379,43 @@ ul {
     z-index: 2;
 }
 
-.map-viewer-toggler img, .sidebar-toggler img, .map-viewer-selector img, .map-applications-toggler img{
+.map-viewer-toggler img,
+.sidebar-toggler img,
+.map-viewer-selector img,
+.map-applications-toggler img {
     background-color: var(--primary);
     padding: 0.1em;
     border-radius: 100%;
     width: 3em;
 }
 
-.map-viewer-selector{
+.map-viewer-selector {
     margin: 5px 0 0 0;
 }
 
-.map-applications-toggler{
+.map-applications-toggler {
     margin: 5px 0 0 0;
 }
-.map-sidebar{
+
+.map-sidebar {
     position: absolute;
     top: 50px;
     right: 0px;
 }
-.map-sidebar-actions{
+
+.map-sidebar-actions {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
-.map-applications-list, .map-viewer-list{
+
+.map-applications-list,
+.map-viewer-list {
     display: none;
 }
-.map-applications-list-entry, .map-viewer-list-entry{
+
+.map-applications-list-entry,
+.map-viewer-list-entry {
     color: white;
     font-weight: bold;
     padding: 10px;
@@ -395,12 +423,14 @@ ul {
     background-color: var(--primary-light);
     border-radius: 10px;
 }
-.map-applications-list-entry:hover, .map-viewer-list-entry:hover {
+
+.map-applications-list-entry:hover,
+.map-viewer-list-entry:hover {
     background-color: var(--primary-light-hover);
     cursor: pointer;
 }
 
-.quickstart-container{
+.quickstart-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -408,7 +438,7 @@ ul {
     margin: auto;
 }
 
-.quickstart{
+.quickstart {
     height: 6em;
     display: flex;
     align-items: space-between;
@@ -424,32 +454,32 @@ ul {
     flex-grow: 1;
 }
 
-.quickstart:hover{
+.quickstart:hover {
     transform: scale(1.05);
     box-shadow: 0 0 10px var(--primary);
     cursor: pointer;
 }
 
-.quickstart-header{
+.quickstart-header {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2em;
 }
 
-.quickstart-body{
+.quickstart-body {
     font-size: 2em;
     font-weight: bold;
     padding: 0 1em 0 1em;
     margin: auto;
 }
 
-.quickstart-header img{
+.quickstart-header img {
     margin: 0 20px 0 0;
     width: 1.25em;
 }
 
-.landing-page-headline{
+.landing-page-headline {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -459,12 +489,13 @@ ul {
     margin: 1em 0 0 0;
     color: var(--primary);
 }
-.landing-page-headline h2{
+
+.landing-page-headline h2 {
     margin: 0;
     text-align: center;
 }
 
-.sidebar-toggler{
+.sidebar-toggler {
     drop-shadow: 0px 0px 0px;
     position: absolute;
     top: 150px;
@@ -473,15 +504,18 @@ ul {
 }
 
 
-.sidebar-toggler:hover, .map-viewer-toggler:hover, .map-applications-toggler:hover, .map-viewer-selector:hover{
+.sidebar-toggler:hover,
+.map-viewer-toggler:hover,
+.map-applications-toggler:hover,
+.map-viewer-selector:hover {
     transform: scale(1.05);
     transition: all 0.1s ease-in-out;
     cursor: pointer;
-	-webkit-filter: drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	-moz-filter:    drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	-ms-filter:     drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	-o-filter:      drop-shadow(0 5px 2px rgba(0,0,0,.5));
-	filter:         drop-shadow(0 5px 2px rgba(0,0,0,.5));
+    -webkit-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    -moz-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    -ms-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    -o-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
+    filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
 }
 
 .sidebar-wrapper {
@@ -498,24 +532,26 @@ ul {
     transition-duration: 0.8s;
     transform: translateX(0px);
 }
-.sidebar-wrapper.closed{
+
+.sidebar-wrapper.closed {
     transform: translateX(-200px);
 }
 
-.sidebar-content{
+.sidebar-content {
     text-align: center;
     width: 100%;
     margin-top: 0px;
     padding: 20px 0 0 0;
     color: white;
 }
-.sidebar-content a{
+
+.sidebar-content a {
     color: white;
     outline: none;
     text-decoration: none;
 }
 
-.sidebar-title{
+.sidebar-title {
     text-align: center;
     font-weight: bold;
     color: white;
@@ -529,7 +565,7 @@ ul {
     user-select: none;
 }
 
-.sidebar-area-title{
+.sidebar-area-title {
     display: flex;
     align-items: center;
     /*justify-content: space-evenly;*/
@@ -538,7 +574,7 @@ ul {
     padding: 20px;
 }
 
-.sidebar-area-title-text{
+.sidebar-area-title-text {
     text-align: left;
     padding: 0 0 0 20px;
     width: 100%;
@@ -548,85 +584,87 @@ ul {
     min-width: 140px;
 }
 
-.sidebar-area-title:hover{
+.sidebar-area-title:hover {
     cursor: pointer;
     background-color: var(--primary-light-hover);
     color: white;
 }
 
-.sidebar-area-content{
+.sidebar-area-content {
     display: none;
     overflow-wrap: break-word;
 }
 
-.sidebar-area-content > div{
+.sidebar-area-content>div {
     background-color: var(--primary-light);
     font-weight: bold;
     padding: 10px 0 10px 0;
 }
 
-.sidebar-area-content > a{
+.sidebar-area-content>a {
     outline: none;
-    text-decoration:none;
+    text-decoration: none;
     color: white;
 }
 
-.sidebar-list-element{
+.sidebar-list-element {
     color: white;
     padding: 15px 0px 15px 15px;
     cursor: pointer;
     text-align: left;
 }
 
-.current-page{
+.current-page {
     background-color: var(--primary-light-hover);
     color: white;
 }
 
-.sidebar-list-element:hover{
+.sidebar-list-element:hover {
     text-decoration: none;
     background-color: var(--primary-light-hover);
     color: white;
 }
 
 
-#map-viewer-selector{
+#map-viewer-selector {
     display: none;
 }
 
-.footer-col-wrapper{
+.footer-col-wrapper {
     display: flex;
     justify-content: center;
 
 }
-.footer-col{
+
+.footer-col {
     align-items: flex-start;
     margin: 0 40px 0 40px;
 }
 
-.footer-col > h6{
+.footer-col>h6 {
     color: var(--primary);
     font-weight: bold;
 }
 
-.footer-list{
+.footer-list {
     list-style-type: none !importan;
 }
 
-.footer-col a{
+.footer-col a {
     text-decoration: none;
     color: var(--secondary-placeholder);
 }
-.footer-col a:hover{
+
+.footer-col a:hover {
     color: var(--primary-hover);
 }
 
-.search-form-text-input{
+.search-form-text-input {
     width: 100%;
 }
 
 /* MESSAGES */
-.messages-container{
+.messages-container {
     display: none;
     position: absolute;
     right: 0;
@@ -634,7 +672,8 @@ ul {
     margin: 0 10rem;
     z-index: 3;
 }
-.messages{
+
+.messages {
     width: 100%;
     -ms-filter: drop-shadow(2px 2px 2px black);
     -webkit-filter: drop-shadow(2px 2px 2px black);
@@ -650,7 +689,7 @@ ul {
     min-height: 45px;
 }
 
-.message-toggler{
+.message-toggler {
     padding: 10px;
     color: white;
     font-weight: bold;
@@ -659,101 +698,111 @@ ul {
     position: absolute;
     right: 0;
 }
-.success .message-toggler{
+
+.success .message-toggler {
     background-color: var(--success-green);
 }
-.success .message-toggler:hover{
+
+.success .message-toggler:hover {
     border: 2px solid var(--success-green);
     background-color: white;
     color: var(--success-green);
 }
-.error .message-toggler{
+
+.error .message-toggler {
     background-color: var(--error-red);
 }
-.error .message-toggler:hover{
+
+.error .message-toggler:hover {
     border: 2px solid var(--error-red);
     background-color: white;
     color: var(--error-red);
 }
 
-.message-toggler:hover{
-    cursor:pointer;
+.message-toggler:hover {
+    cursor: pointer;
 }
 
 .messages.success {
     background-color: var(--success-green);
 }
+
 .messages.error {
     background-color: var(--error-red);
 }
-.messages.success:hover, .messages.error:hover{
+
+.messages.success:hover,
+.messages.error:hover {
     cursor: default;
 }
 
 
-@media screen and (max-width: 700px){
+@media screen and (max-width: 700px) {
 
-    #logo_gdi{
+    #logo_gdi {
         display: none;
     }
 
-    .body-content{
+    .body-content {
         padding: 5em 5vw 0 5vw;
     }
 
-    header{
+    header {
         font-size: 1em;
     }
 
-    .left-header{
+    .left-header {
         padding: 0 3em 0 0;
     }
 
-    .middle-header{
+    .middle-header {
         margin: 3em 0;
     }
 
-    .sticky-top{
+    .sticky-top {
         min-width: 100vw;
         left: 0;
         margin: 0 0 0 0;
     }
 
-    #geoportal-search-field{
+    #geoportal-search-field {
         height: 4em;
     }
 
-    #middle-header-bottom{
+    #middle-header-bottom {
         display: none;
     }
 
-    #sidebar{
+    #sidebar {
         font-size: 1.25em;
         width: 65vw;
     }
-    .sidebar-list-element{
+
+    .sidebar-list-element {
         font-size: 0.9em;
     }
 
-    .body-content.sidebar-open{
+    .body-content.sidebar-open {
         transform: unset;
         margin-right: unset;
     }
 
-    .sidebar-toggler img, .map-viewer-toggler img, .map-viewer-selector img{
+    .sidebar-toggler img,
+    .map-viewer-toggler img,
+    .map-viewer-selector img {
         width: 3.5em;
     }
 
 
-    .sidebar-area-title-icon img{
+    .sidebar-area-title-icon img {
         width: 2em;
     }
 
-    .sidebar-title{
+    .sidebar-title {
         font-size: 1em;
     }
 
-    .quickstart-container{
+    .quickstart-container {
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -761,47 +810,51 @@ ul {
         flex-wrap: unset;
     }
 
-    .quickstart{
+    .quickstart {
         font-size: 1em;
         width: 80vw;
     }
 
-    .quickstart:hover{
+    .quickstart:hover {
         transform: unset;
     }
 
-    .quickstart-header{
+    .quickstart-header {
         font-size: 1.5em;
     }
 
-    footer{
+    footer {
         font-size: 1.25em;
     }
-    .footer-col-wrapper{
+
+    .footer-col-wrapper {
         flex-direction: column;
     }
-    .right-footer{
+
+    .right-footer {
         display: none;
     }
-    #footer-legal{
+
+    #footer-legal {
         margin: 0 0 1em 0;
     }
-    #footer-news-api{
+
+    #footer-news-api {
         margin: 0;
     }
 
-    .sidebar-wrapper.closed{
+    .sidebar-wrapper.closed {
         transform: translateX(-75vw);
     }
 
-    .cookie-container{
+    .cookie-container {
         position: absolute;
         z-index: 100;
         top: 0;
         bottom: unset;
     }
 
-    .mobile-advice{
+    .mobile-advice {
         font-weight: bold;
     }
 
