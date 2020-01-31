@@ -1,12 +1,11 @@
+static/
 Geoportal/__pycache__/
 Geoportal/utils/__pycache__/
 news/__pycache__/
 news/migrations/__pycache__/
-resourceManager/__pycache__/admin.cpython-35.pyc
-resourceManager/__pycache__/models.cpython-35.pyc
+resourceManager/__pycache__/
 searchCatalogue/__pycache__/
-static/
 useroperations/__pycache__/
-useroperations/utils/__pycache__/useroperations_helper.cpython-35.pyc
+useroperations/utils/__pycache__/
 locale/de/LC_MESSAGES/django.mo
 locale/en/LC_MESSAGES/django.mo
