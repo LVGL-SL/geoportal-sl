@@ -78,7 +78,11 @@ footer {
     justify-content: space-evenly;
 }
 
-#logo_geoportal {
+.g-recaptcha{
+margin-left: 212px;
+}
+
+#logo_geoportal{
     max-height: 100px;
 }
 
@@ -295,7 +299,6 @@ footer {
     position: absolute;
     top: 40px;
     display: none;
-    cursor: pointer;
     z-index: 3;
 }
 
@@ -306,12 +309,20 @@ footer {
     display: block;
 }
 
-.simple-search-autocomplete div:hover,
-.simple-search-autocomplete div.active {
-    /*background-color: #f2f2f2; */
-    background-color: var(--primary);
-    color: white;
+.simple-search-autocomplete .headline{
+    font-weight: bold;
 }
+
+.simple-search-autocomplete .suggestion{
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+.simple-search-autocomplete .suggestion:hover, .simple-search-autocomplete .suggestion.active{
+  background-color: var(--primary);
+  color: white;
+  }
 
 .simple-search-autocomplete.active {
     display: block;
