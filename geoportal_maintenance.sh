@@ -9,9 +9,10 @@
 ############################################################
 
 # Variables
+options_file="options.txt"
+installation_folder="/data/"
 ipaddress="127.0.0.1"
 hostname="127.0.0.1"
-mysqlpw="root"
 mode="none"
 
 # mapbender/phppgadmin database config
@@ -22,6 +23,9 @@ mapbender_database_user="mapbenderdbuser"
 mapbender_database_password="mapbenderdbpassword"
 phppgadmin_user="postgresadmin"
 phppgadmin_password="postgresadmin_password"
+mysql_user="geowiki"
+mysql_user_pw="geoportal"
+mysql_root_pw="root"
 
 #proxy config
 http_proxy=""
@@ -35,8 +39,7 @@ webadmin_email="test@test.de"
 email_hosting_server="mail.domain.tld"
 use_ssl="false"
 not_proxy_hosts="localhost,127.0.0.1"
-installation_folder="/data/"
-installation_log=${installation_folder}"geoportal_install_$(date +"%m_%d_%Y").log"
+
 
 # mapbender specific stuff
 mapbender_guest_user_id="2"
@@ -89,6 +92,7 @@ installation_log="/var/log/geoportal/install_$(date +"%m_%d_%Y").log"
 install_system_packages="true"
 create_folders="true"
 checkout_mapbender_svn="true"
+checkout_geoportal_git="true"
 install_mapbender_source="true"
 install_mapbender_database="true"
 checkout_mapbender_conf="true"
@@ -122,11 +126,16 @@ green=`tput setaf 2`
 reset=`tput sgr0`
 
 determineEmailSettings(){
-  sed -i s/"EMAIL_HOST = 'server.domain.tld'"/"EMAIL_HOST = \"$email_hosting_server\""/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
-  sed -i s/"EMAIL_HOST_USER = 'geoportal@server.domain.tld'"/"EMAIL_HOST_USER = \"$webadmin_email\""/g ${installation_folder}GeoPortal.rlp/Geoportal/settings.py
+  sed -i s/"EMAIL_HOST = 'server.domain.tld'"/"EMAIL_HOST = \"$email_hosting_server\""/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+  sed -i s/"EMAIL_HOST_USER = 'geoportal@server.domain.tld'"/"EMAIL_HOST_USER = \"$webadmin_email\""/g ${installation_folder}GeoPortal.sl/Geoportal/settings.py
 }
 
 install_full(){
+
+if [ -f $options_file ];then
+source $options_file
+fi
+
 
 ##################### Geoportal-RLP
 wms_1_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=1 guiId='$default_gui_name' serviceType='wms' serviceAccessUrl=$wms_1_url"
@@ -144,7 +153,6 @@ wms_6_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/regist
 
 # create directories
 if [ $create_folders = 'true' ]; then
-
     echo -e "\n Creating directories for Mapbender! \n"
     # initial installation of geoportal.rlp on debian 9
     ############################################################
@@ -304,8 +312,8 @@ if [ $checkout_mapbender_svn = 'true' ]; then
       svn cleanup
     fi
     cd ${installation_folder}svn/
-    echo -e "\n Downloading Mapbender Sources from SVN! \n" | tee -a $installation_log
-    svn co https://svn.osgeo.org/mapbender/trunk/mapbender | tee -a $installation_log
+    echo -e "\n Downloading Mapbender Sources from Git! \n" | tee -a $installation_log
+    git clone --progress https://git.osgeo.org/gitea/hollsandre/Mapbender2.8 mapbender | tee -a $installation_log
     if [ $? -eq 0 ];then
       echo -e "\n ${green}Successfully downloaded Mapbender Source!${reset} \n"  | tee -a $installation_log
     else
@@ -314,7 +322,24 @@ if [ $checkout_mapbender_svn = 'true' ]; then
     fi
 fi
 
+if [ "$checkout_geoportal_git" = 'true' ]; then
+  if [ -d "${installation_folder}GeoPortal.sl" ];then
+  	echo -e "\n ${red} Folder ${installation_folder}GeoPortal.sl found, please remove it!${reset}\n" | tee -a $installation_log
+    exit
+  fi
+  cd ${installation_folder}
+  echo -e "\n Downloading Geoportal Source to ${installation_folder}! \n" | tee -a $installation_log
+  git clone --progress https://git.osgeo.org/gitea/armin11/GeoPortal.sl | tee -a $installation_log
+  if [ $? -eq 0 ];then
+    echo -e "\n ${green}Successfully downloaded Geoportal Source! ${reset}\n" | tee -a $installation_log
+  else
+    echo -e "\n ${red}Downloading Geoportal Source failed! Check internet connection or proxy!${reset}\n" | tee -a $installation_log
+    exit
+  fi
+fi
+
 if [ $checkout_mapbender_conf = 'true' ]; then
+    cd ${installation_folder}svn
     echo -e "\n Download Mapbender conf from SVN \n"  | tee -a $installation_log
     svn co http://www.gdi-rp-dienste.rlp.de/svn/de-rp/data/conf | tee -a $installation_log
     if [ $? -eq 0 ];then
@@ -383,24 +408,10 @@ if [ $install_mapbender_database = 'true' ]; then
   #overwrite default pg_hba.conf of main - default cluster
   cp /etc/postgresql/9.6/main/pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf_backup
   #####################
-  cat << EOF > "/etc/postgresql/9.6/main/pg_hba.conf"
-  # Database administrative login by Unix domain socket
-  local   all             postgres                                peer
-  
-  # TYPE  DATABASE        USER            ADDRESS                 METHOD
-  
-  # "local" is for Unix domain socket connections only
-  local   all             postgres                                peer
-  local   $mapbender_database_name        $mapbender_database_user                        md5
-  # IPv4 local connections:
-  host    all             postgres        127.0.0.1/32            trust
-  host    $mapbender_database_name             $mapbender_database_user 127.0.0.1/32            md5
-  # IPv6 local connections:
-  
-  host    all             postgres        ::1/128                 trust
-  host    $mapbender_database_name             $mapbender_database_user ::1/128                 md5
-EOF
-  
+  cp -a ${installation_folder}GeoPortal.sl/scripts/pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf
+  sed -i "s/mapbender_database_name/$mapbender_database_name/g" /etc/postgresql/9.6/main/pg_hba.conf
+  sed -i "s/mapbender_database_user/$mapbender_database_user/g" /etc/postgresql/9.6/main/pg_hba.conf
+
   #####################
   service postgresql restart
   #####################
@@ -430,220 +441,28 @@ EOF
   #####################
   echo  -e '\n Adopting mapbenders default database to geoportal default options. \n'
 
-  cat << EOF > ${installation_folder}geoportal_database_adoption_1.sql
-  --create new database content
-  --geoportal specific extensions
-  ALTER TABLE mb_user ADD COLUMN mb_user_glossar character varying(5);
-  --ALTER TABLE mb_user ADD COLUMN mb_user_glossar character varying(14);
-  --ALTER TABLE mb_user ADD COLUMN mb_user_textsize character varying(14);
-  ALTER TABLE mb_user ADD COLUMN mb_user_textsize character varying(14);
-  ALTER TABLE mb_user ADD COLUMN mb_user_last_login_date date;
-  ALTER TABLE mb_user ADD COLUMN mb_user_spatial_suggest character varying(5);
+  cp -a ${installation_folder}GeoPortal.sl/scripts/geoportal_database_adoption_1.sql ${installation_folder}
+  sed -i "s/\${mapbender_guest_user_id}/${mapbender_guest_user_id}/g" ${installation_folder}geoportal_database_adoption_1.sql
+  sed -i "s/\${mapbender_subadmin_default_user_id}/${mapbender_subadmin_default_user_id}/g" ${installation_folder}geoportal_database_adoption_1.sql
+  sed -i "s/\${mapbender_subadmin_group_id}/${mapbender_subadmin_group_id}/g" ${installation_folder}geoportal_database_adoption_1.sql
+  sed -i "s/\${mapbender_subadmin_default_group_id}/${mapbender_subadmin_default_group_id}/g" ${installation_folder}geoportal_database_adoption_1.sql
+  sed -i "s/\${mapbender_guest_group_id}/${mapbender_guest_group_id}/g" ${installation_folder}geoportal_database_adoption_1.sql
+  sed -i "s/\${default_gui_name}/${default_gui_name}/g" ${installation_folder}geoportal_database_adoption_1.sql
+  sed -i "s/\${extended_search_default_gui_name}/${extended_search_default_gui_name}/g" ${installation_folder}geoportal_database_adoption_1.sql
 
-  UPDATE gui_category SET category_name='Anwendung' WHERE category_id=2;
-  UPDATE gui_category SET category_description='Anwendungen (Applications)' WHERE category_id=2;
 
-  --add anonymous user
-  INSERT INTO mb_user (mb_user_id, mb_user_name, mb_user_password, mb_user_owner, mb_user_description, mb_user_login_count, mb_user_email, mb_user_phone, mb_user_department, mb_user_resolution, mb_user_organisation_name, mb_user_position_name, mb_user_phone1, mb_user_facsimile, mb_user_delivery_point, mb_user_city, mb_user_postal_code, mb_user_country, mb_user_online_resource, mb_user_textsize, mb_user_glossar, mb_user_last_login_date, mb_user_digest, mb_user_realname, mb_user_street, mb_user_housenumber, mb_user_reference, mb_user_for_attention_of, mb_user_valid_from, mb_user_valid_to, mb_user_password_ticket, mb_user_firstname, mb_user_lastname, mb_user_academictitle, timestamp_create, timestamp, mb_user_spatial_suggest, mb_user_newsletter, mb_user_allow_survey, mb_user_aldigest, password, is_active, activation_key, timestamp_delete) VALUES (${mapbender_guest_user_id}, 'guest', '084e0343a0486ff05530df6c705c8bb4', 1, 'test', 0, 'kontakt@geoportal.rlp.de', NULL, '', 72, '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, 'textsize3', 'ja', '2012-01-26', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2013-07-05 08:09:25.560359', '2015-08-20 10:04:04.952796', 'nein', true, true, NULL, '\$2b\$12\$sT7geeXvBlGZyLcT55VxqeNF2yuU8LKnBpfKFwxkiAh147mNxF5Cq',true,'',NULL);
-
-  INSERT INTO mb_user (mb_user_id, mb_user_name, mb_user_password, mb_user_owner, mb_user_description, mb_user_login_count, mb_user_email, mb_user_phone, mb_user_department, mb_user_resolution, mb_user_organisation_name, mb_user_position_name, mb_user_phone1, mb_user_facsimile, mb_user_delivery_point, mb_user_city, mb_user_postal_code, mb_user_country, mb_user_online_resource, mb_user_textsize, mb_user_glossar, mb_user_last_login_date, mb_user_digest, mb_user_realname, mb_user_street, mb_user_housenumber, mb_user_reference, mb_user_for_attention_of, mb_user_valid_from, mb_user_valid_to, mb_user_password_ticket, mb_user_firstname, mb_user_lastname, mb_user_academictitle, timestamp_create, timestamp, mb_user_spatial_suggest, mb_user_newsletter, mb_user_allow_survey, mb_user_aldigest, password, is_active, activation_key, timestamp_delete) VALUES (${mapbender_subadmin_default_user_id}, 'bereichsadmin1', '3ad58afdc417b975256af7a6d3eda7a5', 1, '', 0, 'kontakt@geoportal.rlp.de', NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'nein', '2017-07-28', '3c345c2af80400e1e4c94ed0a967e713', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'bereichsadmin1', 'bereichsadmin1', '', '2013-07-05 08:09:25.560359', '2017-07-28 10:12:13.926954', 'nein', false, false, '2a32c845b23d82bea4653810f146397b', '\$2b\$12\$hkhs1s4LrPTNWeZaTHAS5.G63JZSVCmc7xUpaYrdVTAxgeeFe1YM6',true,'',NULL);
-
-  INSERT INTO mb_group VALUES (${mapbender_subadmin_group_id}, 'Bereichsadmin', 1, 'Diensteadministratoren der Behörden', '', NULL, '', '', '', '', '', '', '', '', '', NULL, NULL, '2013-07-05 08:09:25.732456', '2018-05-25 08:57:07.988259', NULL, NULL, NULL, NULL, NULL, NULL, true);
-
-  INSERT INTO mb_group VALUES (${mapbender_guest_group_id}, 'guest', 1, 'Gastgruppe', '', NULL, '', '', '', '', '', '', '', '', '', NULL, NULL, '2013-07-05 08:09:25.732456', '2018-05-25 08:57:07.988259', NULL, NULL, NULL, NULL, NULL, NULL, true);
-
-  INSERT INTO mb_group VALUES (${mapbender_subadmin_default_group_id}, 'testgruppe1', 1, 'testgruppe1', 'testgruppe1', NULL, 'Musterstraße 11', '11111 Musterstadt', 'Musterstadt', 'DE-RP', 'DE', '1111', '1111', 'mustermail@musterdomain.com', 'http://www.geoportal.rlp.de/metadata/GDI-RP_mit_Markenschutz_RGB_70.png', NULL, NULL, '2013-07-05 08:09:25.732456', '2018-05-25 08:57:07.988259', NULL, NULL, NULL, NULL, NULL, NULL, true);
-
-  --guest user into guest group
-  INSERT INTO mb_user_mb_group VALUES (${mapbender_guest_user_id}, ${mapbender_guest_group_id}, 1);
-
-  --bereichsadmin1 into guest group
-  INSERT INTO mb_user_mb_group VALUES (${mapbender_subadmin_default_user_id}, ${mapbender_guest_group_id}, 1);
-
-  --bereichsadmin1 into Bereichsadmin group
-  INSERT INTO mb_user_mb_group VALUES (${mapbender_subadmin_default_user_id}, ${mapbender_subadmin_group_id}, 1);
-
-  --bereichsadmin1 into testgruppe1 group - role primary
-  INSERT INTO mb_user_mb_group VALUES (${mapbender_subadmin_default_user_id}, ${mapbender_subadmin_default_group_id}, 2);
-
-  --bereichsadmin1 into testgruppe1 group - role standard
-  INSERT INTO mb_user_mb_group VALUES (${mapbender_subadmin_default_user_id}, ${mapbender_subadmin_default_group_id}, 1);
-
-  --root into guest group
-  INSERT INTO mb_user_mb_group VALUES (1, ${mapbender_guest_group_id}, 1);
-
-  --guis: Geoportal-RLP, Geoportal-RLP_erwSuche2, Administration_DE, Portal_Admin, Owsproxy_csv - admin_metadata fehlt noch!!!!
-
-  INSERT INTO gui (gui_id, gui_name, gui_description, gui_public) VALUES ('service_container1', 'service_container1', 'service_container1', 1);
-
-  INSERT INTO gui (gui_id, gui_name, gui_description, gui_public) VALUES ('service_container1_free', 'service_container1_free', 'service_container1_free', 1);
-
-  --guis: Geoportal-RLP, Administration_DE, Owsproxy_csv, admin_metadata, .....
-  DELETE FROM gui WHERE gui_id IN ('${default_gui_name}', 'Owsproxy_csv', 'admin_wms_metadata', 'admin_wfs_metadata', 'admin_wmc_metadata', 'admin_metadata', 'admin_ows_scheduler', 'PortalAdmin_DE', 'Administration_DE', '${extended_search_default_gui_name}');
-EOF
   #####################
   # sql for beeing executed after recreating of the guis
   #####################
-  cat << EOF > ${installation_folder}geoportal_database_adoption_2.sql
-  INSERT INTO gui_gui_category (fkey_gui_id, fkey_gui_category_id) VALUES ('${default_gui_name}', 2);
-  INSERT INTO gui_gui_category (fkey_gui_id, fkey_gui_category_id) VALUES ('Administration_DE', 2);
-  INSERT INTO gui_gui_category (fkey_gui_id, fkey_gui_category_id) VALUES ('PortalAdmin_DE', 2);
 
-
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('PortalAdmin_DE', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('${default_gui_name}', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('Administration_DE', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('Owsproxy_csv', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('${extended_search_default_gui_name}', 1, 'owner');
-
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('admin_wms_metadata', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('admin_wfs_metadata', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('admin_wmc_metadata', 1, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('admin_metadata', 1, 'owner');
-
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('admin_ows_scheduler', 1, 'owner');
-
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('service_container1', ${mapbender_subadmin_default_user_id}, 'owner');
-  INSERT INTO gui_mb_user (fkey_gui_id, fkey_mb_user_id, mb_user_type) VALUES ('service_container1_free', ${mapbender_subadmin_default_user_id}, 'owner');
-
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('Administration_DE', ${mapbender_subadmin_group_id});
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('Owsproxy_csv', ${mapbender_subadmin_group_id});
-
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('admin_wmc_metadata', ${mapbender_subadmin_group_id});
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('admin_wms_metadata', ${mapbender_subadmin_group_id});
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('admin_wfs_metadata', ${mapbender_subadmin_group_id});
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('admin_ows_scheduler', ${mapbender_subadmin_group_id});
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('admin_metadata', ${mapbender_subadmin_group_id});
-  --INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('admin1', ${mapbender_subadmin_group_id});
-
-
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('${default_gui_name}', ${mapbender_guest_group_id});
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('${extended_search_default_gui_name}', ${mapbender_guest_group_id});
-
-  INSERT INTO gui_mb_group (fkey_gui_id, fkey_mb_group_id) VALUES ('service_container1_free', ${mapbender_guest_group_id});
-  --alter views to integrate real subadmin and guest user ids
-  -- View: groups_for_publishing
-
-  -- DROP VIEW groups_for_publishing;
-
-  CREATE OR REPLACE VIEW groups_for_publishing AS
-   SELECT mb_group.mb_group_id AS fkey_mb_group_id,
-      mb_group.mb_group_id,
-      mb_group.mb_group_name,
-      mb_group.mb_group_owner,
-      mb_group.mb_group_description,
-      mb_group.mb_group_title,
-      mb_group.mb_group_ext_id,
-      mb_group.mb_group_address,
-      mb_group.mb_group_postcode,
-      mb_group.mb_group_city,
-      mb_group.mb_group_stateorprovince,
-      mb_group.mb_group_country,
-      mb_group.mb_group_voicetelephone,
-      mb_group.mb_group_facsimiletelephone,
-      mb_group.mb_group_email,
-      mb_group.mb_group_logo_path,
-      mb_group.mb_group_homepage,
-      mb_group.mb_group_admin_code,
-      mb_group.timestamp_create,
-      mb_group."timestamp",
-      mb_group.mb_group_address_location,
-      mb_group.uuid,
-      mb_group.mb_group_ckan_uuid,
-      mb_group.mb_group_ckan_api_key
-     FROM mb_group
-    WHERE (mb_group.mb_group_id IN ( SELECT DISTINCT f.fkey_mb_group_id
-             FROM mb_user_mb_group f,
-              mb_user_mb_group s
-            WHERE (f.mb_user_mb_group_type = ANY (ARRAY[2, 3])) AND s.fkey_mb_group_id = ${mapbender_subadmin_group_id} AND f.fkey_mb_user_id = s.fkey_mb_user_id));
-
-  ALTER TABLE groups_for_publishing
-    OWNER TO postgres;
-  GRANT ALL ON TABLE groups_for_publishing TO postgres;
-  GRANT ALL ON TABLE groups_for_publishing TO $mapbender_database_user;
-
-  ALTER TABLE groups_for_publishing
-    OWNER TO postgres;
-  GRANT ALL ON TABLE groups_for_publishing TO postgres;
-  GRANT ALL ON TABLE groups_for_publishing TO $mapbender_database_user;
-
-  -- View: registrating_groups
-
-  -- DROP VIEW registrating_groups;
-
-  CREATE OR REPLACE VIEW registrating_groups AS
-   SELECT f.fkey_mb_group_id,
-      f.fkey_mb_user_id
-     FROM mb_user_mb_group f,
-      mb_user_mb_group s
-    WHERE f.mb_user_mb_group_type = 2 AND s.fkey_mb_group_id = ${mapbender_subadmin_group_id} AND f.fkey_mb_user_id = s.fkey_mb_user_id
-    ORDER BY f.fkey_mb_group_id, f.fkey_mb_user_id;
-
-  ALTER TABLE registrating_groups
-    OWNER TO postgres;
-  GRANT ALL ON TABLE registrating_groups TO postgres;
-  GRANT ALL ON TABLE registrating_groups TO $mapbender_database_user;
-
-  -- View: users_for_publishing
-
-  -- DROP VIEW users_for_publishing;
-
-  CREATE OR REPLACE VIEW users_for_publishing AS
-   SELECT DISTINCT f.fkey_mb_user_id,
-      f.fkey_mb_group_id AS primary_group_id
-     FROM mb_user_mb_group f,
-      mb_user_mb_group s
-    WHERE f.mb_user_mb_group_type = 2 AND s.fkey_mb_group_id = ${mapbender_subadmin_group_id} AND f.fkey_mb_user_id = s.fkey_mb_user_id
-    ORDER BY f.fkey_mb_user_id;
-
-  ALTER TABLE users_for_publishing
-    OWNER TO postgres;
-  GRANT ALL ON TABLE users_for_publishing TO postgres;
-  GRANT ALL ON TABLE users_for_publishing TO $mapbender_database_user;
-
-  --add csw information
-
-  INSERT INTO cat VALUES (1, '2.0.2', 'GeoDatenKatalog.De', 'Bereitstellung des Geodatenkatalog.de der GeoDatenInfrastruktur Deutschland (GDI-DE)', 'http://gdk.gdi-de.org/gdi-de/srv/eng/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities', 'none', 'none', NULL, NULL, 'admin admin', 'Administrator', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, 'iserted via sql - no caps available!', 5299, 1502980960);
-
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'getcapabilities');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'getcapabilities');
-  INSERT INTO cat_op_conf VALUES (1, 'post_xml', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'getcapabilities');
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'describerecord');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'describerecord');
-  INSERT INTO cat_op_conf VALUES (1, 'post_xml', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'describerecord');
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'getdomain');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'http://ims.geoportal.de/gdi-de/srv/eng/csw', 'getdomain');
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'http://ims.geoportal.de/gdi-de/srv/eng/csw-publication', 'transaction');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'http://ims.geoportal.de/gdi-de/srv/eng/csw-publication', 'transaction');
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'http://ims.geoportal.de/gdi-de/srv/eng/csw-publication', 'harvest');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'http://ims.geoportal.de/gdi-de/srv/eng/csw-publication', 'harvest');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'https://gdk.gdi-de.org/gdi-de/srv/eng/csw', 'getrecords');
-  INSERT INTO cat_op_conf VALUES (1, 'post_xml', 'https://gdk.gdi-de.org/gdi-de/srv/eng/csw', 'getrecords');
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'https://gdk.gdi-de.org/gdi-de/srv/eng/csw', 'getrecordbyid');
-  INSERT INTO cat_op_conf VALUES (1, 'post_xml', 'https://gdk.gdi-de.org/gdi-de/srv/eng/csw', 'getrecordbyid');
-  INSERT INTO cat_op_conf VALUES (1, 'get', 'https://gdk.gdi-de.org/gdi-de/srv/eng/csw', 'getrecords');
-  INSERT INTO cat_op_conf VALUES (1, 'post', 'https://gdk.gdi-de.org/gdi-de/srv/eng/csw', 'getrecordbyid');
-
-
-  CREATE TABLE gp_csw (
-      csw_id integer,
-      csw_name text,
-      fkey_cat_id integer,
-      csw_p integer,
-      csw_h integer,
-      hierachylevel character(50)
-  );
-
-
-  ALTER TABLE gp_csw OWNER TO postgres;
-  GRANT ALL ON TABLE gp_csw TO $mapbender_database_user;
-
-  INSERT INTO gp_csw VALUES (5, 'GeodatenkatalogDE - Sonstige Informationen', 1, 1, 5, 'nonGeographicDataset');
-  INSERT INTO gp_csw VALUES (3, 'GeodatenkatalogDE - Dienste', 1, 1, 5, 'service');
-  INSERT INTO gp_csw VALUES (4, 'GeodatenkatalogDE - Anwendungen', 1, 1, 5, 'application');
-  INSERT INTO gp_csw VALUES (2, 'GeodatenkatalogDE - Geodaten', 1, 1, 5, 'dataset/series');
-
-EOF
+  cp -a ${installation_folder}GeoPortal.sl/scripts/geoportal_database_adoption_2.sql ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\${mapbender_subadmin_default_user_id}/${mapbender_subadmin_default_user_id}/g" ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\${mapbender_subadmin_group_id}/${mapbender_subadmin_group_id}/g" ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\${mapbender_guest_group_id}/${mapbender_guest_group_id}/g" ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\${default_gui_name}/${default_gui_name}/g" ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\${extended_search_default_gui_name}/${extended_search_default_gui_name}/g" ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\${mapbender_database_user}/${mapbender_database_user}/g" ${installation_folder}geoportal_database_adoption_2.sql
+  sed -i "s/\$mapbender_database_user/$mapbender_database_user/g" ${installation_folder}geoportal_database_adoption_2.sql
 
   #####################
   sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}geoportal_database_adoption_1.sql | tee -a $installation_log
@@ -693,7 +512,7 @@ EOF
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA mapbender TO $mapbender_database_user'" | tee -a $installation_log
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO $mapbender_database_user'" | tee -a $installation_log
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT ALL PRIVILEGES ON DATABASE $mapbender_database_name TO $mapbender_database_user'" | tee -a $installation_log
-  su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT SELECT, INSERT, UPDATE, DELETE ON DATABASE $mapbender_database_name TO $mapbender_database_user'" | tee -a $installation_log
+  su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT  INSERT, UPDATE, DELETE ON DATABASE $mapbender_database_name TO $mapbender_database_user'" | tee -a $installation_log
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA mapbender TO $mapbender_database_user'" | tee -a $installation_log
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO $mapbender_database_user'" | tee -a $installation_log
   su - postgres -c "psql -q -p $mapbender_database_port -d $mapbender_database_name -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA mapbender TO $mapbender_database_user'" | tee -a $installation_log
@@ -921,149 +740,11 @@ fi
   ############################################################
   # create apache configuration for mapbender
   ############################################################
-  echo -e  "\n Creating apache configuration. \n" | tee -a $installation_log
-  cat << EOF > ${installation_folder}geoportal-apache.conf
-  <VirtualHost *:80>
-          ServerName $hostname
-          ServerAdmin $webadmin_email
-          ReWriteEngine On
-          RewriteRule ^/registry/wfs/([\d]+)\/?$ %{REQUEST_SCHEME}://127.0.0.1/http_auth/http/index.php?wfs_id=\$1 [P,L,QSA,NE]
-          RewriteRule ^/layer/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=layer&languageCode=de&id=\$1
-          RewriteRule ^/wms/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=wms&languageCode=de&id=\$1
-          RewriteRule ^/wmc/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_showMetadata.php?resource=wmc&languageCode=de&id=\$1
-          RewriteRule ^/dataset/(.*) %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/php/mod_dataISOMetadata.php?outputFormat=iso19139&id=\$1
-
-          # for mobilemap2 api
-          RewriteCond %{QUERY_STRING} ^(.*)wmcid(.*)$
-          RewriteRule /mapbender/extensions/mobilemap/map.php %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/extensions/mobilemap2/index.html?%1wmc_id%2
-          RewriteCond %{QUERY_STRING} ^(.*)layerid(.*)$
-          RewriteRule /mapbender/extensions/mobilemap/map.php %{REQUEST_SCHEME}://%{SERVER_NAME}/mapbender/extensions/mobilemap2/index.html?%1layerid%2
-          # for digitizing module
-          RewriteRule ^/icons/maki/([^/]+)/([^/]+)/([^[/]+).png$ %{REQUEST_SCHEME}://127.0.0.1/mapbender/php/mod_getSymbolFromRepository.php?marker-color=\$1&marker-size=\$2&marker-symbol=\$3 [P,L,QSA,NE]
-
-  	      Alias /static/ ${installation_folder}GeoPortal.sl/static/
-
-  	      <Directory ${installation_folder}GeoPortal.sl/static>
-  		  Options -Indexes -FollowSymlinks
-	      Require all granted
-  	      </Directory>
-
-          DocumentRoot ${installation_folder}/mapbender/http
-          Alias /local ${installation_folder}/mapbender/http/local
-	      <Directory ${installation_folder}/mapbender/http/local>
-          Options -Indexes -FollowSymlinks
-          AllowOverride None
-  		  Require ip 127.0.0.1
-  	      </Directory>
-
-          ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-          <Directory "/usr/lib/cgi-bin">
-                  AllowOverride None
-                  Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-                  #SetEnv http_proxy http://IP:PORT
-                  Order allow,deny
-                  Allow from all
-          </Directory>
-
-          ErrorLog /var/log/apache2/error.log
-
-          # Possible values include: debug, info, notice, warn, error, crit,
-          # alert, emerg.
-          LogLevel error
-
-          CustomLog /var/log/apache2/access.log combined
-
-          Alias /mapbender ${installation_folder}mapbender/http
-          <Directory ${installation_folder}mapbender/http/>
-             Options MultiViews
-             AllowOverride None
-             Order deny,allow
-             Allow from all
-             #Allow from 127.0.0.0/255.0.0.0 ::1/128
-             # Insert filter
-             SetOutputFilter DEFLATE
-             # Netscape 4.x has some problems...
-             BrowserMatch ^Mozilla/4 gzip-only-text/html
-             # Netscape 4.06-4.08 have some more problems
-             BrowserMatch ^Mozilla/4\.0[678] no-gzip
-             # MSIE masquerades as Netscape, but it is fine
-             # BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
-             # NOTE: Due to a bug in mod_setenvif up to Apache 2.0.48
-             # the above regex won't work. You can use the following
-             # workaround to get the desired effect:
-             BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
-             # Don't compress images
-             SetEnvIfNoCase Request_URI \
-             \.(?:gif|jpe?g|png)$ no-gzip dont-vary
-             # Make sure proxies don't deliver the wrong content
-             Header append Vary User-Agent env=!dont-vary
-          </Directory>
-
-          <Directory ${installation_folder}mapbender/http/tmp>
-            <Files ~ "(.php|.perl|.rb|.py)">
-              Order allow,deny
-              Deny from all
-            </Files>
-          </Directory>
-
-          #Part for proxy function
-          ProxyPreserveHost On
-          #ReWriteEngine On
-          SetEnv force-proxy-request-1.0 1
-          SetEnv proxy-nokeepalive 1
-          ProxyTimeout 50
-          #NoProxy localhost
-          #ProxyBadHeader Ignore
-          ProxyMaxForwards 3
-          #RewriteLog "/tmp/rewrite.log"
-          #RewriteLogLevel 3
-
-          Alias /owsproxy ${installation_folder}mapbender/owsproxy
-          <Directory ${installation_folder}mapbender/owsproxy/>
-                  Options +FollowSymLinks
-                  ReWriteEngine On
-                  RewriteBase /owsproxy
-                  RewriteRule  ^([\w\d]+)\/([\w\d]+)\/?$ %{REQUEST_SCHEME}://127.0.0.1/owsproxy/http/index.php?sid=\$1\&wms=\$2\& [P,L,QSA,NE]
-                  Options +Indexes
-                  Allow from all
-          </Directory>
-
-          Alias /tools ${installation_folder}mapbender/tools
-          <Directory ${installation_folder}mapbender/tools/>
-                  Options +FollowSymLinks
-                  AllowOverride None
-                  AuthType Digest
-                  AuthName "mb_tools"
-                  AuthDigestProvider file
-                  AuthUserFile ${installation_folder}access/.mb_tools
-                  Require valid-user
-                  order deny,allow
-                  deny from all
-                  Options +Indexes
-                  Allow from all
-          </Directory>
-
-          Alias /http_auth ${installation_folder}mapbender/http_auth
-          <Directory ${installation_folder}mapbender/http_auth/>
-                  Options +FollowSymLinks +Indexes
-                  ReWriteEngine On
-                  RewriteBase /http_auth
-                  RewriteRule  ^([\w\d]+)\/?$ %{REQUEST_SCHEME}://127.0.0.1/http_auth/http/index.php?layer_id=\$1 [P,L,QSA,NE]
-                  Order allow,deny
-                  Allow from all
-          </Directory>
-
-          #wsgi config
-          WSGIDaemonProcess $hostname  python-path=${installation_folder}GeoPortal.sl/ python-home=${installation_folder}env processes=2 threads=15 display-name=%{GROUP}
-          WSGIProcessGroup $hostname
-          WSGIScriptAlias / ${installation_folder}GeoPortal.sl/Geoportal/wsgi.py
-          <Directory ${installation_folder}GeoPortal.sl/Geoportal>
-          Options +ExecCGI
-          Require all granted
-          </Directory>
-
-  </VirtualHost>
-EOF
+  echo -e  "\n Copying and altering apache configuration. \n" | tee -a $installation_log
+  cp -a ${installation_folder}/GeoPortal.sl/scripts/geoportal-apache.conf ${installation_folder}
+  sed -i "s/hostname/$hostname/g" ${installation_folder}geoportal-apache.conf
+  sed -i "s/webadmin_email/$webadmin_email/g" ${installation_folder}geoportal-apache.conf
+  sed -i "s#installation_folder#$installation_folder#g" ${installation_folder}geoportal-apache.conf
   ############################################################
   # copy conf to apache directory and configure apache24+
   ############################################################
@@ -1094,45 +775,9 @@ EOF
   # configure phppgadmin
   ############################################################
   echo -e '\n Adopt phppgadmin default apache24 configuration. \n' | tee -a $installation_log
-  cp /etc/apache2/conf-available/phppgadmin.conf /etc/apache2/conf-available/phppgadmin.conf_backup_geoportal
-  cat << EOF > /etc/apache2/conf-available/phppgadmin.conf
-  Alias /phppgadmin /usr/share/phppgadmin
-
-  <Directory /usr/share/phppgadmin>
-
-  DirectoryIndex index.php
-  AllowOverride None
-
-  # Only allow connections from localhost:
-
-  AuthType Digest
-  AuthName "phppgadmin"
-  AuthDigestProvider file
-  AuthUserFile ${installation_folder}access/.phppgadmin
-  Require valid-user
-
-  <IfModule mod_php.c>
-    php_flag magic_quotes_gpc Off
-    php_flag track_vars On
-    #php_value include_path .
-  </IfModule>
-  <IfModule !mod_php.c>
-    <IfModule mod_actions.c>
-      <IfModule mod_cgi.c>
-        AddType application/x-httpd-php .php
-        Action application/x-httpd-php /cgi-bin/php
-      </IfModule>
-      <IfModule mod_cgid.c>
-        AddType application/x-httpd-php .php
-        Action application/x-httpd-php /cgi-bin/php
-      </IfModule>
-    </IfModule>
-  </IfModule>
-
-  </Directory>
-
-EOF
-
+  cp -a /etc/apache2/conf-available/phppgadmin.conf /etc/apache2/conf-available/phppgadmin.conf_backup_geoportal
+  cp -a ${installation_folder}GeoPortal.sl/scripts/phppgadmin.conf /etc/apache2/conf-available/phppgadmin.conf
+  sed -i "s#installation_folder#$installation_folder#g" /etc/apache2/conf-available/phppgadmin.conf
   ############################################################
   # security stuff
   ############################################################
@@ -1467,19 +1112,19 @@ echo -e "\n ${green}Successfully installed Mediawiki${reset} ! \n" | tee -a $ins
 
 #mysql_secure_installation
 echo -e "\n Configuring Mysql! \n" | tee -a $installation_log
-mysql -uroot -e "UPDATE mysql.user SET Password=PASSWORD('$mysqlpw') WHERE User='root';"
+mysql -uroot -e "UPDATE mysql.user SET Password=PASSWORD('$mysql_root_pw') WHERE User='root';"
 mysql -uroot -e "update mysql.user set plugin='' where user='root';"
 mysql -uroot -e "flush privileges;"
 
-mysql -uroot -p$mysqlpw -e "DELETE FROM mysql.user WHERE User='';"
-mysql -uroot -p$mysqlpw -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-mysql -uroot -p$mysqlpw -e "DROP DATABASE IF EXISTS test;"
-mysql -uroot -p$mysqlpw -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
-mysql -uroot -p$mysqlpw -e "FLUSH PRIVILEGES;"
-mysql -uroot -p$mysqlpw -e "create database Geoportal;"
-mysql -uroot -p$mysqlpw -e "CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY '$mapbender_database_password';"
-mysql -uroot -p$mysqlpw -e "GRANT ALL PRIVILEGES ON Geoportal.* TO 'wikiuser'@'localhost' WITH GRANT OPTION;"
-mysql -uroot -p$mysqlpw Geoportal < ${installation_folder}GeoPortal.sl/scripts/geoportal.sql
+mysql -uroot -p$mysql_root_pw -e "DELETE FROM mysql.user WHERE User='';"
+mysql -uroot -p$mysql_root_pw -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+mysql -uroot -p$mysql_root_pw -e "DROP DATABASE IF EXISTS test;"
+mysql -uroot -p$mysql_root_pw -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+mysql -uroot -p$mysql_root_pw -e "FLUSH PRIVILEGES;"
+mysql -uroot -p$mysql_root_pw -e "create database Geoportal;"
+mysql -uroot -p$mysql_root_pw -e "CREATE USER '$mysql_user'@'localhost' IDENTIFIED BY '$mysql_user_pw';"
+mysql -uroot -p$mysql_root_pw -e "GRANT ALL PRIVILEGES ON Geoportal.* TO '$mysql_user'@'localhost' WITH GRANT OPTION;"
+mysql -uroot -p$mysql_root_pw Geoportal < ${installation_folder}GeoPortal.sl/scripts/geoportal.sql
 
 echo -e "\n ${green}Successfully configured Mysql! ${reset}\n" | tee -a $installation_log
 
@@ -1518,7 +1163,8 @@ sed -i s/"\$wgDefaultSkin = \"vector\";/\$wgDefaultSkin = \"timeless\";"/g /etc/
 sed -i s/"\$wgServer = \"http:\/\/192.168.56.222\";"/"\$wgServer = \"http:\/\/$hostname\";"/g /etc/mediawiki/LocalSettings.php
 sed -i s/"\$wgEmergencyContact = \"apache@192.168.56.222\";"/"\$wgEmergencyContact = \"apache@$hostname\";"/g /etc/mediawiki/LocalSettings.php
 sed -i s/"\$wgPasswordSender = \"apache@192.168.56.222\";"/"\$wgPasswordSender = \"apache@$hostname\";"/g /etc/mediawiki/LocalSettings.php
-sed -i s/"\$wgDBpassword = \"root\";"/"\$wgDBpassword = \"$mapbender_database_password\";"/g /etc/mediawiki/LocalSettings.php
+sed -i s/"\$wgDBuser = \"geowiki\";"/"\$wgDBuser = \"$mysql_user\";"/g /etc/mediawiki/LocalSettings.php
+sed -i s/"\$wgDBpassword = \"root\";"/"\$wgDBpassword = \"$mysql_user_pw\";"/g /etc/mediawiki/LocalSettings.php
 sed -i s/"enableSemantics( '192.168.56.222' );"/"enableSemantics( '$hostname' );"/g /etc/mediawiki/LocalSettings.php
 if ! grep -q "\$wgRawHtml ="  /etc/mediawiki/LocalSettings.php;then
 	echo "\$wgRawHtml = true;" >> /etc/mediawiki/LocalSettings.php
@@ -1553,6 +1199,10 @@ echo -e "\n Details can be found in $installation_log \n" | tee -a $installation
 
 update(){
 
+  if [ -f $options_file ];then
+  source $options_file
+  fi
+
   custom_update(){
 
     if [ -e ${installation_folder}"custom_files.txt" ];then
@@ -1565,7 +1215,7 @@ update(){
             directory=${directory%$filename}
 
             mkdir -p /tmp/custom_files/$directory
-            cp -a $line /tmp/custom_files/
+            cp -a $line /tmp/custom_files/$directory
           done < "$input"
         fi
 
@@ -1647,7 +1297,8 @@ cp -av ${installation_folder}mapbender/conf/atomFeedClient.conf ${installation_f
 
 echo "Updating Mapbender Sources"
 cd ${installation_folder}svn/mapbender
-su -c 'svn -q update'
+su -c 'git reset --hard'
+su -c 'git pull'
 cp -a ${installation_folder}svn/mapbender ${installation_folder}
 
 echo "Restoring Mapbender Configs"
@@ -1659,8 +1310,6 @@ cp -av ${installation_folder}config.js_$(date +"%m_%d_%Y") ${installation_folder
 cp -av ${installation_folder}atomFeedClient.conf_$(date +"%m_%d_%Y") ${installation_folder}mapbender/conf/atomFeedClient.conf
 cd ${installation_folder}mapbender/tools
 sh ./i18n_update_mo.sh
-cd ${installation_folder}mapbender
-rm -rf $(find . -type d -name .svn)
 cd ${installation_folder}
 chown -R www-data ${installation_folder}mapbender/http/tmp/
 chown -R www-data ${installation_folder}mapbender/log/
@@ -1691,25 +1340,28 @@ echo "Mapbender Update Done"
 #update django
 echo "Updating Geoportal Project"
 cd ${installation_folder}GeoPortal.sl
-cp -a ${installation_folder}GeoPortal.sl/Geoportal/settings.py ${installation_folder}settings.py_$(date +"%m_%d_%Y")
-cp -a ${installation_folder}GeoPortal.sl/useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y")
+echo "Backing up Django Configs"
+cp -av ${installation_folder}GeoPortal.sl/Geoportal/settings.py ${installation_folder}settings.py_$(date +"%m_%d_%Y")
+cp -av ${installation_folder}GeoPortal.sl/useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y")
 
 git reset --hard
 git pull
 
-cp -a ${installation_folder}settings.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.sl/Geoportal/settings.py
-cp -a ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.sl/useroperations/conf.py
+echo "Restoring Django Configs"
+cp -av ${installation_folder}settings.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.sl/Geoportal/settings.py
+cp -av ${installation_folder}useroperations_conf.py_$(date +"%m_%d_%Y") ${installation_folder}GeoPortal.sl/useroperations/conf.py
 
 # copy some scripts that are needed for django mapbender integration
-cp -a ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}mapbender/http/local
-cp -a ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
-cp -a ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
-cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}mapbender/http/javascripts/mb_downloadFeedClient.php
-cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}mapbender/http/plugins/mb_downloadFeedClient.php
-cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/move.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
-cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/select.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
-cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/style.css ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
-cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
+cp -av ${installation_folder}GeoPortal.sl/scripts/guiapi.php ${installation_folder}mapbender/http/local
+cp -av ${installation_folder}GeoPortal.sl/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
+cp -av ${installation_folder}GeoPortal.sl/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
+#only needed if multi download should be enabled
+#cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}mapbender/http/javascripts/mb_downloadFeedClient.php
+#cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}mapbender/http/plugins/mb_downloadFeedClient.php
+#cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/move.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
+#cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/select.png ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/img/
+#cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/style.css ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
+#cp -a ${installation_folder}GeoPortal.sl/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
 
 # restore custom Files
 custom_update "restore"
@@ -1730,6 +1382,10 @@ echo "Update Complete"
 } # end of update function
 
 delete(){
+
+if [ -f $options_file ];then
+  source $options_file
+fi
 
 #django deletion
 rm -r ${installation_folder}env
@@ -1800,11 +1456,15 @@ service postgresql restart
 cp /etc/subversion/servers_backup_geoportal /etc/subversion/servers
 
 # drop MySQL
-mysql -uroot -p$mysqlpw -e "DROP DATABASE Geoportal;"
+mysql -uroot -p$mysql_root_pw -e "DROP DATABASE Geoportal;"
 
 } # end of delete function
 
 backup () {
+
+if [ -f $options_file ];then
+  source $options_file
+fi
 
 if [ -d ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y") ]; then
   echo "I have found a Backup for today. You should remove or rename it if you want to use this function.
@@ -1835,7 +1495,7 @@ while true; do
         [Yy]* )
         su - postgres -c "pg_dump mapbender > /tmp/geoportal_mapbender_backup.psql";
         cp -a /tmp/geoportal_mapbender_backup.psql ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y");
-        mysqldump -uroot -p$mysqlpw Geoportal > ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/geoportal_mediawiki_backup.mysql;
+        mysqldump -uroot -p$mysql_root_pw Geoportal > ${installation_folder}backup/geoportal_backup_$(date +"%m_%d_%Y")/geoportal_mediawiki_backup.mysql;
         break;;
         [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
@@ -1849,7 +1509,8 @@ check_mode() {
 
 if [ $mode = "install" ]; then
   echo -n " "
-  date | tee -a /tmp/geoportal_install_$(date +"%m_%d_%Y").log
+  # log has to be defined here as it depends on installation_folder
+  installation_log=${installation_folder}"geoportal_install_$(date +"%m_%d_%Y").log"
   echo -e "\n Performing complete installation \n"
 	install_full
 elif [ $mode = "update" ];then
@@ -1886,8 +1547,8 @@ You can choose from the following options:
 	    --install_dir=Directory for installation	| Default \"/data/\"
       --webadmin_email=email address for send mail      | Default \"test@test.de\"
     	--mysqlpw=database password for MySQL		| Default \"root\"
+      --options_file=File with install options 		| Default \"options.txt\"
     	--mode=what you want to do			| Default \"none\" [install,update,delete,backup]
-      --email_hosting_server=your mailing server        | Default \"mail.domain.tld\"
 
 "
 
@@ -1899,19 +1560,7 @@ while getopts h-: arg; do
     - )  LONG_OPTARG="${OPTARG#*=}"
          case $OPTARG in
 	   help				)  usage;;
-     	   proxy=?*     		)  http_proxy=$LONG_OPTARG;;
-     	   proxyuser=?*       		)  http_proxy_user=$LONG_OPTARG;;
-           mapbenderdbname=?*		)  mapbender_database_name=$LONG_OPTARG;;
-	   mapbenderdbuser=?*		)  mapbender_database_user=$LONG_OPTARG;;
-	   mapbenderdbpw=?*		)  mapbender_database_password=$LONG_OPTARG;;
-	   phppgadmin_user=?*		)  phppgadmin_user=$LONG_OPTARG;;
-	   phppgadmin_pw=?*		)  phppgadmin_password=$LONG_OPTARG;;
-	   install_dir=?*		)  installation_folder=$LONG_OPTARG;;
-     webadmin_email=?*          )   webadmin_email=$LONG_OPTARG;;
-     email_hosting_server=?*    )   email_hosting_server=$LONG_OPTARG;;
-	   ip=?*			)  ipaddress=$LONG_OPTARG;;
-     	   hostname=?*			)  hostname=$LONG_OPTARG;;
-	   mysqlpw=?*			)  mysqlpw=$LONG_OPTARG;;
+	   options_file=?*		)  options_file=$LONG_OPTARG;;
 	   mode=?*			)  mode=$LONG_OPTARG;;
            '' 				)  break ;; # "--" terminates argument processing
            * 				)  echo "Illegal option --$OPTARG" >&2; usage; exit 2 ;;
