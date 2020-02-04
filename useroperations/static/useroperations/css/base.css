@@ -636,29 +636,31 @@ ul {
 
 footer {
     border-top: 5px solid var(--primary);
-    padding: 20px;
     background-color: white;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+}
+
+footer nav {
+    margin: 0;
+    padding: 0;
 }
 
 footer nav ul {
-    margin: 0;
-    padding: 0;
+    table-layout: unset;
 }
 
 footer nav ul li {
     display: block;
     float: left;
-    padding: 0 10px;
+    padding: 1rem;
 }
 
 footer nav ul li a {
     text-decoration: none;
 }
 
-footer nav ul li a:hover {
+footer nav ul li:hover {
     color: var(--secondary-font);
     background-color: rgba(0,0,0,0.25);
 }
