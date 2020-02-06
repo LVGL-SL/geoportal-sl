@@ -406,7 +406,18 @@ install(){
 
   install_mapbender_database_configurePostgreSQL(){
     cp /etc/postgresql/9.6/main/pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf_backup
-    cp -v setup/default-pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf
+    cp ${installation_folder}${installation_subfolder_django}setup/default-pg_hba.conf-dist ${installation_folder}${installation_subfolder_django}setup/default-pg_hba.conf
+    sed -i "s#%%mapbender_database_name%%#${mapbender_database_name}#g" ${installation_folder}${installation_subfolder_django}setup/default-pg_hba.conf
+    if [ $? -ne 0 ];then
+      echo "Could not configure PostgreSQL"
+      exit 13
+    fi
+    sed -i "s#%%mapbender_database_user%%#${mapbender_database_user}#g" ${installation_folder}${installation_subfolder_django}setup/default-pg_hba.conf
+    if [ $? -ne 0 ];then
+      echo "Could not configure PostgreSQL"
+      exit 13
+    fi
+    mv -v ${installation_folder}${installation_subfolder_django}setup/default-pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf
     service postgresql restart
   }
 
@@ -970,9 +981,9 @@ EOF
             # for digitizing module
             RewriteRule ^/icons/maki/([^/]+)/([^/]+)/([^[/]+).png$ %{REQUEST_SCHEME}://127.0.0.1/mapbender/php/mod_getSymbolFromRepository.php?marker-color=\$1&marker-size=\$2&marker-symbol=\$3 [P,L,QSA,NE]
 
-            Alias /static/ ${installation_folder}${installation_subfolder_django}/static/
+            Alias /static/ ${installation_folder}${installation_subfolder_django}static/
 
-            <Directory ${installation_folder}${installation_subfolder_django}/static>
+            <Directory ${installation_folder}${installation_subfolder_django}static>
           Options -Indexes -FollowSymlinks
           Require all granted
             </Directory>
@@ -1083,10 +1094,10 @@ EOF
             </Directory>
 
             #wsgi config
-            WSGIDaemonProcess $hostname  python-path=${installation_folder}${installation_subfolder_django}/ python-home=${installation_folder}env processes=2 threads=15 display-name=%{GROUP}
+            WSGIDaemonProcess $hostname  python-path=${installation_folder}${installation_subfolder_django} python-home=${installation_folder}env processes=2 threads=15 display-name=%{GROUP}
             WSGIProcessGroup $hostname
-            WSGIScriptAlias / ${installation_folder}${installation_subfolder_django}/Geoportal/wsgi.py
-            <Directory ${installation_folder}${installation_subfolder_django}/Geoportal>
+            WSGIScriptAlias / ${installation_folder}${installation_subfolder_django}Geoportal/wsgi.py
+            <Directory ${installation_folder}${installation_subfolder_django}Geoportal>
             Options +ExecCGI
             Require all granted
             </Directory>
@@ -1445,29 +1456,29 @@ EOF
     mkdir -pv ${installation_folder}mapbender/http/local
 
     # copy some mapbender related scripts
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/guiapi.php ${installation_folder}mapbender/http/local
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local
     cp -a ${installation_folder}mapbender/http/geoportal/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php.backup
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
     cp -a ${installation_folder}mapbender/conf/mapbender.conf /${installation_folder}mapbender/conf/mapbender.conf.backup
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/javascripts/
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/plugins/
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/mb_downloadFeedClient/style.css ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/mb_downloadFeedClient/move.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/mb_downloadFeedClient/select.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
-    cp -a ${installation_folder}${installation_subfolder_django}/scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/mb_downloadFeedClient/javascripts/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/javascripts/
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/mb_downloadFeedClient/plugins/mb_downloadFeedClient.php ${installation_folder}/mapbender/http/plugins/
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/mb_downloadFeedClient/style.css ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/mb_downloadFeedClient/move.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/mb_downloadFeedClient/select.png ${installation_folder}/mapbender/http/extensions/OpenLayers-2.13.1/theme/default/img/
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/mb_downloadFeedClient/OpenLayers.js ${installation_folder}mapbender/http/extensions/OpenLayers-2.13.1/
 
     # change mapbender login path
     sed -i "s/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/g" ${installation_folder}mapbender/conf/mapbender.conf
     sed -i "s/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/g" ${installation_folder}mapbender/conf/mapbender.conf
 
     # django code
-    sed -i s/"HOSTIP = \"127.0.0.1\""/"HOSTIP = \"$ipaddress\""/g ${installation_folder}${installation_subfolder_django}/Geoportal/settings.py
-    sed -i s/"HOSTNAME = \"localhost\""/"HOSTNAME = \"$hostname\""/g ${installation_folder}${installation_subfolder_django}/Geoportal/settings.py
-    sed -i "s#PROJECT_DIR = \"/data/\"#PROJECT_DIR = \"${installation_folder}\"#g" ${installation_folder}${installation_subfolder_django}/Geoportal/settings.py
-    sed -i s/"        'USER':'mapbenderdbuser',"/"        'USER':'$mapbender_database_user',"/g ${installation_folder}${installation_subfolder_django}/Geoportal/settings.py
-    sed -i s/"        'PASSWORD':'mapbenderdbpassword',"/"        'PASSWORD':'$mapbender_database_password',"/g ${installation_folder}${installation_subfolder_django}/Geoportal/settings.py
-    sed -i s/"        'NAME':'mapbender',"/"        'NAME':'$mapbender_database_name',"/g ${installation_folder}${installation_subfolder_django}/Geoportal/settings.py
+    sed -i s/"HOSTIP = \"127.0.0.1\""/"HOSTIP = \"$ipaddress\""/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
+    sed -i s/"HOSTNAME = \"localhost\""/"HOSTNAME = \"$hostname\""/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
+    sed -i "s#PROJECT_DIR = \"/data/\"#PROJECT_DIR = \"${installation_folder}\"#g" ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
+    sed -i s/"        'USER':'mapbenderdbuser',"/"        'USER':'$mapbender_database_user',"/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
+    sed -i s/"        'PASSWORD':'mapbenderdbpassword',"/"        'PASSWORD':'$mapbender_database_password',"/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
+    sed -i s/"        'NAME':'mapbender',"/"        'NAME':'$mapbender_database_name',"/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     sed -i s/"EMAIL_HOST = 'server.domain.tld'"/"EMAIL_HOST = \"$email_hosting_server\""/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     sed -i s/"EMAIL_HOST_USER = 'geoportal@server.domain.tld'"/"EMAIL_HOST_USER = \"$webadmin_email\""/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
   }
@@ -1484,7 +1495,7 @@ EOF
   }
 
   install_django_python_virtualEnv(){
-    cd ${installation_folder}${installation_subfolder_django}/
+    cd ${installation_folder}${installation_subfolder_django}
     echo -e "\n Creating Virtualenv in ${installation_folder}env. \n"
     # create and activate virtualenv
     virtualenv -ppython3 ${installation_folder}env
@@ -1511,7 +1522,7 @@ EOF
   }
 
   install_django_python_initializeDjango(){
-    rm -rv ${installation_folder}${installation_subfolder_django}/static
+    rm -rv ${installation_folder}${installation_subfolder_django}static
     python manage.py collectstatic
     python manage.py migrate --fake sessions zero
     python manage.py migrate --fake-initial
@@ -1571,7 +1582,7 @@ EOF
     mysql -uroot -p$mysql_root_pw -e "create database Geoportal;"
     mysql -uroot -p$mysql_root_pw -e "CREATE USER '$mysql_user'@'localhost' IDENTIFIED BY '$mysql_user_pw';"
     mysql -uroot -p$mysql_root_pw -e "GRANT ALL PRIVILEGES ON Geoportal.* TO '$mysql_user'@'localhost' WITH GRANT OPTION;"
-    mysql -uroot -p$mysql_root_pw Geoportal < ${installation_folder}${installation_subfolder_django}/scripts/geoportal.sql
+    mysql -uroot -p$mysql_root_pw Geoportal < ${installation_folder}${installation_subfolder_django}scripts/geoportal.sql
 
     if [ "$?" -eq 0 ];then
       echo -e "\n ${green}Successfully configured Mysql! ${reset}\n"
@@ -1603,8 +1614,8 @@ EOF
   }
 
   install_mediawiki_replaceScriptFiles(){
-    cp -av ${installation_folder}${installation_subfolder_django}/scripts/LocalSettings.php /etc/mediawiki/LocalSettings.php
-    cp -av ${installation_folder}${installation_subfolder_django}/scripts/mediawiki_css/* /usr/share/mediawiki/skins/
+    cp -av ${installation_folder}${installation_subfolder_django}scripts/LocalSettings.php /etc/mediawiki/LocalSettings.php
+    cp -av ${installation_folder}${installation_subfolder_django}scripts/mediawiki_css/* /usr/share/mediawiki/skins/
   }
 
   install_mediawiki_configureSemanticMediaWiki(){
