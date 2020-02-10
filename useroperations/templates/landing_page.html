@@ -3,61 +3,175 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static '/useroperations/css/w3.css' %}" media="all" />
-<style>
-    .mySlides {display:none}
-    .w3-left, .w3-right, .w3-badge {cursor:pointer}
-    .w3-badge {height:13px;width:13px;padding:0}
-</style>
+<link rel="stylesheet" type="text/css" href="{% static '/useroperations/css/landing-page.css' %}" media="all" />
 <script src="{% static '/useroperations/js/slideshow.js' %}" type="text/javascript" async></script>
 <script src="{% static '/useroperations/js/carousel.js' %}" type="text/javascript" async></script>
 {% endblock %}
 
 {% block body %}
-<div class="landing-page-headline">
-    <h2>{% trans 'Herzlich willkommen im GeoPortal Saarland' %}</h2>
-</div>
-<div class="w3-container">
-    <p><strong>{% trans 'der Informations- und Interaktionsplattform der Geodateninfrastruktur Saarland (GDI-SL), die über Geodatendienste und weitere Netzdienste den zentralen Zugang zu raumbezogenen Informationen im Saarland erm&ouml;glicht.' %}</strong></p>
-</div>
-<div class="w3-content w3-display-container" style="max-width:676px">
-    <a title="{% trans 'Fachanwendung Nitratkulisse' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=4335"><img class="mySlides" alt="{% trans 'Fachanwendung Nitratkulisse' %}" src="{% static '/useroperations/images/slider/Nitratkulisse.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Photovoltaik' %}" href="article/Photovoltaik_auf_Agrarflaechen"><img class="mySlides" alt="{% trans 'Fachanwendung Photovoltaik' %}" src="{% static '/useroperations/images/slider/Photovoltaik.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Natura 2000' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=4076"><img class="mySlides" alt="{% trans 'Fachanwendung Natura 2000' %}" src="{% static '/useroperations/images/slider/Natura_2000.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Badegew&auml;sser' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3570"><img class="mySlides" alt="{% trans 'Fachanwendung Badegew&auml;sser' %}" src="{% static '/useroperations/images/slider/Badegewaesser.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Bodenschutz' %}" href="article/Bodenschutz"><img class="mySlides" alt="{% trans 'Fachanwendung Bodenschutz' %}" src="{% static '/useroperations/images/slider/Bodenschutz.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung W&auml;rmekataster' %}" href="article/Waermekataster"><img class="mySlides" alt="{% trans 'Fachanwendung W&auml;rmekataster' %}" src="{% static '/useroperations/images/slider/Waermekataster.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Flugverkehr' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3074"><img class="mySlides" alt="{% trans 'Fachanwendung Flugverkehr' %}" src="{% static '/useroperations/images/slider/Flugverkehr.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Forstwirtschaft' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3074"><img class="mySlides" alt="{% trans 'Fachanwendung Forstwirtschaft' %}" src="{% static '/useroperations/images/slider/Forstwirtschaft.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung WebAtlas DE - AdV' %}" href="article/WebAtlas_DE"><img class="mySlides" alt="{% trans 'Fachanwendung WebAtlas DE - AdV' %}" src="{% static '/useroperations/images/slider/WebAtlas_DE.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Hochwasser' %}" href="article/Hochwasser"><img class="mySlides" alt="{% trans 'Fachanwendung Hochwasser' %}" src="{% static '/useroperations/images/slider/Hochwasser.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Landwirtschaft' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3910"><img class="mySlides" alt="{% trans 'Fachanwendung Landwirtschaft' %}" src="{% static '/useroperations/images/slider/Landwirtschaft.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Bodenrichtwerte' %}" href="article/Bodenrichtwerte"><img class="mySlides" alt="{% trans 'Fachanwendung Bodenrichtwerte' %}" src="{% static '/useroperations/images/slider/Bodenrichtwerte.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Radverkehr' %}" href="article/Radverkehrsplan"><img class="mySlides" alt="{% trans 'Fachanwendung Radverkehr' %}" src="{% static '/useroperations/images/slider/Radverkehr.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Wasser' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2902"><img class="mySlides" alt="{% trans 'Fachanwendung Wasser' %}" src="{% static '/useroperations/images/slider/Wasser.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Naturschutz' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2891"><img class="mySlides" alt="{% trans 'Fachanwendung Naturschutz' %}" src="{% static '/useroperations/images/slider/Naturschutz.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Geobasisdaten' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2896"><img class="mySlides" alt="{% trans 'Fachanwendung Geobasisdaten' %}" src="{% static '/useroperations/images/slider/Geobasisdaten.jpg' %}" style="width:100%"></a>
-    <a title="{% trans 'Fachanwendung Erneuerbare Energie' %}" href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2892"><img class="mySlides" alt="{% trans 'Fachanwendung Erneuerbare Energie' %}" src="{% static '/useroperations/images/slider/Erneuerbare_Energie.jpg' %}" style="width:100%"></a>
-    <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
-      <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-      <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+<div class="landing-page-body">
+    <div class="landing-page-headline">
+        <h2>{% trans 'Herzlich willkommen im GeoPortal Saarland' %}</h2>
+    </div>
+    <div class="w3-container">
+        <p><strong>{% trans 'der Informations- und Interaktionsplattform der Geodateninfrastruktur Saarland (GDI-SL), die über Geodatendienste und weitere Netzdienste den zentralen Zugang zu raumbezogenen Informationen im Saarland erm&ouml;glicht.' %}</strong>
+        </p>
+    </div>
+    <div class="w3-content w3-display-container" style="max-width:676px">
+        <a title="{% trans 'Fachanwendung Nitratkulisse' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=4335"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Nitratkulisse' %}"
+                src="{% static '/useroperations/images/slider/Nitratkulisse.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Photovoltaik' %}" href="article/Photovoltaik_auf_Agrarflaechen"><img
+                class="mySlides" alt="{% trans 'Fachanwendung Photovoltaik' %}"
+                src="{% static '/useroperations/images/slider/Photovoltaik.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Natura 2000' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=4076"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Natura 2000' %}"
+                src="{% static '/useroperations/images/slider/Natura_2000.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Badegew&auml;sser' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3570"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Badegew&auml;sser' %}"
+                src="{% static '/useroperations/images/slider/Badegewaesser.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Bodenschutz' %}" href="article/Bodenschutz"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Bodenschutz' %}"
+                src="{% static '/useroperations/images/slider/Bodenschutz.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung W&auml;rmekataster' %}" href="article/Waermekataster"><img class="mySlides"
+                alt="{% trans 'Fachanwendung W&auml;rmekataster' %}"
+                src="{% static '/useroperations/images/slider/Waermekataster.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Flugverkehr' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3074"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Flugverkehr' %}"
+                src="{% static '/useroperations/images/slider/Flugverkehr.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Forstwirtschaft' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3074"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Forstwirtschaft' %}"
+                src="{% static '/useroperations/images/slider/Forstwirtschaft.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung WebAtlas DE - AdV' %}" href="article/WebAtlas_DE"><img class="mySlides"
+                alt="{% trans 'Fachanwendung WebAtlas DE - AdV' %}"
+                src="{% static '/useroperations/images/slider/WebAtlas_DE.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Hochwasser' %}" href="article/Hochwasser"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Hochwasser' %}"
+                src="{% static '/useroperations/images/slider/Hochwasser.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Landwirtschaft' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3910"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Landwirtschaft' %}"
+                src="{% static '/useroperations/images/slider/Landwirtschaft.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Bodenrichtwerte' %}" href="article/Bodenrichtwerte"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Bodenrichtwerte' %}"
+                src="{% static '/useroperations/images/slider/Bodenrichtwerte.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Radverkehr' %}" href="article/Radverkehrsplan"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Radverkehr' %}"
+                src="{% static '/useroperations/images/slider/Radverkehr.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Wasser' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2902"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Wasser' %}" src="{% static '/useroperations/images/slider/Wasser.jpg' %}"
+                style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Naturschutz' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2891"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Naturschutz' %}"
+                src="{% static '/useroperations/images/slider/Naturschutz.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Geobasisdaten' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2896"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Geobasisdaten' %}"
+                src="{% static '/useroperations/images/slider/Geobasisdaten.jpg' %}" style="width:100%"></a>
+        <a title="{% trans 'Fachanwendung Erneuerbare Energie' %}"
+            href="mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2892"><img class="mySlides"
+                alt="{% trans 'Fachanwendung Erneuerbare Energie' %}"
+                src="{% static '/useroperations/images/slider/Erneuerbare_Energie.jpg' %}" style="width:100%"></a>
+        <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle"
+            style="width:100%">
+            <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+            <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
 
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"  title="{% trans 'Fachanwendung Nitratkulisse' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"  title="{% trans 'Fachanwendung Photovoltaik' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"  title="{% trans 'Fachanwendung Natura 2000' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"  title="{% trans 'Fachanwendung Badegew&auml;sser' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(5)"  title="{% trans 'Fachanwendung Bodenschutz' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(6)"  title="{% trans 'Fachanwendung W&auml;rmekataster' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(7)"  title="{% trans 'Fachanwendung Flugverkehr' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(8)"  title="{% trans 'Fachanwendung Forstwirtschaft' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(9)"  title="{% trans 'Fachanwendung WebAtlas DE - AdV' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(10)" title="{% trans 'Fachanwendung Hochwasser' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(11)" title="{% trans 'Fachanwendung Landwirtschaft' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(12)" title="{% trans 'Fachanwendung Bodenrichtwerte' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(13)" title="{% trans 'Fachanwendung Radverkehr' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(14)" title="{% trans 'Fachanwendung Wasser' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(15)" title="{% trans 'Fachanwendung Naturschutz' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(16)" title="{% trans 'Fachanwendung Geobasisdaten' %}"></span>
-      <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(17)" title="{% trans 'Fachanwendung Erneuerbare Energie' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"
+                title="{% trans 'Fachanwendung Nitratkulisse' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"
+                title="{% trans 'Fachanwendung Photovoltaik' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"
+                title="{% trans 'Fachanwendung Natura 2000' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"
+                title="{% trans 'Fachanwendung Badegew&auml;sser' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(5)"
+                title="{% trans 'Fachanwendung Bodenschutz' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(6)"
+                title="{% trans 'Fachanwendung W&auml;rmekataster' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(7)"
+                title="{% trans 'Fachanwendung Flugverkehr' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(8)"
+                title="{% trans 'Fachanwendung Forstwirtschaft' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(9)"
+                title="{% trans 'Fachanwendung WebAtlas DE - AdV' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(10)"
+                title="{% trans 'Fachanwendung Hochwasser' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(11)"
+                title="{% trans 'Fachanwendung Landwirtschaft' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(12)"
+                title="{% trans 'Fachanwendung Bodenrichtwerte' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(13)"
+                title="{% trans 'Fachanwendung Radverkehr' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(14)"
+                title="{% trans 'Fachanwendung Wasser' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(15)"
+                title="{% trans 'Fachanwendung Naturschutz' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(16)"
+                title="{% trans 'Fachanwendung Geobasisdaten' %}"></span>
+            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(17)"
+                title="{% trans 'Fachanwendung Erneuerbare Energie' %}"></span>
+        </div>
+    </div>
+    <div class="landing-page-headline">
+        <h2>&nbsp;</h2>
+    </div>
+    <div class="quickstart-container">
+        <a class="quickstart" href="{% url 'useroperations:apps' %}" title="{% trans 'Show all applications' %}">
+            <div class="quickstart-header">
+                <i class="fas fa-cogs" alt="{% trans 'An application icon' %}" title="{% trans 'Applications' %}"></i>
+                <span>{% trans 'Applications' %}</span>
+            </div>
+            <span class="quickstart-body">{{ results.num_apps|intcomma }}</span>
+        </a>
+        <a class="quickstart" href="{% url 'useroperations:organizations' %}"
+            title="{% trans 'Show all organizations' %}">
+            <div class="quickstart-header">
+                <i class="fas fa-city" alt="{% trans 'An organization icon' %}" title="{% trans 'Organizations' %}"></i>
+                <span>{% trans 'Organizations' %}</span>
+            </div>
+            <span class="quickstart-body">{{ results.num_orgs|intcomma }}</span>
+        </a>
+        <a class="quickstart search" title="{% trans 'Search for all datasets' %}" data-resource="dataset">
+            <div class="quickstart-header">
+                <i class="fas fa-globe" title="{% trans 'Datasets' %}"></i>
+                <span>{% trans 'Datasets' %}</span>
+            </div>
+            <span class="quickstart-body">{{ results.num_dataset|intcomma }}</span>
+        </a>
+    </div>
+    <div class="quickstart-container">
+        <a class="quickstart" href="{% url 'useroperations:categories' %}" title="{% trans 'Show all topics' %}">
+            <div class="quickstart-header">
+                <i class="fas fa-filter" alt="{% trans 'A filter icon' %}"
+                    title="{% trans 'Filter by categories and topics' %}"></i>
+                <span>INSPIRE</span>
+            </div>
+            <span class="quickstart-body">{{ results.num_topics|intcomma }}</span>
+        </a>
+        <a class="quickstart search" title="{% trans 'Search for all map layers' %}" data-resource="wms">
+            <div class="quickstart-header">
+                <i class="fas fa-layer-group" alt="{% trans 'A lying map' %}"
+                    title="{% trans 'Web Map Services' %}"></i>
+                <span>{% trans 'Map layers' %}</span>
+            </div>
+            <span class="quickstart-body">{{ results.num_wms|intcomma }}</span>
+        </a>
+        <a class="quickstart search" title="{% trans 'Search for all map collections' %}" data-resource="wmc">
+            <div class="quickstart-header">
+                <i class="fas fa-map" alt="{% trans 'A lying map in the background. A large plus in the foreground.' %}"
+                    title="{% trans 'Web Map Context' %}"></i>
+                <span>{% trans 'Map collections' %}</span>
+            </div>
+            <span class="quickstart-body">{{ results.num_wmc|intcomma }}</span>
+        </a>
     </div>
 </div>
 

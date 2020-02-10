@@ -1,20 +1,24 @@
 /*
 DECLARE FIX COLOR CODES FOR CORPORATE DESIGN
 */
-:root{
-    --primary: #002f5c;
+:root {
+    --primary: var(--saarblau);
     --primary-invert: #ffd699;
-    --primary-hover: #4c6993;
-    --primary-light: #193e75;
-    --primary-light-hover: #325384;
+    --primary-hover: #1b3b6c;
+    --primary-light: #31486a;
+    --primary-light-hover: #3d506d;
 
-    --secondary: #8392b2;
+    --secondary: var(--saar-stadtgrau);
     --secondary-font: #000;
-    --secondary-hover: #8f9cb9;
-    --secondary-placeholder: #68748e;
-    --secondary-light: #a8b2c9;
+    --secondary-hover: #a3abbd;
+    --secondary-placeholder: #868686;
+    --secondary-light: var(--saarland-de-background);
 
     --success-green: #1d873c;
-    --error-red: #871d28;
-    --warning: #87711d;
+    --error-red: #D70000;
+
+    --saarblau: #002966;
+    --saar-stadtgrau: #8392B2;
+    --saar-stadtgrau-75p: #b4b8c1;
+    --saarland-de-background: rgb(238, 238, 238);
 }
