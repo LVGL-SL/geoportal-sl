@@ -1,11 +1,12 @@
 #!/bin/bash
 ############################################################
 # Geoportal-RLP install script for debian 9 server environment
-# 2020-02-06
+# 2020-02-10
 # debian netinstall 9
 # André Holl
 # Armin Retterath
 # Michel Peltriaux
+# Sven van Crombrugge
 ############################################################
 
 initializeVariables(){
@@ -82,8 +83,8 @@ usage(){
   This script is for installing and maintaining your geoportal solution
   You can choose from the following options:
 
-        --help             		          | Prints help function
-        --mode=what you want to do			| Default \"none\" [install,update,delete,backup]
+        --help                              | Prints help function
+        --mode=what you want to do          | Default \"none\" [install,update,delete,backup]
 
   "
 }
@@ -1488,7 +1489,7 @@ EOF
     fi
 
     echo -e "\n Installing needed python libraries. \n"
-    pip install -r setup/requirements.txt
+    pip install -r ${installation_folder}${installation_subfolder_django}setup/requirements.txt
     echo -e "\n ${green} Successfully installed python libraries! ${reset}\n"
   }
 
@@ -1623,7 +1624,7 @@ EOF
   }
 
   install_mediawiki_update(){
-    if [[ which php &> /dev/null ]];then
+    if [[ $(which php &> /dev/null) -eq 0 ]];then
       php /usr/share/mediawiki/maintenance/update.php --quiet --skip-external-dependencies
     else
       exit 10
@@ -1666,7 +1667,7 @@ EOF
   }
 
   postInstallationChecks_curlLandingPage(){
-    if [[ which curl &> /dev/null ]];then
+    if [[ $(which curl &> /dev/null) -eq 0 ]];then
       echo -e "\n Trying to reach the index page! \n"
     else
       echo -e "Curl is not installed"
@@ -1836,20 +1837,23 @@ update(){
     sed -i "s/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/g" ${installation_folder}mapbender/conf/mapbender.conf
   }
 
-  update_django_copyConfiguraionts(){
+  update_django_copyConfigurations(){
     cp -a ${installation_folder}${installation_subfolder_django}Geoportal/settings.py ${installation_folder}settings.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y")
+    cp -a ${installation_folder}${installation_subfolder_django}setup/setup.conf ${installation_folder}setup.conf_$(date +"%d_%m_%Y")
   }
 
   update_django_gitFetch(){
     cd ${installation_folder}${installation_subfolder_django}
     git reset --hard
     git pull
+    chmod u+x ${installation_folder}${installation_subfolder_django}geoportal_maintenance.sh
   }
 
   update_django_restoreConfigurations(){
     cp -a ${installation_folder}settings.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     cp -a ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}useroperations/conf.py
+    cp -a ${installation_folder}setup.conf_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}setup/setup.conf
   }
 
   update_django_copyScriptsForGeoportalIntegrationToMapbender(){
@@ -1891,7 +1895,7 @@ update(){
 
   update_django(){
     echo "Updating Geoportal Project"
-    update_django_copyConfiguraionts
+    update_django_copyConfigurations
     update_django_gitFetch
     update_django_restoreConfigurations
     update_django_copyScriptsForGeoportalIntegrationToMapbender
