@@ -82,22 +82,8 @@ usage(){
   This script is for installing and maintaining your geoportal solution
   You can choose from the following options:
 
-        --ip=ipaddress             		| Default \"127.0.0.1\"
-        --hostname=hostname              		| Default \"127.0.0.1\"
-        --proxy=Proxy IP:Port  	 			| Default \"None\" ; Syntax --proxy=1.2.3.4:5555
-        --proxyuser=username                            | Default \"\" ; Password will be prompted
-        --mapbenderdbname=mapbender						| Default \"mapbender\"
-        --mapbenderdbuser=User for Database access	| Default \"mapbenderdbuser\"
-        --mapbenderdbpw=Password for database access    | Default \"mapbenderdbpassword\"
-        --phppgadmin_user=User for PGAdmin web access	  | Default \"postgresadmin\"
-        --phppgadmin_pw=Password for PGAdmin web access | Default \"postgresadmin_password\"
-        --install_dir=Directory for installation	| Default \"/data/\"
-        --webadmin_email=email address for send mail      | Default \"test@test.de\"
-        --mysql_root_pw=database password for MySQL root user		| Default \"root\"
-        --mysql_user=database user for MySQL		| Default \"geowiki\"
-        --mysql_user_pw=database password for MySQL		| Default \"geoportal\"
+        --help             		          | Prints help function
         --mode=what you want to do			| Default \"none\" [install,update,delete,backup]
-        --email_hosting_server=your mailing server        | Default \"mail.domain.tld\"
 
   "
 }
@@ -109,21 +95,6 @@ getOptions(){
       - )  LONG_OPTARG="${OPTARG#*=}"
           case $OPTARG in
       help				)  usage;;
-          proxy=?*     		)  http_proxy=$LONG_OPTARG;;
-          proxyuser=?*       		)  http_proxy_user=$LONG_OPTARG;;
-            mapbenderdbname=?*		)  mapbender_database_name=$LONG_OPTARG;;
-      mapbenderdbuser=?*		)  mapbender_database_user=$LONG_OPTARG;;
-      mapbenderdbpw=?*		)  mapbender_database_password=$LONG_OPTARG;;
-      phppgadmin_user=?*		)  phppgadmin_user=$LONG_OPTARG;;
-      phppgadmin_pw=?*		)  phppgadmin_password=$LONG_OPTARG;;
-      install_dir=?*		)  installation_folder=$LONG_OPTARG;;
-      webadmin_email=?*          )   webadmin_email=$LONG_OPTARG;;
-      email_hosting_server=?*    )   email_hosting_server=$LONG_OPTARG;;
-      ip=?*			)  ipaddress=$LONG_OPTARG;;
-          hostname=?*			)  hostname=$LONG_OPTARG;;
-      mysql_root_pw=?*			)  mysql_root_pw=$LONG_OPTARG;;
-      mysql_user=?*			)  mysql_user=$LONG_OPTARG;;
-      mysql_user_pw=?*			)  mysql_user_pw=$LONG_OPTARG;;
       mode=?*			)  mode=$LONG_OPTARG;;
             '' 				)  break ;; # "--" terminates argument processing
             * 				)  echo "Illegal option --$OPTARG" >&2; usage; exit 2 ;;
