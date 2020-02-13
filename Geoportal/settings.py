@@ -37,6 +37,11 @@ SEARCH_API_PROTOCOL = "http"
 
 ALLOWED_HOSTS = [HOSTIP, HOSTNAME, '127.0.0.1', 'localhost']
 
+# Recaptcha Config
+USE_RECAPTCHA = 0
+GOOGLE_RECAPTCHA_SECRET_KEY = ''
+GOOGLE_RECAPTCHA_PUBLIC_KEY = ''
+
 # Mediawiki
 INTERNAL_PAGES_CATEGORY = "Portalseite"
 
@@ -106,6 +111,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Geoportal.urls'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "Geoportal/static"),  # for generic static files, which are used in all apps
+]
 
 TEMPLATES = [
     {

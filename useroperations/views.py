@@ -19,9 +19,10 @@ from django.utils.translation import gettext as _
 from Geoportal.decorator import check_browser
 from Geoportal.geoportalObjects import GeoportalJsonResponse, GeoportalContext
 from Geoportal.settings import DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTERNAL_SSL, \
-    SESSION_NAME, PROJECT_DIR, MULTILINGUAL, LANGUAGE_CODE, DEFAULT_FROM_EMAIL
+    SESSION_NAME, PROJECT_DIR, MULTILINGUAL, LANGUAGE_CODE, DEFAULT_FROM_EMAIL, GOOGLE_RECAPTCHA_SECRET_KEY, USE_RECAPTCHA, GOOGLE_RECAPTCHA_PUBLIC_KEY
 from Geoportal.utils import utils, php_session_data, mbConfReader
 from searchCatalogue.utils.url_conf import URL_INSPIRE_DOC
+from searchCatalogue.settings import PROXIES
 from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
@@ -271,6 +272,9 @@ def register_view(request):
         "btn_label1": btn_label,
         "small_labels": small_labels,
         "disclaimer": disclaimer,
+        "use_recaptcha": USE_RECAPTCHA,
+        "recaptcha_public_key": GOOGLE_RECAPTCHA_PUBLIC_KEY,
+        "register": 1,
     }
 
     geoportal_context.add_context(context)
@@ -284,12 +288,26 @@ def register_view(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
 
+            if USE_RECAPTCHA == 1:
+                recaptcha_response = request.POST.get('g-recaptcha-response')
+                data = {
+                    'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
+                    'response': recaptcha_response
+                }
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data)
+                result = r.json()
+
+                if not result['success']:
+                    messages.error(request, _("Invalid reCAPTCHA. Please try again."))
+                    return redirect('useroperations:register')
+
+
             if MbUser.objects.filter(mb_user_name=form.cleaned_data['name']).exists():
                 messages.error(request, _("The Username") + " {str_name} ".format(str_name=form.cleaned_data['name']) + _("is already taken"))
                 return redirect('useroperations:register')
 
-            if re.match(r'[A-Za-z0-9@#$%&+=!]{9,}', form.cleaned_data['password']) is None:
-                messages.error(request, _("Password does not meet specified criteria, you need at least one uppercase letter, one lowercase letter, one number, you should have at least 9 characters, allowed special chars are: @#$%&+=!"))
+            if re.match(r'[A-Za-z0-9@#$%&+=!:]{9,}', form.cleaned_data['password']) is None:
+                messages.error(request, _("Password does not meet specified criteria, you need at least one uppercase letter, one lowercase letter, one number, you should have at least 9 characters, allowed special chars are: @#$%&+=!:"))
                 return redirect('useroperations:register')
 
             user = MbUser()
@@ -314,6 +332,8 @@ def register_view(request):
                     "btn_label1": btn_label,
                     "small_labels": small_labels,
                     "disclaimer": disclaimer,
+                    "use_recaptcha": USE_RECAPTCHA,
+                    "register": 1,
                 }
                 geoportal_context.add_context(context)
                 messages.error(request, _("Passwords do not match"))
@@ -744,20 +764,25 @@ def map_viewer_view(request):
 
     # is regular call means the request comes directly from the navigation menu in the page, without selecting a search result
     is_regular_call = len(request_get_params_dict) == 0 or request_get_params_dict.get("searchResultParam", None) is None
-    request_get_params = dict(urllib.parse.parse_qsl(request_get_params_dict.get("searchResultParam")))
+    request_get_params = dict(urllib.parse.parse_qsl(request_get_params_dict.get("searchResultParam"), keep_blank_values=True))
     template = "geoportal_external.html"
     gui_id = context_data.get("preferred_gui", DEFAULT_GUI)  # get selected gui from params, use default gui otherwise!
 
     wmc_id = request_get_params.get("WMC", "") or request_get_params.get("wmc", "")
-    if len(request_get_params) > 1:
-        wms_id = urllib.parse.quote(request_get_params_dict.get("searchResultParam", "").replace("WMS=", ""), safe="")
-    else:
-        wms_id = urllib.parse.quote(request_get_params.get("WMS", "") or request_get_params.get("wms", ""), safe="")
+    wms_id = request_get_params.get("WMS", "") or request_get_params.get("wms", "")
+
+    # resolve wms_id to LAYER[id] if the given parameter is not an uri but rather an integer
+    try:
+        wms_id = int(wms_id)
+        request_get_params["LAYER[id]"] = wms_id
+        wms_id = ""
+    except ValueError:
+        # If this failed, the wms_id is not an integer, so we assume it must be some kind of link
+        pass
 
     # check if the request comes from a mobile device
     is_mobile = request.user_agent.is_mobile
     if is_mobile:
-
         # if so, just call the mobile map viewer in a new window
         mobile_viewer_url = "{}{}/mapbender/extensions/mobilemap2/index.html?".format(HTTP_OR_SSL, HOSTNAME)
         if wmc_id != "":
@@ -766,17 +791,9 @@ def map_viewer_view(request):
             mobile_viewer_url += "&wms_id={}".format(wms_id)
         return GeoportalJsonResponse(url=mobile_viewer_url).get_response()
 
-    # if the call targets a DE catalogue result, we need to adjust a little thing here to restore the previously splitted url
-    if request_get_params.get("WMS", None) is not None:
-        # yes, this happens when we have a DE catalogue call! Now merge the stuff back into "WMS" again!
-        for request_get_params_key, request_get_params_val in request_get_params.items():
-            if request_get_params_key == "WMS":
-                continue
-            request_get_params["WMS"] += "&" + request_get_params_key + "=" + request_get_params_val
-
     mapviewer_params_dict = {
-        "LAYER[id]": request_get_params.get("LAYER[id]", None),
-        "LAYER[zoom]": request_get_params.get("LAYER[zoom]", None),
+        "LAYER[id]": request_get_params.get("LAYER[id]", ""),
+        "LAYER[zoom]": request_get_params.get("LAYER[zoom]", ""),
         "LAYER[visible]": request_get_params.get("LAYER[visible]", 1),
         "LAYER[querylayer]": request_get_params.get("LAYER[querylayer]", 1),
         "WMS": wms_id,
@@ -784,19 +801,15 @@ def map_viewer_view(request):
         "GEORSS": urllib.parse.urlencode(request_get_params.get("GEORSS", "")),
         "KML": urllib.parse.urlencode(request_get_params.get("KML", "")),
         "FEATURETYPE": request_get_params.get("FEATURETYPE[id]", ""),
-        "ZOOM": request_get_params.get("ZOOM", None),
-        "GEOJSON": request_get_params.get("GEOJSON", None),
-        "GEOJSONZOOM": request_get_params.get("GEOJSONZOOM", None),
-        "GEOJSONZOOMOFFSET": request_get_params.get("GEOJSONZOOMOFFSET", None),
+        "ZOOM": request_get_params.get("ZOOM", ""),
+        "GEOJSON": request_get_params.get("GEOJSON", ""),
+        "GEOJSONZOOM": request_get_params.get("GEOJSONZOOM", ""),
+        "GEOJSONZOOMOFFSET": request_get_params.get("GEOJSONZOOMOFFSET", ""),
         "gui_id": request_get_params.get("gui_id", gui_id),
+        "DATASETID": request_get_params.get("DATASETID", ""),
     }
-    mapviewer_params = ""
-    for param_key, param_val in mapviewer_params_dict.items():
-        if param_val is not None:
-            if isinstance(param_val, int):
-                mapviewer_params += "&" + param_key + "=" + str(param_val)
-            elif len(param_val) > 0:
-                mapviewer_params += "&" + param_key + "=" + param_val
+
+    mapviewer_params = "&" + urllib.parse.urlencode(mapviewer_params_dict)
 
     if is_regular_call:
         # an internal call from our geoportal should lead to the map viewer page without problems
@@ -806,9 +819,11 @@ def map_viewer_view(request):
         }
         geoportal_context.add_context(context=params)
         return render(request, template, geoportal_context.get_context())
+
     elif is_external_search:
         # for an external ajax call we need to deliver a url which can be used to open a new tab which leads to the geoportal
         return GeoportalJsonResponse(url=HTTP_OR_SSL + HOSTNAME, mapviewer_params=gui_id + "&" + request_get_params_dict.get("searchResultParam")).get_response()
+
     else:
         # for an internal search result selection, where the dynamic map viewer overlay shall be used
         return GeoportalJsonResponse(mapviewer_params=mapviewer_params).get_response()
@@ -901,6 +916,21 @@ def feedback_view(request: HttpRequest):
         # form is returning
         form = FeedbackForm(request.POST)
         if form.is_valid():
+
+            if USE_RECAPTCHA == 1:
+                recaptcha_response = request.POST.get('g-recaptcha-response')
+                data = {
+                    'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
+                    'response': recaptcha_response
+                }
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data)
+                result = r.json()
+
+                if not result['success']:
+                    messages.error(request, _("Invalid reCAPTCHA. Please try again."))
+                    return redirect('useroperations:feedback')
+
+
             messages.success(request, _("Feedback sent. Thank you!"))
             msg = {
                 "sender": form.cleaned_data["first_name"] + " " + form.cleaned_data["family_name"],
@@ -940,6 +970,8 @@ def feedback_view(request: HttpRequest):
             "form": feedback_form,
             "btn_send": _("Send"),
             "disclaimer": disclaimer,
+            "use_recaptcha": USE_RECAPTCHA,
+            "recaptcha_public_key" : GOOGLE_RECAPTCHA_PUBLIC_KEY,
         }
         geoportal_context = GeoportalContext(request=request)
         geoportal_context.add_context(params)
