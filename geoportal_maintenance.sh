@@ -722,6 +722,12 @@ EOF
     sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/pgsql/pgsql_serial_set_sequences_2.7.sql
   }
 
+  install_mapbender_database_setPermissions(){
+    sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}mapbender/resources/db/pgsql/pgsql_serial_set_sequences_2.7.sql
+    sed -i "s/mapbenderdbuser/$mapbender_database_user/g" ${installation_folder}${installation_subfolder_django}setup/change_owner.psql
+    sudo -u postgres psql -q -p $mapbender_database_port -d $mapbender_database_name -f ${installation_folder}${installation_subfolder_django}scripts/change_owner.psql
+  }
+
   install_mapbender_database(){
     if [ $install_mapbender_database = 'true' ]; then
       echo -e "\n Installing Mapbender database \n"
@@ -737,6 +743,7 @@ EOF
       install_mapbender_database_addPrivilegesForDBUser
       install_mapbender_database_projectionAdoption
       install_mapbender_database_setSequences
+      install_mapbender_database_setPermissions
       echo -e "\n ${green}Successfully installed Mapbender Database! ${reset} \n"
     fi
   }
