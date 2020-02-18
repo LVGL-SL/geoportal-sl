@@ -1791,6 +1791,12 @@ update(){
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${installation_folder}extent_service_geoportal_rlp.conf_$(date +"%d_%m_%Y")
     cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${installation_folder}config.js_$(date +"%d_%m_%Y")
     cp -av ${installation_folder}mapbender/conf/atomFeedClient.conf ${installation_folder}atomFeedClient.conf_$(date +"%d_%m_%Y")
+    cp -av ${installation_folder}mapbender/conf/ckan.conf ${installation_folder}ckan.conf_$(date +"%d_%m_%Y")
+    cp -av ${installation_folder}mapbender/conf/mobilemap2.conf ${installation_folder}mobilemap2.conf_$(date +"%d_%m_%Y")
+    cp -av ${installation_folder}mapbender/conf/linkedDataProxy.json ${installation_folder}linkedDataProxy.json_$(date +"%d_%m_%Y")
+    cp -av ${installation_folder}mapbender/conf/twitter.conf ${installation_folder}twitter.conf_$(date +"%d_%m_%Y")
+    cp -av ${installation_folder}mapbender/conf/bkgGeocoding.conf ${installation_folder}bkgGeocoding.conf_$(date +"%d_%m_%Y")
+    cp -av ${installation_folder}mapbender/conf/excludeproxyurls.conf ${installation_folder}excludeproxyurls.conf_$(date +"%d_%m_%Y")
   }
 
   update_mapbender_gitFetch(){
@@ -1806,6 +1812,12 @@ update(){
     cp -av ${installation_folder}extent_service_geoportal_rlp.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/tools/wms_extent/extent_service.conf
     cp -av ${installation_folder}config.js_$(date +"%d_%m_%Y") ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js
     cp -av ${installation_folder}atomFeedClient.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/atomFeedClient.conf
+    cp -av ${installation_folder}ckan.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/ckan.conf
+    cp -av ${installation_folder}mobilemap2.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/mobilemap2.conf
+    cp -av ${installation_folder}linkedDataProxy.json_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/linkedDataProxy.json
+    cp -av ${installation_folder}twitter.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/twitter.conf
+    cp -av ${installation_folder}bkgGeocoding.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/bkgGeocoding.conf
+    cp -av ${installation_folder}excludeproxyurls.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/excludeproxyurls.conf
   }
 
   update_mapbender_restoreExtensions(){
