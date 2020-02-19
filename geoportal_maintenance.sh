@@ -1885,7 +1885,7 @@ update(){
     virtualenv -ppython3 ${installation_folder}env
     source ${installation_folder}env/bin/activate
     cd ${installation_folder}${installation_subfolder_django}
-    pip install -r requirements.txt
+    pip install -r setup/requirements.txt
     python manage.py collectstatic
     python manage.py compilemessages
   }
