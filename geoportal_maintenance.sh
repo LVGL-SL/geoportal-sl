@@ -1859,6 +1859,7 @@ update(){
   update_django_copyConfigurations(){
     cp -a ${installation_folder}${installation_subfolder_django}Geoportal/settings.py ${installation_folder}settings.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y")
+    cp -a ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}setup/setup.conf ${installation_folder}setup.conf_$(date +"%d_%m_%Y")
   }
 
@@ -1872,6 +1873,7 @@ update(){
   update_django_restoreConfigurations(){
     cp -a ${installation_folder}settings.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     cp -a ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}useroperations/conf.py
+    cp -a ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py
     cp -a ${installation_folder}setup.conf_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}setup/setup.conf
   }
 
