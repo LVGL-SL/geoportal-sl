@@ -1221,7 +1221,7 @@ msgid "Order by"
 msgstr "Sortieren nach"
 
 #: useroperations/templates/applications.html:52
-msgid "Powered by GeoPortal.RLP"
+msgid "Powered by GeoPortal.Saarland"
 msgstr ""
 
 #: useroperations/templates/applications.html:61
