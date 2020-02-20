@@ -70,8 +70,11 @@
     object-fit: cover;
 }
 
-.topics .tile-img,
-.topics .icn-sub-tile.only {
+.tile-img.fill-color{
+    color: var(--primary);
+}
+
+.topics .tile-img, .topics .icn-sub-tile.only{
     transition: all 0.1s ease-in-out;
 }
 
