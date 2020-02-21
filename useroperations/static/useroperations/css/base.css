@@ -319,12 +319,9 @@ ul {
 .map-viewer-overlay {
     width: 100%;
     height: 100%;
-    background-color: #002966;
+    background-color: var(--secondary-light);
     position: absolute;
     margin: 0;
-    /*
-    top: 150px;
-    */
     z-index: 1;
     display: none;
 }
