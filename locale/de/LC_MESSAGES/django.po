@@ -830,8 +830,8 @@ msgstr "Vielen Dank für Ihr Verständnis!"
 
 #: templates/500.html:25 templates/base.html:235
 #: templates/unsupported_browser.html:25
-msgid "The logo of Geoportal Rhineland-Palatinate"
-msgstr "Das Logo des Geoportals Rheinland-Pfalz"
+msgid "The logo of Geoportal Saarland"
+msgstr "Das Logo des Geoportals Saarland"
 
 #: templates/base.html:42 useroperations/templates/landing_page.html:95
 msgid "Logo of the spatial data infrastructure organization"
@@ -927,10 +927,6 @@ msgstr "Kartenviewer"
 #: templates/base.html:152
 msgid "A navigation menu icon"
 msgstr "Ein Navigationsmenüsymbol"
-
-#: templates/base.html:209
-msgid "State coat of arms of Rhineland-Palatinate"
-msgstr "Wappen von Rheinland-Pfalz"
 
 #: templates/base.html:214
 msgid "Contact"

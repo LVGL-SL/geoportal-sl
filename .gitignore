@@ -1,3 +1,4 @@
+.vscode
 setup/setup.conf
 Geoportal/__pycache__/
 Geoportal/utils/__pycache__/
