@@ -39,9 +39,6 @@ html {
 
 body {
     margin: 0;
-    /*
-    background-color: var(--secondary-light);
-    */
     height: 100%;
     position: relative;
 }
@@ -517,8 +514,6 @@ ul {
 }
 
 .sidebar-wrapper {
-    background-color: var(--primary);
-    /* background-image: linear-gradient(var(--primary), white); */
     list-style-type: none;
     width: 200px;
     margin: 0;
@@ -536,6 +531,7 @@ ul {
 }
 
 .sidebar-content {
+    background-color: var(--primary);
     text-align: center;
     width: 100%;
     margin-top: 0px;
@@ -549,6 +545,7 @@ ul {
 }
 
 .sidebar-title {
+    background-color: var(--primary);
     text-align: center;
     font-weight: bold;
     color: white;
@@ -565,9 +562,7 @@ ul {
 .sidebar-area-title {
     display: flex;
     align-items: center;
-    /*justify-content: space-evenly;*/
     font-weight: bold;
-    background-color: var(--primary-light);
     padding: 20px;
 }
 
@@ -583,7 +578,7 @@ ul {
 
 .sidebar-area-title:hover {
     cursor: pointer;
-    background-color: var(--primary-light-hover);
+    background-color: var(--primary-hover);
     color: white;
 }
 
@@ -606,18 +601,18 @@ ul {
 
 .sidebar-list-element {
     color: white;
+    background-color: var(--primary-light);
     padding: 15px 0px 15px 15px;
     cursor: pointer;
     text-align: left;
 }
 
-.current-page {
-    background-color: var(--primary-light-hover);
-    color: white;
-}
-
 .sidebar-list-element:hover {
     text-decoration: none;
+    background-color: var(--primary-light-hover);
+}
+
+.current-page {
     background-color: var(--primary-light-hover);
     color: white;
 }
