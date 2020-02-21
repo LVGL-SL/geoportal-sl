@@ -716,6 +716,9 @@ msgstr "Ablehnen"
 msgid "Own catalogue"
 msgstr "Eigener Katalog"
 
+msgid "Help"
+msgstr "Hilfe"
+
 #: searchCatalogue/utils/viewHelper.py:53
 msgid "Germany"
 msgstr "Deutschland"
