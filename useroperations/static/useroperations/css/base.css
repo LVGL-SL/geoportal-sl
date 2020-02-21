@@ -619,7 +619,6 @@ ul {
     color: white;
 }
 
-
 #map-viewer-selector {
     display: none;
 }
@@ -631,31 +630,30 @@ footer {
     justify-content: center;
 }
 
-footer nav {
+.footer-navigation {
     margin: 0;
     padding: 0;
 }
 
-footer nav ul {
+.footer-navigation>ul {
     table-layout: unset;
 }
 
-footer nav ul li {
+.footer-navigation>ul>li {
     display: block;
     float: left;
     padding: 1rem;
 }
 
-footer nav ul li a {
+.footer-navigation>ul>li>a {
     text-decoration: none;
 }
 
-footer nav ul li:hover {
+.footer-navigation>ul>li:hover {
     color: var(--secondary-font);
     background-color: var(--secondary-light);
 }
 
-/* MESSAGES */
 .messages-container {
     display: none;
     position: absolute;
