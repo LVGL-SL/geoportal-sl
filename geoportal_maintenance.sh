@@ -807,7 +807,7 @@ EOF
     sed -i "s/%%DBOWNER%%/$mapbender_database_user/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%DBPASSWORD%%/$mapbender_database_password/g" ${installation_folder}conf/mapbender.conf
     sed -i "s#%%INSTALLATIONFOLDER%%#${installation_folder}#g" ${installation_folder}conf/mapbender.conf
-    sed -i "s/%%DOMAINNAME%%/$hostname,$hostip,127.0.0.1/g" ${installation_folder}conf/mapbender.conf
+    sed -i "s/%%DOMAINNAME%%/$hostname,$ipaddress,127.0.0.1/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%WEBADMINMAIL%%/$webadmin_email/g" ${installation_folder}conf/mapbender.conf
 
     #####################
@@ -1427,7 +1427,7 @@ EOF
     mkdir -pv ${installation_folder}mapbender/http/local
 
     # copy some mapbender related scripts
-    cp -a ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local/guiapi.php
     cp -a ${installation_folder}mapbender/http/geoportal/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php.backup
     cp -a ${installation_folder}${installation_subfolder_django}scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
     cp -a ${installation_folder}${installation_subfolder_django}scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
@@ -1870,7 +1870,7 @@ update(){
   }
 
   update_django_copyScriptsForGeoportalIntegrationToMapbender(){
-    cp -av ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local
+    cp -av ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local/guiapi.php
     cp -av ${installation_folder}${installation_subfolder_django}scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
     cp -av ${installation_folder}${installation_subfolder_django}scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
   }
