@@ -154,7 +154,7 @@
                     title="{% trans 'Filter by categories and topics' %}"></i>
                 <span>{% trans 'INSPIRE topics' %}</span>
             </div>
-            <span class="quickstart-body"><!-- {{ results.num_topics|intcomma }} --></span>
+            <span class="quickstart-body">{{ results.num_inspire_topics|intcomma }}</span>
         </a>
         <a class="quickstart search" title="{% trans 'Search for all map layers' %}" data-resource="wms">
             <div class="quickstart-header">
@@ -170,7 +170,7 @@
                     title="{% trans 'Filter by categories and topics' %}"></i>
                 <span>{% trans 'ISO topics' %}</span>
             </div>
-            <span class="quickstart-body"><!-- {{ results.num_topics|intcomma }} --></span>
+            <span class="quickstart-body">{{ results.num_iso_topics|intcomma }}</span>
         </a>
     </div>
 </div>
