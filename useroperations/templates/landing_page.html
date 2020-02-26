@@ -148,13 +148,13 @@
         </a>
     </div>
     <div class="quickstart-container">
-        <a class="quickstart" href="{% url 'useroperations:categories' %}" title="{% trans 'Show all topics' %}">
+        <a class="quickstart" href="{% url 'useroperations:inspire-categories' %}" title="{% trans 'Show all INSPIRE topics' %}">
             <div class="quickstart-header">
                 <i class="fas fa-filter" alt="{% trans 'A filter icon' %}"
                     title="{% trans 'Filter by categories and topics' %}"></i>
-                <span>INSPIRE</span>
+                <span>{% trans 'INSPIRE topics' %}</span>
             </div>
-            <span class="quickstart-body">{{ results.num_topics|intcomma }}</span>
+            <span class="quickstart-body"><!-- {{ results.num_topics|intcomma }} --></span>
         </a>
         <a class="quickstart search" title="{% trans 'Search for all map layers' %}" data-resource="wms">
             <div class="quickstart-header">
@@ -164,13 +164,13 @@
             </div>
             <span class="quickstart-body">{{ results.num_wms|intcomma }}</span>
         </a>
-        <a class="quickstart search" title="{% trans 'Search for all map collections' %}" data-resource="wmc">
+        <a class="quickstart" href="{% url 'useroperations:iso-categories' %}" title="{% trans 'Show all ISO topics' %}">
             <div class="quickstart-header">
-                <i class="fas fa-map" alt="{% trans 'A lying map in the background. A large plus in the foreground.' %}"
-                    title="{% trans 'Web Map Context' %}"></i>
-                <span>{% trans 'Map collections' %}</span>
+                <i class="fas fa-filter" alt="{% trans 'A filter icon' %}"
+                    title="{% trans 'Filter by categories and topics' %}"></i>
+                <span>{% trans 'ISO topics' %}</span>
             </div>
-            <span class="quickstart-body">{{ results.num_wmc|intcomma }}</span>
+            <span class="quickstart-body"><!-- {{ results.num_topics|intcomma }} --></span>
         </a>
     </div>
 </div>

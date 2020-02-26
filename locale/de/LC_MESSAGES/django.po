@@ -1384,6 +1384,18 @@ msgstr "Ein Anwendungssymbol"
 msgid "Show all topics"
 msgstr "Alle anzeigen"
 
+msgid "Show all INSPIRE topics"
+msgstr "Zeige alle INSPIRE Themen"
+
+msgid "Show all ISO topics"
+msgstr "Zeige alle Themengebiete"
+
+msgid "INSPIRE topics"
+msgstr "INSPIRE"
+
+msgid "ISO topics"
+msgstr "Themengebiete"
+
 #: useroperations/templates/landing_page.html:49
 msgid "Filter by categories and topics"
 msgstr "Filtern mittels Kategorien und Themen"

@@ -123,8 +123,10 @@ def get_landing_page(lang: str):
     # get number of topics
     len_inspire = len(get_topics(lang, INSPIRE_CATEGORIES).get("tags", []))
     len_iso = len(get_topics(lang, ISO_CATEGORIES).get("tags", []))
+    ret_dict["num_inspire_topics"] = len_inspire
+    ret_dict["num_iso_topics"] = len_iso
     ret_dict["num_topics"] = len_inspire + len_iso
-
+    
     # get number of datasets and layers
     tmp = {
         "dataset": "num_dataset",
