@@ -217,6 +217,78 @@ def categories_view(request: HttpRequest):
 
 
 @check_browser
+def categories_iso_view(request: HttpRequest):
+    """ Renders the view for showing all inspire categories
+
+    Args:
+        request: The incoming request
+    Returns:
+         A rendered view
+    """
+
+    geoportal_context = GeoportalContext(request)
+    context_data = geoportal_context.get_context()
+    if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
+        return redirect('useroperations:change_profile')
+
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
+    template = "topics.html"
+
+    topics = []
+    iso_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, ISO_CATEGORIES)
+    topics += iso_topics.get("tags", [])
+
+    context = {
+        "topics": topics,
+        "inspire_doc_uri": URL_INSPIRE_DOC,
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
+    }
+    geoportal_context.add_context(context)
+    return render(request, template, geoportal_context.get_context())
+
+
+@check_browser
+def categories_inspire_view(request: HttpRequest):
+    """ Renders the view for showing all inspire categories
+
+    Args:
+        request: The incoming request
+    Returns:
+         A rendered view
+    """
+
+    geoportal_context = GeoportalContext(request)
+    context_data = geoportal_context.get_context()
+    if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
+        return redirect('useroperations:change_profile')
+
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
+    template = "topics.html"
+
+    topics = []
+    inspire_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
+    topics += inspire_topics.get("tags", [])
+
+    context = {
+        "topics": topics,
+        "inspire_doc_uri": URL_INSPIRE_DOC,
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
+    }
+    geoportal_context.add_context(context)
+    return render(request, template, geoportal_context.get_context())
+
+
+@check_browser
 def login_view(request):
     """ View that handles the login
 
