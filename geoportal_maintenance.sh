@@ -139,7 +139,7 @@ backup(){
 
   backup_mapbenderConfigurations(){
     cp -av ${installation_folder}mapbender/conf/* ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/conf/
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/mobilemap2/scripts/
+    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/mobilemap2/scripts/netgis/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/tools/wms_extent/
   }
@@ -157,7 +157,6 @@ backup(){
             su - postgres -c "pg_dump mapbender > /tmp/geoportal_mapbender_backup.psql";
             cp -a /tmp/geoportal_mapbender_backup.psql ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y");
             # TODO use defined Variable
-            # for some reason the password key won't take variables
             mysqldump --user=root --password=${mysql_root_pw} Geoportal > ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/geoportal_mariaDB_allDatabases.backup;
             break;;
             [Nn]* ) break;;
@@ -182,14 +181,14 @@ backup(){
 install(){
 
   install_setWMSRegistrationCommands(){
-    ##################### Geoportal-RLP
+    ##################### Default GUI
     wms_1_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=1 guiId='$default_gui_name' serviceType='wms' serviceAccessUrl=$wms_1_url"
     wms_2_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=1 guiId='$default_gui_name' serviceType='wms' serviceAccessUrl=$wms_2_url"
     wms_3_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=1 guiId='$default_gui_name' serviceType='wms' serviceAccessUrl=$wms_3_url"
-    ##################### Geoportal-RLP_erwSuche2
+    ##################### Default GUI extended search
     wms_4_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=1 guiId='$extended_search_default_gui_name' serviceType='wms' serviceAccessUrl=$wms_1_url"
     wms_5_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=1 guiId='$extended_search_default_gui_name' serviceType='wms' serviceAccessUrl=$wms_2_url"
-    ##################### demo service -
+    ##################### demo service
     wms_6_register_cmd="/usr/bin/php -f ${installation_folder}mapbender/tools/registerOwsCli.php userId=3 guiId='service_container1_free' serviceType='wms' serviceAccessUrl=$wms_4_url"
   }
 
@@ -1444,7 +1443,6 @@ EOF
     sed -i "s/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/g" ${installation_folder}mapbender/conf/mapbender.conf
 
     # django code
-    sed -i s/"HOSTIP = \"127.0.0.1\""/"HOSTIP = \"$ipaddress\""/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     sed -i s/"HOSTNAME = \"localhost\""/"HOSTNAME = \"$hostname\""/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     sed -i "s#PROJECT_DIR = \"/data/\"#PROJECT_DIR = \"${installation_folder}\"#g" ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     sed -i s/"        'USER':'mapbenderdbuser',"/"        'USER':'$mapbender_database_user',"/g ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
