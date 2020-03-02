@@ -8,10 +8,11 @@ urlpatterns = [
     path('apps/', applications_view, name='apps'),
     path('organizations/', organizations_view, name='organizations'),
     path('categories/', categories_view, name='categories'),
+    path('categories/inspire/', categories_inspire_view, name='inspire-categories'),
+    path('categories/iso/', categories_iso_view, name='iso-categories'),
     path('feedback/', feedback_view, name='feedback'),
     path('map-viewer/', map_viewer_view, name='map_viewer'),
     path('map', get_map_view, name='map'),
-
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('password_reset/', pw_reset_view, name='pw_reset'),

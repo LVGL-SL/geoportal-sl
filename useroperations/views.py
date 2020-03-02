@@ -24,7 +24,7 @@ from Geoportal.settings import DEFAULT_GUI, HOSTNAME, HOSTIP, HTTP_OR_SSL, INTER
 from Geoportal.utils import utils, php_session_data, mbConfReader
 from searchCatalogue.utils.url_conf import URL_INSPIRE_DOC
 from searchCatalogue.settings import PROXIES
-from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT
+from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT, INSPIRE_CATEGORIES, ISO_CATEGORIES
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
 from .models import MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
@@ -198,9 +198,87 @@ def categories_view(request: HttpRequest):
     order_by_options["rank"] = _("Relevance")
     order_by_options["title"] = _("Alphabetically")
 
-    template = "inspire_topics.html"
+    template = "topics.html"
+
+    topics = []
+    inspire_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
+    iso_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, ISO_CATEGORIES)
+    topics += inspire_topics.get("tags", []) + iso_topics.get("tags", [])
+
     context = {
-        "topics": useroperations_helper.get_all_inspire_topics(request.LANGUAGE_CODE),
+        "topics": topics,
+        "inspire_doc_uri": URL_INSPIRE_DOC,
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
+    }
+    geoportal_context.add_context(context)
+    return render(request, template, geoportal_context.get_context())
+
+
+@check_browser
+def categories_iso_view(request: HttpRequest):
+    """ Renders the view for showing all inspire categories
+
+    Args:
+        request: The incoming request
+    Returns:
+         A rendered view
+    """
+
+    geoportal_context = GeoportalContext(request)
+    context_data = geoportal_context.get_context()
+    if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
+        return redirect('useroperations:change_profile')
+
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
+    template = "topics.html"
+
+    topics = []
+    iso_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, ISO_CATEGORIES)
+    topics += iso_topics.get("tags", [])
+
+    context = {
+        "topics": topics,
+        "inspire_doc_uri": URL_INSPIRE_DOC,
+        "order_by_options": order_by_options,
+        "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,
+        "LISTED_VIEW_AS_DEFAULT": LISTED_VIEW_AS_DEFAULT,
+    }
+    geoportal_context.add_context(context)
+    return render(request, template, geoportal_context.get_context())
+
+
+@check_browser
+def categories_inspire_view(request: HttpRequest):
+    """ Renders the view for showing all inspire categories
+
+    Args:
+        request: The incoming request
+    Returns:
+         A rendered view
+    """
+
+    geoportal_context = GeoportalContext(request)
+    context_data = geoportal_context.get_context()
+    if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
+        return redirect('useroperations:change_profile')
+
+    order_by_options = OrderedDict()
+    order_by_options["rank"] = _("Relevance")
+    order_by_options["title"] = _("Alphabetically")
+
+    template = "topics.html"
+
+    topics = []
+    inspire_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
+    topics += inspire_topics.get("tags", [])
+
+    context = {
+        "topics": topics,
         "inspire_doc_uri": URL_INSPIRE_DOC,
         "order_by_options": order_by_options,
         "ORDER_BY_DEFAULT": ORDER_BY_DEFAULT,

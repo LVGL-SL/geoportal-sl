@@ -1,7 +1,7 @@
 #!/bin/bash
 ############################################################
-# Geoportal-RLP install script for debian 9 server environment
-# 2020-02-10
+# Geoportal-SL install script for debian 9 server environment
+# 2020-02-20
 # debian netinstall 9
 # André Holl
 # Armin Retterath
@@ -200,15 +200,10 @@ install(){
   install_createDirectories(){
     if [ $create_folders = 'true' ]; then
         echo -e "\n Creating directories for Mapbender! \n"
-        # initial installation of geoportal.rlp on debian 9
-        ############################################################
-        # create folder structure
-        ############################################################
         mkdir -pv $installation_folder
         touch $installation_log
         mkdir -pv ${installation_folder}access/
-
-        echo -e "\n${green} Successfully created directories! ${reset}\n"
+        echo -e "\n ${green} Successfully created directories! ${reset}\n"
     fi
   }
 
@@ -410,9 +405,9 @@ install(){
     UPDATE gui_category SET category_description='Anwendungen (Applications)' WHERE category_id=2;
 
     --add anonymous user
-    INSERT INTO mb_user (mb_user_id, mb_user_name, mb_user_password, mb_user_owner, mb_user_description, mb_user_login_count, mb_user_email, mb_user_phone, mb_user_department, mb_user_resolution, mb_user_organisation_name, mb_user_position_name, mb_user_phone1, mb_user_facsimile, mb_user_delivery_point, mb_user_city, mb_user_postal_code, mb_user_country, mb_user_online_resource, mb_user_textsize, mb_user_glossar, mb_user_last_login_date, mb_user_digest, mb_user_realname, mb_user_street, mb_user_housenumber, mb_user_reference, mb_user_for_attention_of, mb_user_valid_from, mb_user_valid_to, mb_user_password_ticket, mb_user_firstname, mb_user_lastname, mb_user_academictitle, timestamp_create, timestamp, mb_user_spatial_suggest, mb_user_newsletter, mb_user_allow_survey, mb_user_aldigest, password, is_active, activation_key, timestamp_delete) VALUES (${mapbender_guest_user_id}, 'guest', '084e0343a0486ff05530df6c705c8bb4', 1, 'test', 0, 'kontakt@geoportal.rlp.de', NULL, '', 72, '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, 'textsize3', 'ja', '2012-01-26', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2013-07-05 08:09:25.560359', '2015-08-20 10:04:04.952796', 'nein', true, true, NULL, '\$2b\$12\$sT7geeXvBlGZyLcT55VxqeNF2yuU8LKnBpfKFwxkiAh147mNxF5Cq',true,'',NULL);
+    INSERT INTO mb_user (mb_user_id, mb_user_name, mb_user_password, mb_user_owner, mb_user_description, mb_user_login_count, mb_user_email, mb_user_phone, mb_user_department, mb_user_resolution, mb_user_organisation_name, mb_user_position_name, mb_user_phone1, mb_user_facsimile, mb_user_delivery_point, mb_user_city, mb_user_postal_code, mb_user_country, mb_user_online_resource, mb_user_textsize, mb_user_glossar, mb_user_last_login_date, mb_user_digest, mb_user_realname, mb_user_street, mb_user_housenumber, mb_user_reference, mb_user_for_attention_of, mb_user_valid_from, mb_user_valid_to, mb_user_password_ticket, mb_user_firstname, mb_user_lastname, mb_user_academictitle, timestamp_create, timestamp, mb_user_spatial_suggest, mb_user_newsletter, mb_user_allow_survey, mb_user_aldigest, password, is_active, activation_key, timestamp_delete) VALUES (${mapbender_guest_user_id}, 'guest', '084e0343a0486ff05530df6c705c8bb4', 1, 'test', 0, '${webadmin_email}', NULL, '', 72, '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, 'textsize3', 'ja', '2012-01-26', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2013-07-05 08:09:25.560359', '2015-08-20 10:04:04.952796', 'nein', true, true, NULL, '\$2b\$12\$sT7geeXvBlGZyLcT55VxqeNF2yuU8LKnBpfKFwxkiAh147mNxF5Cq',true,'',NULL);
 
-    INSERT INTO mb_user (mb_user_id, mb_user_name, mb_user_password, mb_user_owner, mb_user_description, mb_user_login_count, mb_user_email, mb_user_phone, mb_user_department, mb_user_resolution, mb_user_organisation_name, mb_user_position_name, mb_user_phone1, mb_user_facsimile, mb_user_delivery_point, mb_user_city, mb_user_postal_code, mb_user_country, mb_user_online_resource, mb_user_textsize, mb_user_glossar, mb_user_last_login_date, mb_user_digest, mb_user_realname, mb_user_street, mb_user_housenumber, mb_user_reference, mb_user_for_attention_of, mb_user_valid_from, mb_user_valid_to, mb_user_password_ticket, mb_user_firstname, mb_user_lastname, mb_user_academictitle, timestamp_create, timestamp, mb_user_spatial_suggest, mb_user_newsletter, mb_user_allow_survey, mb_user_aldigest, password, is_active, activation_key, timestamp_delete) VALUES (${mapbender_subadmin_default_user_id}, 'bereichsadmin1', '3ad58afdc417b975256af7a6d3eda7a5', 1, '', 0, 'kontakt@geoportal.rlp.de', NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'nein', '2017-07-28', '3c345c2af80400e1e4c94ed0a967e713', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'bereichsadmin1', 'bereichsadmin1', '', '2013-07-05 08:09:25.560359', '2017-07-28 10:12:13.926954', 'nein', false, false, '2a32c845b23d82bea4653810f146397b', '\$2b\$12\$hkhs1s4LrPTNWeZaTHAS5.G63JZSVCmc7xUpaYrdVTAxgeeFe1YM6',true,'',NULL);
+    INSERT INTO mb_user (mb_user_id, mb_user_name, mb_user_password, mb_user_owner, mb_user_description, mb_user_login_count, mb_user_email, mb_user_phone, mb_user_department, mb_user_resolution, mb_user_organisation_name, mb_user_position_name, mb_user_phone1, mb_user_facsimile, mb_user_delivery_point, mb_user_city, mb_user_postal_code, mb_user_country, mb_user_online_resource, mb_user_textsize, mb_user_glossar, mb_user_last_login_date, mb_user_digest, mb_user_realname, mb_user_street, mb_user_housenumber, mb_user_reference, mb_user_for_attention_of, mb_user_valid_from, mb_user_valid_to, mb_user_password_ticket, mb_user_firstname, mb_user_lastname, mb_user_academictitle, timestamp_create, timestamp, mb_user_spatial_suggest, mb_user_newsletter, mb_user_allow_survey, mb_user_aldigest, password, is_active, activation_key, timestamp_delete) VALUES (${mapbender_subadmin_default_user_id}, 'bereichsadmin1', '3ad58afdc417b975256af7a6d3eda7a5', 1, '', 0, '${webadmin_email}', NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'nein', '2017-07-28', '3c345c2af80400e1e4c94ed0a967e713', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'bereichsadmin1', 'bereichsadmin1', '', '2013-07-05 08:09:25.560359', '2017-07-28 10:12:13.926954', 'nein', false, false, '2a32c845b23d82bea4653810f146397b', '\$2b\$12\$hkhs1s4LrPTNWeZaTHAS5.G63JZSVCmc7xUpaYrdVTAxgeeFe1YM6',true,'',NULL);
 
     INSERT INTO mb_group VALUES (${mapbender_subadmin_group_id}, 'Bereichsadmin', 1, 'Diensteadministratoren der Behörden', '', NULL, '', '', '', '', '', '', '', '', '', NULL, NULL, '2013-07-05 08:09:25.732456', '2018-05-25 08:57:07.988259', NULL, NULL, NULL, NULL, NULL, NULL, true);
 
@@ -438,13 +433,10 @@ install(){
     --root into guest group
     INSERT INTO mb_user_mb_group VALUES (1, ${mapbender_guest_group_id}, 1);
 
-    --guis: Geoportal-RLP, Geoportal-RLP_erwSuche2, Administration_DE, Portal_Admin, Owsproxy_csv - admin_metadata fehlt noch!!!!
-
     INSERT INTO gui (gui_id, gui_name, gui_description, gui_public) VALUES ('service_container1', 'service_container1', 'service_container1', 1);
 
     INSERT INTO gui (gui_id, gui_name, gui_description, gui_public) VALUES ('service_container1_free', 'service_container1_free', 'service_container1_free', 1);
 
-    --guis: Geoportal-RLP, Administration_DE, Owsproxy_csv, admin_metadata, .....
     DELETE FROM gui WHERE gui_id IN ('${default_gui_name}', 'Owsproxy_csv', 'admin_wms_metadata', 'admin_wfs_metadata', 'admin_wmc_metadata', 'admin_metadata', 'admin_ows_scheduler', 'PortalAdmin_DE', 'Administration_DE', '${extended_search_default_gui_name}');
 EOF
   }
@@ -815,7 +807,7 @@ EOF
     sed -i "s/%%DBOWNER%%/$mapbender_database_user/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%DBPASSWORD%%/$mapbender_database_password/g" ${installation_folder}conf/mapbender.conf
     sed -i "s#%%INSTALLATIONFOLDER%%#${installation_folder}#g" ${installation_folder}conf/mapbender.conf
-    sed -i "s/%%DOMAINNAME%%/$hostname,$hostip,127.0.0.1/g" ${installation_folder}conf/mapbender.conf
+    sed -i "s/%%DOMAINNAME%%/$hostname,$ipaddress,127.0.0.1/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%WEBADMINMAIL%%/$webadmin_email/g" ${installation_folder}conf/mapbender.conf
 
     #####################
@@ -1435,7 +1427,7 @@ EOF
     mkdir -pv ${installation_folder}mapbender/http/local
 
     # copy some mapbender related scripts
-    cp -a ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local
+    cp -a ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local/guiapi.php
     cp -a ${installation_folder}mapbender/http/geoportal/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php.backup
     cp -a ${installation_folder}${installation_subfolder_django}scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
     cp -a ${installation_folder}${installation_subfolder_django}scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
@@ -1859,6 +1851,7 @@ update(){
   update_django_copyConfigurations(){
     cp -a ${installation_folder}${installation_subfolder_django}Geoportal/settings.py ${installation_folder}settings.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y")
+    cp -a ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}setup/setup.conf ${installation_folder}setup.conf_$(date +"%d_%m_%Y")
   }
 
@@ -1872,11 +1865,12 @@ update(){
   update_django_restoreConfigurations(){
     cp -a ${installation_folder}settings.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     cp -a ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}useroperations/conf.py
+    cp -a ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py
     cp -a ${installation_folder}setup.conf_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}setup/setup.conf
   }
 
   update_django_copyScriptsForGeoportalIntegrationToMapbender(){
-    cp -av ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local
+    cp -av ${installation_folder}${installation_subfolder_django}scripts/guiapi.php ${installation_folder}mapbender/http/local/guiapi.php
     cp -av ${installation_folder}${installation_subfolder_django}scripts/authentication.php ${installation_folder}mapbender/http/geoportal/authentication.php
     cp -av ${installation_folder}${installation_subfolder_django}scripts/delete_inactive_users.sql ${installation_folder}mapbender/resources/db/delete_inactive_users.sql
   }
@@ -1885,7 +1879,7 @@ update(){
     virtualenv -ppython3 ${installation_folder}env
     source ${installation_folder}env/bin/activate
     cd ${installation_folder}${installation_subfolder_django}
-    pip install -r requirements.txt
+    pip install -r setup/requirements.txt
     python manage.py collectstatic
     python manage.py compilemessages
   }

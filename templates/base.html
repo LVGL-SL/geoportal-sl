@@ -157,7 +157,7 @@
                     </div>
                 </div>
 
-                <a style="color:white;text-decoration:none;" href="/article/Meldungen/">
+                <a href="/article/Meldungen/">
                     <div class="sidebar-area" id="news">
                         <div class="sidebar-area-title">
                             <div class="sidebar-area-title-icon">
@@ -216,14 +216,26 @@
                     </div>
                 </div>
                 {% endfor %}
-                <a style="color:white;text-decoration:none;" href="/article/Hilfe/">
+                <a href="/article/Apps/">
+                    <div class="sidebar-area" id="help">
+                        <div class="sidebar-area-title">
+                            <div class="sidebar-area-title-icon">
+                                <img alt="{% trans 'A Question Mark' %}" width="40px"
+                                    src="{% static 'useroperations/images/icn_geoportal.png' %}">
+                            </div>
+                            <div class="sidebar-area-title-text">{% trans 'Applications' %}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="/article/Hilfe/">
                     <div class="sidebar-area" id="help">
                         <div class="sidebar-area-title">
                             <div class="sidebar-area-title-icon">
                                 <img alt="{% trans 'A Question Mark' %}" width="40px"
                                     src="{% static 'useroperations/images/icn_help.png' %}">
                             </div>
-                            <div class="sidebar-area-title-text">{% trans 'Hilfe' %}
+                            <div class="sidebar-area-title-text">{% trans 'Help' %}
                             </div>
                         </div>
                     </div>
@@ -259,7 +271,7 @@
     {% endif %}
 
     <footer>
-        <nav>
+        <nav class="footer-navigation">
             <ul>
                 <li><a href="/article/Kontakt">{% trans 'Contact' %}</a></li>
                 <li><a href="/article/Impressum">{% trans 'Legal Disclosure' %}</a></li>
