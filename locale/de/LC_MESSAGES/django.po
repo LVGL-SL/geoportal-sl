@@ -1396,6 +1396,9 @@ msgstr "INSPIRE"
 msgid "ISO topics"
 msgstr "Themengebiete"
 
+msgid "Informations"
+msgstr "Informationen"
+
 #: useroperations/templates/landing_page.html:49
 msgid "Filter by categories and topics"
 msgstr "Filtern mittels Kategorien und Themen"
