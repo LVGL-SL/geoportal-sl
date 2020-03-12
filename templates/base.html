@@ -56,8 +56,7 @@
                     <input type="text" id="geoportal-search-field" class="simple-search-field -js-simple-search-field"
                         placeholder="{% trans 'Search term' %}">
                     <div id="geoportal-search-button" class="search-submit-button">
-                        <img alt="{% trans 'A magnifying glass' %}" id="geoportal-search-button-icon"
-                            src="{% static 'searchCatalogue/images/icons/icn_search_hover.png' %}">
+                        <i class="fas fa-search"></i>
                     </div>
                     <div class="simple-search-autocomplete -js-simple-search-autocomplete"></div>
                 </div>
@@ -216,12 +215,11 @@
                     </div>
                 </div>
                 {% endfor %}
-                <a href="/article/Apps/">
-                    <div class="sidebar-area" id="help">
+                <a href="/apps/">
+                    <div class="sidebar-area" id="apps">
                         <div class="sidebar-area-title">
                             <div class="sidebar-area-title-icon">
-                                <img alt="{% trans 'A Question Mark' %}" width="40px"
-                                    src="{% static 'useroperations/images/icn_geoportal.png' %}">
+                                <i class="fas fa-cogs" alt="{% trans 'An application icon' %}"></i>
                             </div>
                             <div class="sidebar-area-title-text">{% trans 'Applications' %}
                             </div>
@@ -232,8 +230,7 @@
                     <div class="sidebar-area" id="help">
                         <div class="sidebar-area-title">
                             <div class="sidebar-area-title-icon">
-                                <img alt="{% trans 'A Question Mark' %}" width="40px"
-                                    src="{% static 'useroperations/images/icn_help.png' %}">
+                                <i class="fas fa-question-circle" alt="{% trans 'A Question Mark' %}"></i>
                             </div>
                             <div class="sidebar-area-title-text">{% trans 'Help' %}
                             </div>

@@ -269,7 +269,6 @@ def get_data_other(request: HttpRequest, catalogue_id):
     """
     post_params = request.POST.dict()
     template_name = app_name + "search_results.html"
-    host = request.META.get("HTTP_HOST")
 
     # extract parameters
     start_time = time.time()
@@ -314,7 +313,7 @@ def get_data_other(request: HttpRequest, catalogue_id):
                         resource_set=requested_resources,
                         language_code=request.LANGUAGE_CODE,
                         catalogue_id=catalogue_id,
-			            host=host,
+			            host=HOSTNAME,
                         )
     start_time = time.time()
     search_results = searcher.search_external_catalogue_data()
@@ -384,7 +383,6 @@ def get_data_primary(request: HttpRequest):
         JsonResponse: Contains data for the ajax call
     """
     post_params = request.POST.dict()
-    host = request.META.get("HTTP_HOST")
     template_name = app_name + "search_results.html"
     resources = {
         "dataset": _("Datasets"),
@@ -452,7 +450,7 @@ def get_data_primary(request: HttpRequest):
                         only_open_data=only_open_data,
                         language_code=lang_code,
                         catalogue_id=catalogue_id,
-                        host=host
+                        host=HOSTNAME
                         )
     search_results = searcher.search_primary_catalogue_data(user_id=session_data.get("userid", ""))
     print_debug(EXEC_TIME_PRINT % ("total search in catalogue with ID " + str(catalogue_id), time.time() - start_time))
@@ -541,9 +539,9 @@ def get_data_primary(request: HttpRequest):
         "show_facets_count": 5,
         "selected_facets": selected_facets,
         "pages": pages,
-        "download_url": host + "/mapbender/php/mod_getDownloadOptions.php?id=",
-        "download_feed_url": host + "/mapbender/plugins/mb_downloadFeedClient.php?url=",
-        "download_feed_inspire": host + "/mapbender/php/mod_inspireDownloadFeed.php?id=",
+        "download_url": HOSTNAME + "/mapbender/php/mod_getDownloadOptions.php?id=",
+        "download_feed_url": HOSTNAME + "/mapbender/plugins/mb_downloadFeedClient.php?url=",
+        "download_feed_inspire": HOSTNAME + "/mapbender/php/mod_inspireDownloadFeed.php?id=",
         "view_map_url": "//localhost/portal/karten.html?",
         "wms_action_url": HTTP_OR_SSL + HOSTNAME + "/mapbender/php/wms.php?",
         "OPEN_DATA_URL": OPEN_DATA_URL,
