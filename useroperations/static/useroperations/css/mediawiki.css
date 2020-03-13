@@ -79,6 +79,15 @@ a:hover {
     height: auto;
 }
 
+.wikitable {
+    border-collapse: collapse;
+}
+
+.wikitable td {
+    padding: none;
+    border: 1px solid #013;
+}
+
 /* FOR MOBILE USERS */
 @media only screen and (max-width: 1000px) {
     .mediawiki-article {
