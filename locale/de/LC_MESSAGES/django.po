@@ -1399,6 +1399,18 @@ msgstr "Themengebiete"
 msgid "Informations"
 msgstr "Informationen"
 
+msgid "Wind Potential Analysis"
+msgstr "Windpotentialanalyse"
+
+msgid "Biosphere Bliesgau"
+msgstr "Biosphäre Bliesgau"
+
+msgid "National Park Hunsrück-Hochwald"
+msgstr "Nationalpark Hunsrück-Hochwald"
+
+msgid "Nature Reserve Land Registry"
+msgstr "Schutzgebietskataster"
+
 msgid "By clicking on one of the topics you will get an overview of the available geodata."
 msgstr "Über die Auswahl eines der Themen erhalten Sie eine Übersicht der dazu verfügbaren Geodaten."
 
