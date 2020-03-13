@@ -1399,6 +1399,15 @@ msgstr "Themengebiete"
 msgid "Informations"
 msgstr "Informationen"
 
+msgid "By clicking on one of the topics you will get an overview of the available geodata."
+msgstr "Über die Auswahl eines der Themen erhalten Sie eine Übersicht der dazu verfügbaren Geodaten."
+
+msgid "Here you can find the available fields of expertise categorized by ISO topics. "
+msgstr "Hier finden Sie Geodaten aus unterschiedlichen Fachgebieten. "
+
+msgid "Here you can find geodata that are identified as being INSPIRE (INfrastructure for SPatial InfoRmation in Europe) relevant."
+msgstr "Hier finden Sie Geodaten, welche als für die europäische Geodateninfrastruktur INSPIRE (INfrastructure for SPatial InfoRmation in Europe) relavant identifiziert wurden."
+
 #: useroperations/templates/landing_page.html:49
 msgid "Filter by categories and topics"
 msgstr "Filtern mittels Kategorien und Themen"

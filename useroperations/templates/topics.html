@@ -9,9 +9,30 @@
 {% endblock %}
 
 {% block body %}
+{% if request.path == '/categories/iso/' %}
+<div class="landing-page-headline">
+    <h2>{% trans 'ISO topics' %}</h2>
+</div>
+<div class="topic-description">
+    <p><strong>{% trans 'Here you can find the available fields of expertise categorized by ISO topics. ' %}
+            {% trans 'By clicking on one of the topics you will get an overview of the available geodata.' %}</strong>
+    </p>
+</div>
+{% elif request.path == '/categories/inspire/' %}
+<div class="landing-page-headline">
+    <h2>{% trans 'INSPIRE topics' %}</h2>
+</div>
+<div class="topic-description">
+    <p><strong>{% trans 'Here you can find geodata that are identified as being INSPIRE (INfrastructure for SPatial InfoRmation in Europe) relevant. ' %}
+            {% trans 'By clicking on one of the topics you will get an overview of the available geodata.' %}</strong>
+    </p>
+</div>
+{% else %}
 <div class="landing-page-headline">
     <h2>{% trans 'Topics' %}</h2>
 </div>
+{% endif %}
+
 <div class="tile-options-wrapper">
     <div class="options-left">
     </div>
