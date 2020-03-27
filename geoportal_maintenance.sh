@@ -806,7 +806,7 @@ EOF
     sed -i "s/%%DBOWNER%%/$mapbender_database_user/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%DBPASSWORD%%/$mapbender_database_password/g" ${installation_folder}conf/mapbender.conf
     sed -i "s#%%INSTALLATIONFOLDER%%#${installation_folder}#g" ${installation_folder}conf/mapbender.conf
-    sed -i "s/localhost,127.0.0.1,%%DOMAINNAME%%/localhost,127.0.0.1,${hostname},${ipaddress}/g" ${installation_folder}conf/mapbender.conf
+    sed -i "s/%%DOMAINNAME%%/$hostname,$ipaddress,127.0.0.1/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%WEBADMINMAIL%%/$webadmin_email/g" ${installation_folder}conf/mapbender.conf
     sed -i "s#http://%%DOMAINNAME%%#http://${hostname}#g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%DOMAINNAME%%,vmlxgeoportal1/${hostname},${ipaddress}/g" ${installation_folder}conf/mapbender.conf
