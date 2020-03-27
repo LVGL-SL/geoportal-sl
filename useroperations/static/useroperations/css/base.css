@@ -585,7 +585,8 @@ ul {
 }
 
 .sidebar-area-content>div {
-    background-color: var(--primary-light);
+    color: var(--secondary-font);
+    background-color: var(--secondary-placeholder);
     font-weight: bold;
     padding: 10px 0 10px 0;
 }
@@ -593,12 +594,12 @@ ul {
 .sidebar-area-content>a {
     outline: none;
     text-decoration: none;
-    color: white;
+    color: var(--secondary-font);
 }
 
 .sidebar-list-element {
-    color: white;
-    background-color: var(--primary-light);
+    color: var(--secondary-font);
+    background-color: var(--secondary-light);
     padding: 15px 0px 15px 15px;
     cursor: pointer;
     text-align: left;
@@ -606,7 +607,7 @@ ul {
 
 .sidebar-list-element:hover {
     text-decoration: none;
-    background-color: var(--primary-light-hover);
+    background-color: var(--secondary-hover);
 }
 
 .current-page {
