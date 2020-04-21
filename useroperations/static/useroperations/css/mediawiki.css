@@ -7,12 +7,12 @@
 
 @import 'color_schema.css';
 
-
-.mediawiki-article{
+.mediawiki-article {
     padding: 0 50px 0 0;
 }
 
-.mediawiki-article p, .mediawiki-article li{
+.mediawiki-article p,
+.mediawiki-article li {
     font-size: 1.0em;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
@@ -20,65 +20,77 @@
     text-align: justify
 }
 
-h1 .mw-headline{
+h1 .mw-headline {
     color: var(--primary);
 }
 
-h2 .mw-headline{
+h2 .mw-headline {
     color: var(--primary);
 }
 
-h3 .mw-headline{
+h3 .mw-headline {
     color: var(--primary);
 }
 
-.mediawiki-article ul{
+.mediawiki-article ul {
     list-style: square var(--primary);
     padding: 0 0 0 20px;
 }
 
-.tright{
+.tright {
     float: right;
 }
-.tleft{
+
+.tleft {
     float: left;
 }
 
-.thumbinner{
+.thumbinner {
     display: flex;
     flex-direction: column;
     justify-content: center;
     border: 1px solid var(--secondary);
     padding: 5px;
 }
-.thumbcaption{
+
+.thumbcaption {
     text-align: center;
 }
 
-.external, a{
+.external,
+a {
     color: var(--primary);
     text-decoration: none;
 }
-.external:hover, a:hover{
+
+.external:hover,
+a:hover {
     color: var(--primary-light-hover);
     text-decoration: underline;
 }
 
-.center{
+.center {
     display: flex;
     justify-content: center;
 }
 
-.image > img{
+.image>img {
     max-width: 100%;
     height: auto;
 }
 
+.wikitable {
+    border-collapse: collapse;
+}
 
+.wikitable td {
+    padding: none;
+    border: 1px solid #013;
+}
 
 /* FOR MOBILE USERS */
-@media only screen and (max-width: 1000px){
-    .mediawiki-article{
+@media only screen and (max-width: 1000px) {
+    .mediawiki-article {
         padding: 0;
     }
 }

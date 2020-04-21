@@ -1748,7 +1748,7 @@ update(){
 
   checkDjangoSettings_fetchSettingsFromRepository(){
     if [ -f /tmp/settings.py ]; then
-      rm /tmp/settings.py
+      /bin/rm /tmp/settings.py
     fi
     wget ${git_django_settingsURL} -P /tmp/
   }
@@ -1782,19 +1782,16 @@ update(){
   }
 
   update_mapbender_copyConfigurations(){
-    echo "Backing up Mapbender Configs"
-    cp -av ${installation_folder}mapbender/conf/mapbender.conf ${installation_folder}mapbender.conf_$(date +"%d_%m_%Y") 
-    cp -av ${installation_folder}mapbender/conf/geoportal.conf ${installation_folder}geoportal.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map ${installation_folder}extents_geoportal_rlp.map_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${installation_folder}extent_service_geoportal_rlp.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${installation_folder}config.js_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/atomFeedClient.conf ${installation_folder}atomFeedClient.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/ckan.conf ${installation_folder}ckan.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/mobilemap2.conf ${installation_folder}mobilemap2.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/linkedDataProxy.json ${installation_folder}linkedDataProxy.json_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/twitter.conf ${installation_folder}twitter.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/bkgGeocoding.conf ${installation_folder}bkgGeocoding.conf_$(date +"%d_%m_%Y")
-    cp -av ${installation_folder}mapbender/conf/excludeproxyurls.conf ${installation_folder}excludeproxyurls.conf_$(date +"%d_%m_%Y")
+    echo -e "\n Backing up Mapbender Configs \n"
+    mkdir -p ${temporaryConfigDirectory}conf/
+    mkdir -p ${temporaryConfigDirectory}tools/wms_extent/
+    mkdir -p ${temporaryConfigDirectory}http/extensions/mobilemap/
+    mkdir -p ${temporaryConfigDirectory}http/extensions/mobilemap2/
+    cp -av ${installation_folder}mapbender/conf/*.conf ${temporaryConfigDirectory}conf/
+    cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map  ${temporaryConfigDirectory}tools/wms_extent/
+    cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${temporaryConfigDirectory}tools/wms_extent/
+    cp -av ${installation_folder}mapbender/http/extensions/mobilemap ${temporaryConfigDirectory}http/extensions/mobilemap
+    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2 ${temporaryConfigDirectory}http/extensions/mobilemap2
   }
 
   update_mapbender_gitFetch(){
@@ -1804,22 +1801,15 @@ update(){
   }
 
   update_mapbender_restoreConfigurations(){
-    cp -av ${installation_folder}mapbender.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/mapbender.conf
-    cp -av ${installation_folder}geoportal.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/geoportal.conf
-    cp -av ${installation_folder}extents_geoportal_rlp.map_$(date +"%d_%m_%Y") ${installation_folder}mapbender/tools/wms_extent/extents.map
-    cp -av ${installation_folder}extent_service_geoportal_rlp.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/tools/wms_extent/extent_service.conf
-    cp -av ${installation_folder}config.js_$(date +"%d_%m_%Y") ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js
-    cp -av ${installation_folder}atomFeedClient.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/atomFeedClient.conf
-    cp -av ${installation_folder}ckan.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/ckan.conf
-    cp -av ${installation_folder}mobilemap2.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/mobilemap2.conf
-    cp -av ${installation_folder}linkedDataProxy.json_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/linkedDataProxy.json
-    cp -av ${installation_folder}twitter.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/twitter.conf
-    cp -av ${installation_folder}bkgGeocoding.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/bkgGeocoding.conf
-    cp -av ${installation_folder}excludeproxyurls.conf_$(date +"%d_%m_%Y") ${installation_folder}mapbender/conf/excludeproxyurls.conf
-  }
-
-  update_mapbender_restoreExtensions(){
-    cp -av ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/* ${installation_folder}mapbender/http/extensions/
+    echo -e "\n Restoring Mapbender Configs \n"
+    cp -av ${temporaryConfigDirectory}* ${installation_folder}mapbender/
+    if [ $? -eq 0 ];then
+      echo -e "\n ${green}Successfully restored Mapbender configurations! ${reset}\n" 
+      /bin/rm -rf ${temporaryConfigDirectory}
+    else
+      echo -e "\n ${red}Restoring Mapbender configurations failed! ${reset}\n"
+      exit 14
+    fi
   }
 
   update_mapbender_internationalization(){
@@ -1857,7 +1847,7 @@ update(){
   update_django_copyConfigurations(){
     cp -a ${installation_folder}${installation_subfolder_django}Geoportal/settings.py ${installation_folder}settings.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y")
-    cp -a ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y")
+    cp -a ${installation_folder}${installation_subfolder_django}searchCatalogue/utils/url_conf.py ${installation_folder}url_conf.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}setup/setup.conf ${installation_folder}setup.conf_$(date +"%d_%m_%Y")
   }
 
@@ -1871,7 +1861,7 @@ update(){
   update_django_restoreConfigurations(){
     cp -a ${installation_folder}settings.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     cp -a ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}useroperations/conf.py
-    cp -a ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py
+    cp -a ${installation_folder}url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/utils/url_conf.py
     cp -a ${installation_folder}setup.conf_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}setup/setup.conf
   }
 
@@ -1905,7 +1895,6 @@ update(){
     update_mapbender_copyConfigurations
     update_mapbender_gitFetch
     update_mapbender_restoreConfigurations
-    update_mapbender_restoreExtensions
     update_mapbender_internationalization
     update_mapbender_setFolderPermissions
     update_mapbender_textReplacements
