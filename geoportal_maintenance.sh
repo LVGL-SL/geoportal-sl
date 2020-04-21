@@ -806,7 +806,7 @@ EOF
     sed -i "s/%%DBOWNER%%/$mapbender_database_user/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%DBPASSWORD%%/$mapbender_database_password/g" ${installation_folder}conf/mapbender.conf
     sed -i "s#%%INSTALLATIONFOLDER%%#${installation_folder}#g" ${installation_folder}conf/mapbender.conf
-    sed -i "s/localhost,127.0.0.1,%%DOMAINNAME%%/localhost,127.0.0.1,${hostname},${ipaddress}/g" ${installation_folder}conf/mapbender.conf
+    sed -i "s/%%DOMAINNAME%%/$hostname,$ipaddress,127.0.0.1/g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%WEBADMINMAIL%%/$webadmin_email/g" ${installation_folder}conf/mapbender.conf
     sed -i "s#http://%%DOMAINNAME%%#http://${hostname}#g" ${installation_folder}conf/mapbender.conf
     sed -i "s/%%DOMAINNAME%%,vmlxgeoportal1/${hostname},${ipaddress}/g" ${installation_folder}conf/mapbender.conf
@@ -1748,7 +1748,7 @@ update(){
 
   checkDjangoSettings_fetchSettingsFromRepository(){
     if [ -f /tmp/settings.py ]; then
-      rm /tmp/settings.py
+      /bin/rm /tmp/settings.py
     fi
     wget ${git_django_settingsURL} -P /tmp/
   }
@@ -1785,11 +1785,13 @@ update(){
     echo -e "\n Backing up Mapbender Configs \n"
     mkdir -p ${temporaryConfigDirectory}conf/
     mkdir -p ${temporaryConfigDirectory}tools/wms_extent/
-    mkdir -p ${temporaryConfigDirectory}http/extensions/mobilemap2/scripts/netgis/
+    mkdir -p ${temporaryConfigDirectory}http/extensions/mobilemap/
+    mkdir -p ${temporaryConfigDirectory}http/extensions/mobilemap2/
     cp -av ${installation_folder}mapbender/conf/*.conf ${temporaryConfigDirectory}conf/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map  ${temporaryConfigDirectory}tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${temporaryConfigDirectory}tools/wms_extent/
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${temporaryConfigDirectory}http/extensions/mobilemap2/scripts/netgis/
+    cp -av ${installation_folder}mapbender/http/extensions/mobilemap ${temporaryConfigDirectory}http/extensions/mobilemap
+    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2 ${temporaryConfigDirectory}http/extensions/mobilemap2
   }
 
   update_mapbender_gitFetch(){
@@ -1808,10 +1810,6 @@ update(){
       echo -e "\n ${red}Restoring Mapbender configurations failed! ${reset}\n"
       exit 14
     fi
-  }
-
-  update_mapbender_restoreExtensions(){
-    cp -av ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/* ${installation_folder}mapbender/http/extensions/
   }
 
   update_mapbender_internationalization(){
@@ -1849,7 +1847,7 @@ update(){
   update_django_copyConfigurations(){
     cp -a ${installation_folder}${installation_subfolder_django}Geoportal/settings.py ${installation_folder}settings.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}useroperations/conf.py ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y")
-    cp -a ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y")
+    cp -a ${installation_folder}${installation_subfolder_django}searchCatalogue/utils/url_conf.py ${installation_folder}url_conf.py_$(date +"%d_%m_%Y")
     cp -a ${installation_folder}${installation_subfolder_django}setup/setup.conf ${installation_folder}setup.conf_$(date +"%d_%m_%Y")
   }
 
@@ -1863,7 +1861,7 @@ update(){
   update_django_restoreConfigurations(){
     cp -a ${installation_folder}settings.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
     cp -a ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}useroperations/conf.py
-    cp -a ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py
+    cp -a ${installation_folder}url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/utils/url_conf.py
     cp -a ${installation_folder}setup.conf_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}setup/setup.conf
   }
 
@@ -1897,7 +1895,6 @@ update(){
     update_mapbender_copyConfigurations
     update_mapbender_gitFetch
     update_mapbender_restoreConfigurations
-    update_mapbender_restoreExtensions
     update_mapbender_internationalization
     update_mapbender_setFolderPermissions
     update_mapbender_textReplacements
