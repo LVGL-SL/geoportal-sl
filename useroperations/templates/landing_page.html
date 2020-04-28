@@ -188,13 +188,13 @@
             </div>
             <span class="quickstart-body">{{ results.num_inspire_topics|intcomma }}</span>
         </a>
-        <a class="quickstart" href="{% url 'useroperations:organizations' %}"
-            title="{% trans 'Show all organizations' %}">
+        <a class="quickstart search" title="{% trans 'Search for all map collections' %}" data-resource="wmc">
             <div class="quickstart-header">
-                <i class="fas fa-city" alt="{% trans 'An organization icon' %}" title="{% trans 'Organizations' %}"></i>
-                <span>{% trans 'Organizations' %}</span>
+                <i class="fas fa-map" alt="{% trans 'A lying map in the background. A large plus in the foreground.' %}"
+                    title="{% trans 'Web Map Context' %}"></i>
+                <span>{% trans 'Map collections' %}</span>
             </div>
-            <span class="quickstart-body">{{ results.num_orgs|intcomma }}</span>
+            <span class="quickstart-body">{{ results.num_wmc|intcomma }}</span>
         </a>
     </div>
 </div>

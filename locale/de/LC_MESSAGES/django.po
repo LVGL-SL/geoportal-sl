@@ -590,7 +590,7 @@ msgstr "Such/Download/Erfassungsmodule"
 #: searchCatalogue/templates/search_forms.html:895
 #: useroperations/templates/landing_page.html:13
 msgid "Map collections"
-msgstr "Karten"
+msgstr "Karten (WMC)"
 
 #: searchCatalogue/templates/search_forms.html:899
 msgid "GeoRSS Newsfeeds"

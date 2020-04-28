@@ -109,7 +109,8 @@ getOptions(){
 }
 
 updateI18N(){
-  /usr/bin/sh ${installation_folder}mapbender/tools/i18n_update_mo.sh
+  cd ${installation_folder}mapbender/tools
+  /bin/sh ${installation_folder}mapbender/tools/i18n_update_mo.sh
 }
 
 backup(){
