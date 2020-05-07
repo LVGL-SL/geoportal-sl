@@ -1297,7 +1297,7 @@ EOF
       cp -v setup/qualifyMetadata.sh ${installation_folder}cronjobs/qualifyMetadata.sh
       chmod u+x ${installation_folder}cronjobs/generateMetadata.sh
       chmod u+x ${installation_folder}cronjobs/qualifyMetadata.sh
-      sed -i "s#%%INSTALLATION_FOLDER%%#${installation_folder}#g" ${installation_folder}cronjobs/qualifyMetadata.sh
+      sed -i "s#%%MAPBENDER_FOLDER%%#${installation_folder}mapbender/#g" ${installation_folder}cronjobs/qualifyMetadata.sh
       
       ############################################################
       # install cronjobs for root account
