@@ -1294,7 +1294,10 @@ EOF
     if [ $configure_cronjobs = 'true' ]; then
       mkdir -pv ${installation_folder}cronjobs/
       cp -v setup/generateMetadata.sh ${installation_folder}cronjobs/generateMetadata.sh
+      cp -v setup/qualifyMetadata.sh ${installation_folder}cronjobs/qualifyMetadata.sh
       chmod u+x ${installation_folder}cronjobs/generateMetadata.sh
+      chmod u+x ${installation_folder}cronjobs/qualifyMetadata.sh
+      sed -i "s#%%MAPBENDER_FOLDER%%#${installation_folder}mapbender/#g" ${installation_folder}cronjobs/qualifyMetadata.sh
       
       ############################################################
       # install cronjobs for root account
@@ -1326,7 +1329,7 @@ EOF
       ( crontab -l | grep -v -F "$croncmd4" ; echo "$cronjob4" ) | crontab -
       
       # 5. generate metadata xml files
-      croncmd5="sh ${installation_folder}cronjobs/generateMetadata.sh"
+      croncmd5="sh ${installation_folder}cronjobs/generateMetadata.sh && sh ${installation_folder}cronjobs/qualifyMetadata.sh"
       cronjob5="45 23 * * * $croncmd5"
       ( crontab -l | grep -v -F "$croncmd5" ; echo "$cronjob5" ) | crontab -
       

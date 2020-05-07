@@ -69,10 +69,11 @@
                     </div>
                 </div>
             </div>
-            <div class="right-header">
-                <div class="right-header-bottom">
-                </div>
-            </div>
+            <figure class="right-header">
+                <a href="/"><img alt="{% trans 'Logo of the spatial data infrastructure organization' %}" id="logo_gdi"
+                        src="{% static 'useroperations/images/logo-gdi.png' %}"
+                        title="{{ LOGO_GEOPORTAL_TITLE }}" /></a>
+            </figure>
         </div>
     </header>
 
@@ -288,7 +289,6 @@
                 <li><a href="/article/Kontakt">{% trans 'Contact' %}</a></li>
                 <li><a href="/article/Impressum">{% trans 'Legal Disclosure' %}</a></li>
                 <li><a href="/article/Datenschutz">{% trans 'Privacy' %}</a></li>
-                <li><a href="/article/Rechtshinweis">{% trans 'Legal Notice' %}</a></li>
                 <li><a href="/feedback">{% trans 'Feedback' %}</a></li>
             </ul>
         </nav>
