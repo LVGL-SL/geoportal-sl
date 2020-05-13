@@ -226,8 +226,13 @@ $(document).on("click", ".map-viewer-list-entry", function(){
 
     gui_id = elem.attr("data-resource");
     if(gui_id.includes("http")){
+        // Open the mobile client in a new window
+        if(gui_id.includes("mobilemap2")){
+            window.open(gui_id);
+        } else {
         // simply paste in the new url
         iFrame.attr("src", gui_id);
+        }
     }else{
         var srcUrl = null;
         if(!iFrame.attr("src").includes("gui_id")){
