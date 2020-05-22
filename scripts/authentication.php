@@ -66,9 +66,9 @@ if(is_array($isAuthenticated) != false) {
 	}
 
 	if($_SERVER["HTTPS"] != "on") {
-		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: http://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	} else  {
-		header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: https://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	}
 	session_write_close();
 
@@ -76,26 +76,26 @@ if(is_array($isAuthenticated) != false) {
 
 	$URLAdd="?status=notactive";
 	if($_SERVER["HTTPS"] != "on") {
-		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: http://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	} else {
-		header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: https://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	}
 
 } else if (strpos($isAuthenticated,'Password failed third time for') !== false){
 
 	$URLAdd="?status=fail3&name=".$name;
 	if($_SERVER["HTTPS"] != "on") {
-		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: http://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	} else {
-		header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: https://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	}
 
 } else {
 	$URLAdd="?status=fail";
 	if($_SERVER["HTTPS"] != "on") {
-		header ("Location: http://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: http://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	} else  {
-		header ("Location: https://".$_SERVER['HTTP_HOST'].$URLAdd);
+		header ("Location: https://".FULLY_QUALIFIED_DOMAIN_NAME.$URLAdd);
 	}
 
 }
