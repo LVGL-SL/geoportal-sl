@@ -267,10 +267,12 @@ update(){
   update_mapbender_copyConfigurations(){
     echo -e "\n Backing up Mapbender Configs \n"
     mkdir -p ${temporaryConfigDirectory}mapbender/conf/
+    mkdir -p ${temporaryConfigDirectory}mapbender/mapserver/
     mkdir -p ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     mkdir -p ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap/
     mkdir -p ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap2/
     cp -av ${installation_folder}mapbender/conf/*.conf ${temporaryConfigDirectory}mapbender/conf/
+    cp -av ${installation_folder}mapbender/mapserver/spatial_security.map ${temporaryConfigDirectory}mapbender/mapserver/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map  ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/monitorCapabilities.bash ${temporaryConfigDirectory}mapbender/tools/
