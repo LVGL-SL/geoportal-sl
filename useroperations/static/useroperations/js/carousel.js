@@ -7,7 +7,6 @@ startCarousel();
 
 function carousel() {
   plusDivs(1);
-  setTimeout(carousel, carousel_timeout);
 }
 
 function startCarousel() {
