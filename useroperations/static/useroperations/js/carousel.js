@@ -1,12 +1,19 @@
-var carousel_initial_stop = true;
-carousel();
+const sliderElement = document.querySelector("#landing-page-slider-container");
+sliderElement.addEventListener("mouseenter", () => stopCarousel());
+sliderElement.addEventListener("mouseleave", () => startCarousel());
+
+let carouselInterval;
+startCarousel();
 
 function carousel() {
-  if (carousel_initial_stop) {
-    carousel_initial_stop = false;
-    setTimeout(carousel, 5000);
-  } else {
-    plusDivs(1)
-    setTimeout(carousel, 5000);
-  }
+  plusDivs(1);
+  setTimeout(carousel, carousel_timeout);
+}
+
+function startCarousel() {
+  carouselInterval = setInterval(carousel, 5000);
+}
+
+function stopCarousel() {
+  clearInterval(carouselInterval);
 }
