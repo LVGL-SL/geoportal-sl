@@ -8,8 +8,8 @@ EXTENT_SERVICE_LAYER = "demis,ows_layer_target,extent,metadata_polygon"
 EXTENT_SERVICE_BBOX = "6.05,48.9,8.6,50.96"
 
 PROXIES = {
-    "http": "http://lprxdutm04.saarland.de:8080/",
-    "https": "http://lprxdutm04.saarland.de:8080/",
+    "http": "http://%%HTTP_PROXY%%/",
+    "https": "http://%%HTTP_PROXY%%/",
 }
 
 iso3166_folder = "iso3166States/"
