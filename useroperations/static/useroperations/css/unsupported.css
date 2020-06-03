@@ -34,33 +34,16 @@ h1{
     text-align: justify;
 }
 
-footer {
-    border-top: 5px solid var(--primary);
-    background-color: white;
-    display: flex;
-    justify-content: center;
+footer{
+    border-top: 1px solid gray;
+    background-image: -ms-linear-gradient(#e2e2e2, white); /*--secondary*/
+    background-image: linear-gradient(var(--secondary), white);
+    width: 100%;
+    text-align: center;
 }
-
-.footer-navigation {
-    margin: 0;
-    padding: 0;
-}
-
-.footer-navigation>ul {
-    table-layout: unset;
-}
-
-.footer-navigation>ul>li {
-    display: block;
-    float: left;
-    padding: 1rem;
-}
-
-.footer-navigation>ul>li>a {
-    text-decoration: none;
-}
-
-.footer-navigation>ul>li:hover {
-    color: var(--secondary-font);
-    background-color: var(--secondary-light);
+footer img{
+    max-height: 7vw;
+    min-height: 100px;
+    padding: 20px;
+    border: 0px solid;
 }
