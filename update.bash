@@ -267,10 +267,12 @@ update(){
   update_mapbender_copyConfigurations(){
     echo -e "\n Backing up Mapbender Configs \n"
     mkdir -p ${temporaryConfigDirectory}mapbender/conf/
+    mkdir -p ${temporaryConfigDirectory}mapbender/mapserver/
     mkdir -p ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     mkdir -p ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap/
     mkdir -p ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap2/
     cp -av ${installation_folder}mapbender/conf/*.conf ${temporaryConfigDirectory}mapbender/conf/
+    cp -av ${installation_folder}mapbender/mapserver/spatial_security.map ${temporaryConfigDirectory}mapbender/mapserver/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map  ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/monitorCapabilities.bash ${temporaryConfigDirectory}mapbender/tools/
@@ -281,6 +283,7 @@ update(){
   update_mapbender_gitFetch(){
     cd ${installation_folder}mapbender
     git reset --hard
+    git checkout ${git_mapbender_repositoryBranch}
     git pull
   }
 
@@ -289,7 +292,7 @@ update(){
     cp -av ${temporaryConfigDirectory}mapbender/* ${installation_folder}mapbender/
     if [ $? -eq 0 ];then
       echo -e "\n ${green}Successfully restored Mapbender configurations! ${reset}\n" 
-      /bin/rm -rf ${temporaryConfigDirectory}
+      /bin/rm -rf ${temporaryConfigDirectory}mapbender/
     else
       echo -e "\n ${red}Restoring Mapbender configurations failed! ${reset}\n"
       exit 14
@@ -347,8 +350,10 @@ update(){
   update_django_gitFetch(){
     cd ${installation_folder}${installation_subfolder_django}
     git reset --hard
+    git checkout ${git_django_repositoryBranch}
     git pull
     chmod u+x ${installation_folder}${installation_subfolder_django}geoportal_maintenance.sh
+    chmod u+x ${installation_folder}${installation_subfolder_django}update.bash
   }
 
   update_django_restoreConfigurations(){
@@ -356,7 +361,7 @@ update(){
     cp -av ${temporaryConfigDirectory}django/* ${installation_folder}${installation_subfolder_django}
     if [ $? -eq 0 ];then
       echo -e "\n ${green}Successfully restored Django configurations! ${reset}\n" 
-      /bin/rm -rf ${temporaryConfigDirectory}
+      /bin/rm -rf ${temporaryConfigDirectory}django/
     else
       echo -e "\n ${red}Restoring Django configurations failed! ${reset}\n"
       exit 14
@@ -364,10 +369,14 @@ update(){
   }
 
   update_django_restoreConfigurations(){
-    cp -a ${installation_folder}settings.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}Geoportal/settings.py
-    cp -a ${installation_folder}useroperations_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}useroperations/conf.py
-    cp -a ${installation_folder}searchCatalogue/url_conf.py_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py
-    cp -a ${installation_folder}setup.conf_$(date +"%d_%m_%Y") ${installation_folder}${installation_subfolder_django}setup/setup.conf
+    echo -e "\n Restoring GeoPortal Configs \n"
+    cp -av ${temporaryConfigDirectory}django/* ${installation_folder}${installation_subfolder_django}
+    if [ $? -eq 0 ];then
+      echo -e "\n ${green}Successfully restored GeoPortal configurations! ${reset}\n" 
+    else
+      echo -e "\n ${red}Restoring GeoPortal configurations failed! ${reset}\n"
+      exit 14
+    fi
   }
 
   update_django_copyScriptsForGeoportalIntegrationToMapbender(){

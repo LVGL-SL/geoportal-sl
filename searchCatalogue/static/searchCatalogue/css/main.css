@@ -684,7 +684,7 @@ dl dd {
 }
 
 .select-wrapper select:hover{
-    background-color: var(--primary-hover);
+    background-color: var(--secondary-hover);
 }
 .select-wrapper select::-ms-expand{
     /* For IE */

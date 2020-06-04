@@ -5,19 +5,41 @@
 <link rel="stylesheet" type="text/css" href="{% static '/useroperations/css/favourite_wmcs.css' %}" media="all" />
 <link rel="stylesheet" type="text/css" href="{% static '/useroperations/css/tiles.css' %}" media="all" />
 <link rel="stylesheet" href="{% static 'searchCatalogue/css/main.css' %}">
-    <script type="text/javascript" src="{% static 'useroperations/js/filter.js' %}"></script>
+<script type="text/javascript" src="{% static 'useroperations/js/filter.js' %}"></script>
 {% endblock %}
 
 {% block body %}
+{% if request.path == '/categories/iso/' %}
+<div class="landing-page-headline">
+    <h2>{% trans 'ISO topics' %}</h2>
+</div>
+<div class="topic-description">
+    <p>{% trans 'Here you can find the available fields of expertise categorized by ISO topics.' %}&nbsp;
+        {% trans 'By clicking on one of the topics you will get an overview of the available geodata.' %}
+    </p>
+</div>
+{% elif request.path == '/categories/inspire/' %}
+<div class="landing-page-headline">
+    <h2>{% trans 'INSPIRE topics' %}</h2>
+</div>
+<div class="topic-description">
+    <p>{% trans 'Here you can find geodata that are identified as being INSPIRE (INfrastructure for SPatial InfoRmation in Europe) relevant.' %}&nbsp;
+        {% trans 'By clicking on one of the topics you will get an overview of the available geodata.' %}
+    </p>
+</div>
+{% else %}
 <div class="landing-page-headline">
     <h2>{% trans 'Topics' %}</h2>
 </div>
+{% endif %}
+
 <div class="tile-options-wrapper">
     <div class="options-left">
     </div>
     <div class="options-middle">
         <div class="tile-filter-input-wrapper">
-            <input class="tile-filter-input" type="text" title="{% trans 'Filter by' %}" placeholder="{% trans 'Filter by' %}">
+            <input class="tile-filter-input" type="text" title="{% trans 'Filter by' %}"
+                placeholder="{% trans 'Filter by' %}">
             <i id="tile-filter-input-icon" class="fas fa-search"></i>
         </div>
     </div>
@@ -25,14 +47,15 @@
         <div class="tile-list-wrapper" title="{% trans 'Switch between list or tile view' %}">
             <i class="fas fa-th-list icn-toggle-list"></i>
             <label class="switch">
-              <input  {%if LISTED_VIEW_AS_DEFAULT %} checked="checked" {% endif %} type="checkbox">
-              <span class="slider round"></span>
+                <input {%if LISTED_VIEW_AS_DEFAULT %} checked="checked" {% endif %} type="checkbox">
+                <span class="slider round"></span>
             </label>
         </div>
         <div class="tile-order-wrapper select-wrapper">
             <select class="tile-filter-order" title="{% trans 'Order by' %}">
                 {% for val, title in order_by_options.items %}
-                    <option class="tile-filter-order-option" value="{{ val }}" {% if val == ORDER_BY_DEFAULT %} selected="selected" {% endif %}>{{ title }}</option>
+                <option class="tile-filter-order-option" value="{{ val }}" {% if val == ORDER_BY_DEFAULT %}
+                    selected="selected" {% endif %}>{{ title }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -41,50 +64,54 @@
 <div class="tile-wrapper topics">
     {% for result in topics %}
         <div class="tile">
-            <div class="tile-header" data-id="{{ result.id }}" data-name="{{ result.title }}" data-num-resources="{{ result.weight }}">
-                {% if result.inspireThemeId is not None %}
-                <a href="https://inspire.ec.europa.eu/" title="{% trans 'An INSPIRE category' %}">
-                    <img alt="{% trans 'The INSPIRE icon, shaped like a pineapple' %}" class="tile-corner-icn inspire-icn" src="{% static 'searchCatalogue/images/inspire_pineapple.png' %}">
-                </a>
+            <div class="tile-header" data-id="{{ result.id }}" data-name="{{ result.title }}"
+            data-num-resources="{{ result.weight }}"
+            data-search-category="{% if result.inspireThemeId is not None %}INSPIRE{% else %}ISO 19115{% endif %}">
+            {% if result.inspireThemeId is not None %}
+            <a href="https://inspire.ec.europa.eu/" title="{% trans 'An INSPIRE category' %}">
+                <img alt="{% trans 'The INSPIRE icon, shaped like a pineapple' %}" class="tile-corner-icn inspire-icn"
+                    src="{% static 'searchCatalogue/images/inspire_pineapple.png' %}">
+            </a>
+            {% endif %}
+
+            <div class="tile-title">{{ result.title }}</div>
+            <div class="tile-header-img">
+                {% if result.symbolUrl != '' %}
+                {% if result.inlineSvg is not None %}
+                <div class="tile-img {% if not result.keepColor %}fill-color{% endif %}">
+                    {{ result.inlineSvg|safe }}
+                </div>
+
                 {% endif %}
-
-                <div class="tile-title">{{ result.title }}</div>
-                <div class="tile-header-img">
-                    {% if result.symbolUrl != '' %}
-                        {% if result.inlineSvg is not None %}
-                            <div class="tile-img {% if not result.keepColor %}fill-color{% endif %}">
-                                {{ result.inlineSvg|safe }}
-                            </div>
-
-                        {% endif %}
-                    {% else  %}
-                        <img alt="{% trans 'Placeholder topic symbol, since no topic symbol is available' %}" class="tile-img" src="{% static 'searchCatalogue/images/no_image.png' %}">
+                {% else  %}
+                <img alt="{% trans 'Placeholder topic symbol, since no topic symbol is available' %}" class="tile-img"
+                    src="{% static 'searchCatalogue/images/no_image.png' %}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="tile-content">
+            <div class="tile-content-abstract">
+                <div class="sub-tile-container">
+                    <div class="data-info-container" title="{% trans 'Number of data' %}">
+                        <i class="fas fa-file-alt icn-file icn-sub-tile"></i>
+                        <span>{{ result.weight|intcomma }}</span>
+                    </div>
+                    {% if result.inspireThemeId is not None %}
+                    <a href="{{ inspire_doc_uri }}{{ result.inspireThemeId }}" target="_blank">
+                        <div class="data-info-container" title="{% trans 'More information' %}">
+                            <i class="fas fa-info-circle icn-sub-tile"></i>
+                            <span>{% trans 'Information' %}</span>
+                        </div>
+                    </a>
                     {% endif %}
                 </div>
-            </div>
-            <div class="tile-content">
-                <div class="tile-content-abstract">
-                    <div class="sub-tile-container">
-                        <div class="data-info-container" title="{% trans 'Number of data' %}">
-                            <i class="fas fa-file-alt icn-file icn-sub-tile"></i>
-                            <span>{{ result.weight|intcomma }}</span>
-                        </div>
-                        {% if result.inspireThemeId is not None %}
-                        <a href="{{ inspire_doc_uri }}{{ result.inspireThemeId }}" target="_blank">
-                            <div class="data-info-container" title="{% trans 'More information' %}">
-                                <i class="fas fa-info-circle icn-sub-tile"></i>
-                                <span>{% trans 'Information' %}</span>
-                            </div>
-                        </a>
-                        {% endif %}
-                    </div>
-                    <hr>
-                    <div class="tile-content-abstract-text" title="{{ result.description|safe }}">
-                        {{ result.description|safe }}
-                    </div>
+                <hr>
+                <div class="tile-content-abstract-text" title="{{ result.description|safe }}">
+                    {{ result.description|safe }}
                 </div>
             </div>
         </div>
+    </div>
 
     {% endfor %}
 
