@@ -1338,6 +1338,15 @@ msgstr "Hier finden Sie Geodaten aus unterschiedlichen Fachgebieten."
 msgid "Here you can find geodata that are identified as being INSPIRE (INfrastructure for SPatial InfoRmation in Europe) relevant."
 msgstr "Hier finden Sie Geodaten, welche als für die europäische Geodateninfrastruktur INSPIRE (INfrastructure for SPatial InfoRmation in Europe) relavant identifiziert wurden."
 
+msgid "Here you can find plenty of web map collections for selected topics of the state administration of Saarland as well as it's municipalities."
+msgstr "Hier finden Sie eine Vielzahl von Kartenzusammenstellungen zu ausgewählten Themenbereichen der saarländischen Landesverwaltung sowie der Kommunen."
+
+msgid "By this selection of topics you get an overview of available data linked to it."
+msgstr "Über die Auswahl eines der Themen erhälten Sie eine Übersicht der dazu verfügbaren Geodaten."
+
+msgid "On top of this you get a selection of external applications."
+msgstr "Zudem werden Ihnen weitere externe Geodatenanwendungen (Applikationen) angeboten."
+
 #: useroperations/templates/landing_page.html:49
 msgid "Filter by categories and topics"
 msgstr "Filtern mittels Kategorien und Themen"
