@@ -343,6 +343,7 @@ update(){
     mkdir -p ${temporaryConfigDirectory}django/setup/
     cp -av  ${installation_folder}${installation_subfolder_django}Geoportal/settings.py ${temporaryConfigDirectory}django/Geoportal/
     cp -av  ${installation_folder}${installation_subfolder_django}useroperations/conf.py ${temporaryConfigDirectory}django/useroperations/
+    cp -av  ${installation_folder}${installation_subfolder_django}searchCatalogue/settings.py ${temporaryConfigDirectory}django/searchCatalogue/
     cp -av  ${installation_folder}${installation_subfolder_django}searchCatalogue/url_conf.py ${temporaryConfigDirectory}django/searchCatalogue/
     cp -av  ${installation_folder}${installation_subfolder_django}setup/setup.conf ${temporaryConfigDirectory}django/setup/
   }
