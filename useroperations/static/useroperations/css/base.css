@@ -731,8 +731,8 @@ footer {
         padding: 20px;
     }
 
-    #logo_country,
-    #logo_gdi {
+    .left-header,
+    .right-header {
         display: none;
     }
 
@@ -749,11 +749,6 @@ footer {
 
     header {
         font-size: 1em;
-    }
-
-    .left-header,
-    .right-header {
-        padding: 0 3em 0 0;
     }
 
     .middle-header {
