@@ -113,11 +113,15 @@
 
 .sub-tile-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 }
 
-.mobile-button {
+.placeholder{
+  width:110px;
+}
+
+.mobile-button{
     opacity: 0.75;
     font-size: 3em;
     padding: 0 0.25em;
