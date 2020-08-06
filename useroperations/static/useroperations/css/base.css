@@ -230,7 +230,7 @@ body {
     overflow: hidden;
     padding: 10px;
     display: block;
-}
+    box-sizing: border-box;}
 
 .simple-search-autocomplete .headline {
     font-weight: bold;
@@ -853,5 +853,21 @@ footer {
     .mobile-advice {
         font-weight: bold;
     }
+
+    .popup-landing .popuptext-landing {
+     margin-left: -100px;
+    }
+
+    .popup-landing .popuptext-landing::after {
+     left: 50%;
+    }
+
+    .popup-search .popuptext-search {
+      bottom: 125%;
+      left: 350%;
+    }
+
+
+
 
 }
