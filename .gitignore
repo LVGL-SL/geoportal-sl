@@ -1,12 +1,11 @@
-.vscode
+# Update options
 setup/setup.conf
-Geoportal/__pycache__/
-Geoportal/utils/__pycache__/
-news/__pycache__/
-news/migrations/__pycache__/
-resourceManager/__pycache__/
-searchCatalogue/__pycache__/
-useroperations/__pycache__/
-useroperations/utils/__pycache__/
-locale/de/LC_MESSAGES/django.mo
-locale/en/LC_MESSAGES/django.mo
+
+# Visual Studio Code
+.vscode
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Translations
+*.mo
