@@ -60,13 +60,13 @@ h3 .mw-headline {
 .external,
 a {
     color: var(--primary);
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .external:hover,
 a:hover {
     color: var(--primary-light-hover);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .center {
