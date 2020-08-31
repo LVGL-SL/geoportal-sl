@@ -274,3 +274,13 @@ class InspireDownloads(models.Model):
     service_name = models.CharField(max_length=250)
     no_of_tiles = models.IntegerField()
     date = models.DateTimeField(default=timezone.now)
+
+
+class ApplicationSliderElement(models.Model):
+    title = models.CharField(max_length=50)
+    anchor_href = models.URLField(max_length=255)
+    image_src = models.URLField(max_length=255)
+
+    def __str__(self): 
+        return self.title
+
