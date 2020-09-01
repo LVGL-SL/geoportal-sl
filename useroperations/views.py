@@ -130,7 +130,7 @@ def index_view(request, wiki_keyword=""):
     geoportal_context.add_context(context=context_search_results)
 
     context_slider_elements = {
-        "slider_elements": ApplicationSliderElement.objects.all(),
+        "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
     }
     geoportal_context.add_context(context=context_slider_elements)
 
