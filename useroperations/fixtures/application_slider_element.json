@@ -1,0 +1,191 @@
+[
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 3,
+        "fields": {
+            "title": "Schutzgebietskataster",
+            "anchor_href": "https://geoportal.saarland.de/article/Schutzgebietskataster/",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Schutzgebietskataster.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 4,
+        "fields": {
+            "title": "Nationalpark Hunsr\u00fcck Hochwald",
+            "anchor_href": "https://geoportal.saarland.de/article/Nationalpark_Hunsrueck_Hochwald/",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Nationalpark_Hunsrueck_Hochwald.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 5,
+        "fields": {
+            "title": "Biosph\u00e4re Bliesgau",
+            "anchor_href": "https://geoportal.saarland.de/article/Biosphaere_Bliesgau/",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Biosphaere_Bliesgau.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 6,
+        "fields": {
+            "title": "Windenergie",
+            "anchor_href": "https://geoportal.saarland.de/article/Windpotenzialanalyse/",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Windpotenzialanalyse.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 7,
+        "fields": {
+            "title": "Erneuerbare Energien",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2892",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Erneuerbare_Energie.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 8,
+        "fields": {
+            "title": "Geobasisdaten",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2896",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Geobasisdaten.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 9,
+        "fields": {
+            "title": "Naturschutz",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2891",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Naturschutz.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 10,
+        "fields": {
+            "title": "Wasser",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=2902",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Wasser.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 11,
+        "fields": {
+            "title": "Radverkehr",
+            "anchor_href": "https://geoportal.saarland.de/article/Radverkehrsplan",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Radverkehr.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 12,
+        "fields": {
+            "title": "Bodenrichtwerte",
+            "anchor_href": "https://geoportal.saarland.de/article/Bodenrichtwerte",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Bodenrichtwerte.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 13,
+        "fields": {
+            "title": "Landwirtschaft",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3910",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Landwirtschaft.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 14,
+        "fields": {
+            "title": "Hochwasser",
+            "anchor_href": "https://geoportal.saarland.de/article/Wasser",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Hochwasser.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 15,
+        "fields": {
+            "title": "WebAtlas DE - AdV",
+            "anchor_href": "https://geoportal.saarland.de/article/WebAtlas_DE",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/WebAtlas_DE.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 16,
+        "fields": {
+            "title": "Forstwirtschaft",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3074",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Forstwirtschaft.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 17,
+        "fields": {
+            "title": "Flugverkehr",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3776",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Flugverkehr.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 18,
+        "fields": {
+            "title": "W\u00e4rmekataster",
+            "anchor_href": "https://geoportal.saarland.de/article/Waermekataster",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Waermekataster.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 19,
+        "fields": {
+            "title": "Bodenschutz",
+            "anchor_href": "https://geoportal.saarland.de/article/Bodenschutz",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Bodenschutz.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 20,
+        "fields": {
+            "title": "Badegew\u00e4sser",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=3570",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Badegewaesser.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 21,
+        "fields": {
+            "title": "Natura 2000",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=4076",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Natura_2000.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 22,
+        "fields": {
+            "title": "Photovoltaik",
+            "anchor_href": "https://geoportal.saarland.de/article/Photovoltaik_auf_Agrarflaechen",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Photovoltaik.jpg"
+        }
+    },
+    {
+        "model": "useroperations.applicationsliderelement",
+        "pk": 23,
+        "fields": {
+            "title": "Nitratkulisse",
+            "anchor_href": "https://geoportal.saarland.de/mapbender/frames/index.php?gui_id=Geoportal-SL-2020&WMC=4335",
+            "image_src": "https://geoportal.saarland.de/static/useroperations/images/slider/Nitratkulisse.jpg"
+        }
+    }
+]
