@@ -27,7 +27,7 @@ from searchCatalogue.settings import PROXIES
 from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT, INSPIRE_CATEGORIES, ISO_CATEGORIES
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
-from .models import MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
+from .models import ApplicationSliderElement, MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
 
 logger = logging.getLogger(__name__)
 
@@ -123,11 +123,16 @@ def index_view(request, wiki_keyword=""):
         template = "landing_page.html"
         results = useroperations_helper.get_landing_page(lang)
 
-    context = {
-               "content": output,
-               "results": results,
-               }
-    geoportal_context.add_context(context=context)
+    context_search_results = {
+        "content": output,
+        "results": results,
+    }
+    geoportal_context.add_context(context=context_search_results)
+
+    context_slider_elements = {
+        "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
+    }
+    geoportal_context.add_context(context=context_slider_elements)
 
     # check if this is an ajax call from info search
     if get_params.get("info_search", "") == 'true':
