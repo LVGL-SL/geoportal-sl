@@ -1820,3 +1820,9 @@ msgstr "Link zur Karte wurde in Zwischenablage kopiert"
 
 #~ msgid "A magnifying glass icon"
 #~ msgstr "Ein Lupensymbol"
+
+msgid "Welcome to the Geoportal Saarland"
+msgstr "Herzlich willkommen im GeoPortal Saarland"
+
+msgid "the information and interaction platform of the geo data infrastructure Saarland (GDI-SL), a central access point web services on spatial data in Saarland."
+msgstr "der Informations- und Interaktionsplattform der Geodateninfrastruktur Saarland (GDI-SL), die über Geodatendienste und weitere Netzdienste den zentralen Zugang zu raumbezogenen Informationen im Saarland ermöglicht."

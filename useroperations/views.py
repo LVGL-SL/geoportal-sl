@@ -20,14 +20,14 @@ from Geoportal.decorator import check_browser
 from Geoportal.geoportalObjects import GeoportalJsonResponse, GeoportalContext
 from Geoportal.settings import DEFAULT_GUI, HOSTNAME, HTTP_OR_SSL, INTERNAL_SSL, \
     SESSION_NAME, PROJECT_DIR, MULTILINGUAL, LANGUAGE_CODE, DEFAULT_FROM_EMAIL, GOOGLE_RECAPTCHA_SECRET_KEY, \
-    USE_RECAPTCHA, GOOGLE_RECAPTCHA_PUBLIC_KEY, EMAIL_HOST_USER
+    USE_RECAPTCHA, GOOGLE_RECAPTCHA_PUBLIC_KEY, EMAIL_HOST_USER, MOBILE_WMC_ID
 from Geoportal.utils import utils, php_session_data, mbConfReader
 from searchCatalogue.utils.url_conf import URL_INSPIRE_DOC
 from searchCatalogue.settings import PROXIES
 from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT, INSPIRE_CATEGORIES, ISO_CATEGORIES
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
-from .models import MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
+from .models import ApplicationSliderElement, MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
 
 logger = logging.getLogger(__name__)
 
@@ -115,6 +115,7 @@ def index_view(request, wiki_keyword=""):
         template = "wiki.html"
         try:
             output = useroperations_helper.get_wiki_body_content(wiki_keyword, lang)
+            request.session["current_page"] = wiki_keyword
         except (error.HTTPError, FileNotFoundError) as e:
             template = "404.html"
             output = ""
@@ -126,6 +127,8 @@ def index_view(request, wiki_keyword=""):
     context = {
                "content": output,
                "results": results,
+                "mobile_wmc_id": MOBILE_WMC_ID,
+                "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
                }
     geoportal_context.add_context(context=context)
 
@@ -147,8 +150,10 @@ def applications_view(request: HttpRequest):
     Returns:
          A rendered view
     """
-    geoportal_context = GeoportalContext(request)
+    request.session["current_page"] = "apps"
 
+    geoportal_context = GeoportalContext(request)
+    
     order_by_options = OrderedDict()
     order_by_options["rank"] = _("Relevance")
     order_by_options["title"] = _("Alphabetically")
@@ -390,7 +395,7 @@ def register_view(request):
                     'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
                     'response': recaptcha_response
                 }
-                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data)
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=False)
                 result = r.json()
 
                 if not result['success']:
@@ -877,16 +882,17 @@ def map_viewer_view(request):
         # If this failed, the wms_id is not an integer, so we assume it must be some kind of link
         pass
 
+    # MOBILE DETECTION IS NOW IN JAVASCRIPT all.js and frontpage.js, NOT SURE IF THIS MIGHT BE NEEDED LATER
     # check if the request comes from a mobile device
-    is_mobile = request.user_agent.is_mobile
-    if is_mobile:
+    #is_mobile = request.user_agent.is_mobile
+    #if is_mobile:
         # if so, just call the mobile map viewer in a new window
-        mobile_viewer_url = "{}{}/mapbender/extensions/mobilemap2/index.html?".format(HTTP_OR_SSL, HOSTNAME)
-        if wmc_id != "":
-            mobile_viewer_url += "&wmc_id={}".format(wmc_id)
-        if wms_id != "":
-            mobile_viewer_url += "&wms_id={}".format(wms_id)
-        return GeoportalJsonResponse(url=mobile_viewer_url).get_response()
+    #    mobile_viewer_url = "{}{}/mapbender/extensions/mobilemap2/index.html?".format(HTTP_OR_SSL, HOSTNAME)
+    #    if wmc_id != "":
+    #        mobile_viewer_url += "&wmc_id={}".format(wmc_id)
+    #    if wms_id != "":
+    #        mobile_viewer_url += "&wms_id={}".format(wms_id)
+    #    return GeoportalJsonResponse(url=mobile_viewer_url).get_response()
 
     mapviewer_params_dict = {
         "LAYER[id]": request_get_params.get("LAYER[id]", ""),
@@ -1019,7 +1025,7 @@ def feedback_view(request: HttpRequest):
                     'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
                     'response': recaptcha_response
                 }
-                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data)
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=False)
                 result = r.json()
 
                 if not result['success']:
@@ -1106,7 +1112,7 @@ def open_linked_data(request: HttpRequest):
     Returns:
 
     """
-    request.session["current_page"] = "open_linked_data"
+    request.session["current_page"] = "linked_open_data"
 
     geoportal_context = GeoportalContext(request)
     context_data = geoportal_context.get_context()

@@ -127,7 +127,6 @@ backup(){
     echo "Creating backup in ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")"
     mkdir -pv ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/
     mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/conf
-    mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/mobilemap2/scripts/
     mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/tools/wms_extent/
     mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/${installation_subfolder_django}Geoportal/
     mkdir -p ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/${installation_subfolder_django}useroperations/
@@ -140,14 +139,8 @@ backup(){
 
   backup_mapbenderConfigurations(){
     cp -av ${installation_folder}mapbender/conf/* ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/conf/
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/scripts/netgis/config.js ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/mobilemap2/scripts/netgis/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/tools/wms_extent/
-  }
-
-  backup_mapbenderExtensions(){
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap/* ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/mobilemap/
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2/* ${installation_folder}backup/geoportal_backup_$(date +"%d_%m_%Y")/mapbender/http/extensions/mobilemap2/
   }
 
   backup_userInput_databaseBackup(){
@@ -171,7 +164,6 @@ backup(){
     backup_createFolders
     backup_djangoConfigurations
     backup_mapbenderConfigurations
-    backup_mapbenderExtensions
     backup_userInput_databaseBackup
     echo "Backup Done!"
   }
@@ -269,15 +261,11 @@ update(){
     mkdir -p ${temporaryConfigDirectory}mapbender/conf/
     mkdir -p ${temporaryConfigDirectory}mapbender/mapserver/
     mkdir -p ${temporaryConfigDirectory}mapbender/tools/wms_extent/
-    mkdir -p ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap/
-    mkdir -p ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap2/
     cp -av ${installation_folder}mapbender/conf/*.conf ${temporaryConfigDirectory}mapbender/conf/
     cp -av ${installation_folder}mapbender/mapserver/spatial_security.map ${temporaryConfigDirectory}mapbender/mapserver/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extents.map  ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/wms_extent/extent_service.conf ${temporaryConfigDirectory}mapbender/tools/wms_extent/
     cp -av ${installation_folder}mapbender/tools/monitorCapabilities.bash ${temporaryConfigDirectory}mapbender/tools/
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap
-    cp -av ${installation_folder}mapbender/http/extensions/mobilemap2 ${temporaryConfigDirectory}mapbender/http/extensions/mobilemap2
   }
 
   update_mapbender_gitFetch(){
@@ -313,7 +301,6 @@ update(){
     chown -R www-data ${installation_folder}mapbender/http/geoportal/preview/
     chown -R www-data ${installation_folder}mapbender/http/geoportal/news/
     chown -R www-data ${installation_folder}mapbender/metadata/
-    chown -R www-data ${installation_folder}mapbender/http/extensions/mobilemap2/
     chmod -R 755 ${installation_folder}mapbender/resources/locale/
   }
 

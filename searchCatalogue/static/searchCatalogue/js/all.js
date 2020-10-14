@@ -219,7 +219,9 @@ Search.prototype = {
                 self.setParam("searchBbox", "");
                 self.setParam("searchTypeBbox", "");
                 toggleSearchArea();
-                toggleFilterArea();
+                if($(window).width() > 705){
+                    toggleFilterArea();
+                };
                 openSpatialArea();
                 enableSearchInputField();
                 //focus_on_search_input();
@@ -344,6 +346,10 @@ var Autocomplete = function(search) {
         $("html").on('click', self.onSelect);
         _input.on('keyup', function(e) {
             self.keyUp(e.keyCode);
+            document.getElementById("geoportal-empty-search-button").style.display = 'flex';
+            if (document.getElementById("geoportal-search-field").value == ''){
+            document.getElementById("geoportal-empty-search-button").style.display = 'none';
+            };
         });
     };
 
@@ -400,40 +406,12 @@ var Autocomplete = function(search) {
             }, _search.timeoutDelay);
         }
     };
-
     this.onSelect = function(e) {
-        var el = $(e.target);
-        var srs = 25832;
-
-        // resolve into possible suggestion element where only name was clicked
-        var el = el.closest(".suggestion");
-
         // if click is outside of the .middle-header element (where the search field and suggestion list lives), we close the list
-        if(el.is(".middle-header, .middle-header *")){
-
-            if(el.hasClass("location")){
-                // for location suggestions
-                var bbox = el.attr("data-location");
-
-                // create parameter string, which defines a zoom to the given bbox
-                var param = "ZOOM=" + bbox + ",EPSG%3A" + srs
-                startAjaxMapviewerCall(param);
-                self.hide();
-
-            }else{
-                // for regular data search suggestions
-                var keyword = el.text().trim();
-                if (keyword) {
-                    _input.val(keyword);
-                    self.hide();
-                    $("#geoportal-search-button").click();
-                }
-            }
-        }else{
-            self.hide();
+        if(!$(e.target).is(".middle-header, .middle-header *")){
+            self.hide()
         }
     };
-
     this.nav = function(p) {
         var alldivs = _div.find('.suggestion');
         if (alldivs.length) {
@@ -452,42 +430,6 @@ var Autocomplete = function(search) {
     this.init(search);
 };
 
-/**
- * Leaflet Map
- * @param $searchBbox
- * @param conf
- * @constructor
- */
-/*
-function Map($searchBbox, conf) {
-    var _map = null;
-    var _$searchBbox = null;
-    this.init = function(conf) {
-        _$searchBbox = $searchBbox;
-        _map = L.map(
-            conf.mapId, {
-                'center': new L.LatLng(conf.center.lat, conf.center.lon),
-                'zoom': conf.zoom,
-                'crs': L.CRS.EPSG4326
-            }
-        );
-        L.tileLayer.wms(
-            conf.wms.url, {
-                'layers': conf.wms.layers,
-                'format': conf.wms.format,
-                'transparent': true
-            }
-        ).addTo(_map);
-        _map.on('moveend', function() {
-            _$searchBbox.val(_map.getBounds().toBBoxString());
-        });
-    };
-    this.getBbox = function() {
-        return _map.getBounds().toBBoxString();
-    };
-    this.init(conf);
-}
-*/
 
 /**
  * Group 1 = coming from download, shut down view
@@ -638,11 +580,22 @@ function startAjaxMapviewerCall(value, mobile){
                     behavior:'smooth'
                 });
 
+                var params = decodeURIComponent(data["mapviewer_params"]);
+                var wms = params.match(/LAYER\[id\]=\d+/);
+                var wmc = params.match(/WMC=\d+/);
+                var servicetype;
+
+                if (wms) {servicetype="wms="+wms[0]};
+                if (wmc) {servicetype="wmc="+wmc[0]};
+
+
                 // Open the map overlay only if it wasn't opened yet!
                 var mapOverlay = $(".map-viewer-overlay");
                 if(mapOverlay.hasClass("closed")){
-                    $(".map-viewer-toggler").click();
+                    //$(".map-viewer-toggler").click();
+                    toggleMapviewer(servicetype);
                 }
+                // not used atm
                 if(mobile){
                     $(".map-viewer-selector").click();
                 }
@@ -1202,6 +1155,7 @@ $(document).ready(function() {
                 var html = data["html"];
                 var infoOverlay = $("#info-overlay");
                 if(html.length == 0){
+                    // this is for external search, not used atm
                     startAjaxMapviewerCall(elem_href);
                 }else{
                     infoOverlay.html(html);
@@ -1650,6 +1604,70 @@ $(document).ready(function() {
             }
         });
         prepareAndSearch(undefined, true);
+    });
+
+
+    /**
+    * Suggestion copy functionality
+    */
+    $(document).on("click", ".suggestion-copy", function(){
+        var el = $(this);
+        var suggElem = el.parent().find(".suggestion-item");
+        var searchBar = $("#geoportal-search-field");
+        searchBar.val(suggElem.text().trim());
+        searchBar.focus();
+        $(".simple-search-autocomplete").hide();
+    });
+
+    /**
+    * Suggestion search functionality
+    */
+    $(document).on("click", ".suggestion-item", function(){
+        var elem = $(this);
+        var keyword = elem.text().trim();
+        var searchBar = $("#geoportal-search-field");
+        if (keyword) {
+            searchBar.val(keyword);
+            $("#geoportal-search-button").click();
+            $(".simple-search-autocomplete").hide();
+        }
+    });
+
+    /**
+    * Suggestion location functionality
+    */
+    $(document).on("click", ".suggestion.location", function(){
+        var el = $(this)
+        var srs = 25832;
+        // for location suggestions
+        var bbox = el.attr("data-location");
+
+        if ($(window).width() < 689 || /Mobi|Tablet|android|iPad|iPhone/.test(navigator.userAgent)) {
+            var coords = bbox.split(",");
+            var x = (parseFloat(coords[0])+parseFloat(coords[2]))/2;
+            var y = (parseFloat(coords[1])+parseFloat(coords[3]))/2;
+            var z;
+            var diff_x = (parseFloat(coords[2])-parseFloat(coords[0]));
+            var diff_y = (parseFloat(coords[3])-parseFloat(coords[1]));
+            var diff = (diff_x+diff_y)/2;
+
+            if (diff > 0){z=20;}
+            if (diff > 100){z=19;}
+            if (diff > 400){z=17;}
+            if (diff > 1000){z=15;}
+            if (diff > 5000){z=13;}
+            if (diff > 10000){z=12;}
+            if (diff > 25000){z=10;}
+            if (diff > 50000){z=9;}
+            if (diff > 100000){z=8;}
+
+            window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?x='+x+'&y='+y+'&z='+z;
+        }else{
+            // create parameter string, which defines a zoom to the given bbox
+            var param = "ZOOM=" + bbox + ",EPSG%3A" + srs
+            startAjaxMapviewerCall(param);
+        }
+        $(".simple-search-autocomplete").hide();
     });
 
     autocomplete = new Autocomplete(search);

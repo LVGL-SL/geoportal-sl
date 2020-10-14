@@ -73,6 +73,12 @@ ROOT_EMAIL_ADDRESS = "geoportal-root@server.domain.tld"
 MODERN_GUI = "Geoportal-RLP_2019"
 DEFAULT_GUI = "Geoportal-RLP"
 
+# WMC ID that should be loaded on mobile devices
+MOBILE_WMC_ID = None
+# Directory for inspire Downloads
+INSPIRE_ATOM_DIR = "" # eg: "/var/www/html/inspiredownloads/"
+INSPIRE_ATOM_ALIAS = "" # eg: "/inspiredownloads/"
+
 # Social networking and news feeds
 TWITTER_NAME = "GeoPortalRLP"
 RSS_FILE = "http://www.geoportal.rlp.de" + "/mapbender/geoportal/news/georss.xml"
