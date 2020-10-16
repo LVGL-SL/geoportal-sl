@@ -2,15 +2,17 @@ import pytest
 import random
 import string
 
-from ..forms import LoginForm, ChangeProfileForm
+from ..forms import LoginForm, ChangeProfileForm, PasswordResetForm
 
 pytestmark = pytest.mark.django_db
+
 
 def get_random_string(length):
     # Random string with the combination of lower and upper case
     letters = string.ascii_letters
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
+
 
 # Tests start here
 class TestLoginForm:
@@ -55,7 +57,7 @@ class TestChangeProfileForm:
 
     def test_only_email_field(self):
         form_data = {
-            'email': 'user@mail.com', # This is the only required field
+            'email': 'user@mail.com',  # This is the only required field
         }
         form = ChangeProfileForm(data=form_data)
         assert form.is_valid(
@@ -71,7 +73,7 @@ class TestChangeProfileForm:
 
     def test_field_to_long(self):
         form_data = {
-            'email': 'user@mail.com', # This is the only required field
+            'email': 'user@mail.com',  # This is the only required field
             'organization': get_random_string(101),
             'department': get_random_string(101),
             'phone': get_random_string(101),
@@ -84,7 +86,7 @@ class TestChangeProfileForm:
 
     def test_field_not_to_long(self):
         form_data = {
-            'email': 'user@mail.com', # This is the only required field
+            'email': 'user@mail.com',  # This is the only required field
             'organization': get_random_string(100),
             'department': get_random_string(100),
             'phone': get_random_string(100),
@@ -97,7 +99,7 @@ class TestChangeProfileForm:
 
     def test_password_fields(self):
         form_data = {
-            'email': 'user@mail.com', # This is the only required field
+            'email': 'user@mail.com',  # This is the only required field
             'oldpassword': get_random_string(20),
             'password': get_random_string(20),
             'passwordconfirm': get_random_string(20),
@@ -108,7 +110,7 @@ class TestChangeProfileForm:
 
     def test_full_form_valid(self):
         form_data = {
-            'email': 'user@mail.com', # This is the only required field
+            'email': 'user@mail.com',  # This is the only required field
             'oldpassword': get_random_string(20),
             'password': get_random_string(20),
             'passwordconfirm': get_random_string(20),
@@ -125,3 +127,36 @@ class TestChangeProfileForm:
         form = ChangeProfileForm(data=form_data)
         assert form.is_valid(
         ) is True, "Should be valid if field length not above 100"
+
+
+class TestPasswordResetForm:
+    def test_empty_form(self):
+        form_data = {}
+        form = PasswordResetForm(data=form_data)
+        assert form.is_valid(
+        ) is False, "Should be invalid if no data is given"
+
+    def test_empty_username_field(self):
+        form_data = {
+            'email': 'user@mail.com',
+        }
+        form = LoginForm(data=form_data)
+        assert form.is_valid(
+        ) is False, "Should be invalid with no username given"
+
+    def test_empty_email_field(self):
+        form_data = {
+            'name': 'Foo',
+        }
+        form = LoginForm(data=form_data)
+        assert form.is_valid(
+        ) is False, "Should be invalid with no email given"
+
+    def test_filled_form(self):
+        form_data = {
+            'name': 'Foo',
+            'email': 'user@mail.com',
+        }
+        form = PasswordResetForm(data=form_data)
+        assert form.is_valid(
+        ) is True, "Should be valid if all fields are filled correctly"
