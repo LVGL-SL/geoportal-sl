@@ -2,7 +2,8 @@ import pytest
 import random
 import string
 
-from ..forms import LoginForm, ChangeProfileForm, PasswordResetForm
+from ..forms import (LoginForm, ChangeProfileForm, PasswordResetForm,
+                     DeleteProfileForm)
 
 pytestmark = pytest.mark.django_db
 
@@ -158,5 +159,21 @@ class TestPasswordResetForm:
             'email': 'user@mail.com',
         }
         form = PasswordResetForm(data=form_data)
+        assert form.is_valid(
+        ) is True, "Should be valid if all fields are filled correctly"
+
+
+class TestDeleteProfileForm:
+    def test_empty_form(self):
+        form_data = {}
+        form = DeleteProfileForm(data=form_data)
+        assert form.is_valid(
+        ) is False, "Should be invalid if no data is given"
+
+    def test_filled_form(self):
+        form_data = {
+            'confirmation_password': get_random_string(20),
+        }
+        form = DeleteProfileForm(data=form_data)
         assert form.is_valid(
         ) is True, "Should be valid if all fields are filled correctly"
