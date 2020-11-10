@@ -726,8 +726,8 @@ msgid "Send permission request"
 msgstr "Berechtigungsanfrage senden"
 
 #: searchCatalogue/views.py:631
-msgid "[Geoportal.RLP] Permission request for "
-msgstr "[Geoportal.RLP] Berechtigungsanfrage für "
+msgid "Permission request for "
+msgstr "Berechtigungsanfrage für "
 
 #: searchCatalogue/views.py:632
 msgid ""
