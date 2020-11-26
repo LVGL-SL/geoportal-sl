@@ -109,7 +109,12 @@ function toggleMapviewer(servicetype){
             // start mobile with default mobile wmc (from index)
             }
         }else{
-            window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?wmc_id='+$("#mapviewer-sidebar").attr("mobile_wmc");
+            const mobile_wmc_id = $("#mapviewer-sidebar").attr("mobile_wmc");
+            if (Number.isInteger(mobile_wmc_id)) {
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?wmc_id='+$("#mapviewer-sidebar").attr("mobile_wmc");
+            } else {
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html';
+            }
         }
     }else{
         // get preferred gui
