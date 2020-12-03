@@ -3,12 +3,11 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'useroperations/css/mediawiki.css' %}" media="all" />
+<script src="{% static 'useroperations/js/mediawiki.js' %}" type="text/javascript" async></script>
 {% endblock %}
 
 {% block body %}
 <div class="mediawiki-article">
     {{ content|safe }}
 </div>
-
-
 {% endblock %}
