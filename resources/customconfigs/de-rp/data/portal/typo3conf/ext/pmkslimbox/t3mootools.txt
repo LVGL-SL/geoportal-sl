@@ -1,2 +1,0 @@
-script = res/scripts/mediaboxAdv99f_uncompressed.js,res/scripts/slimbox_uncompressed.js,res/scripts/slimboxplus_uncompressed.js,res/scripts/slimboxMagnify_uncompressed.js
-components=

@@ -83,6 +83,15 @@ a:hover {
     border-collapse: collapse;
 }
 
+.wikitable th {
+    border: 1px solid #013;
+    background-color: var(--secondary-light);
+}
+
+.wikitable th:hover {
+    background-color: var(--secondary-hover);
+}
+
 .wikitable td {
     padding: none;
     border: 1px solid #013;
