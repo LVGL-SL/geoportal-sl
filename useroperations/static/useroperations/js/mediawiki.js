@@ -7,9 +7,13 @@ setTimeout(initialize_collapse_capability, 500);
 
 function toggle_table_collapse(table_element) {
 
+    const headline = table_element.querySelector('.mw-headline');
+
     if (table_element.classList.contains('mw-collapsed')) {
+        headline.innerHTML = `&nbsp;<i class="fas fa-chevron-down"></i> ${headline.id}`;
         explode_table(table_element);
     } else {
+        headline.innerHTML = `&nbsp;<i class="fas fa-chevron-right"></i> ${headline.id}`;
         collapse_table(table_element);
     }
 }
