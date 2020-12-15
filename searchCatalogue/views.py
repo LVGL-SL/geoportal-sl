@@ -626,7 +626,7 @@ def get_permission_email_form(request: HttpRequest):
     data_id = params_GET.get("layerId")
     data_name = params_GET.get("layerName")
     title = _("Send permission request")
-    subject = _("[Geoportal.RLP] Permission request for ") + str(data_id)
+    subject = "[" + HOSTNAME + "] " + _("Permission request for ") + str(data_id)
     draft = _("Please give me permission to view the resource \n'") + data_name +\
             _("'\n It has the ID ") + str(data_id) +\
             _(".\n\n Thank you very much\n\n") +\

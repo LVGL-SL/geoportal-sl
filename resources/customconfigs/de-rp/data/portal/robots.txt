@@ -1,3 +1,0 @@
-# robots.txt 
-User-agent: Spatineo Monitor GetMapBot (http://www.spatineo.com/spatineo-monitor)
-Disallow: /       #alles ;-)

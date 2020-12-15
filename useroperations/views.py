@@ -395,7 +395,7 @@ def register_view(request):
                     'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
                     'response': recaptcha_response
                 }
-                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=False)
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=INTERNAL_SSL)
                 result = r.json()
 
                 if not result['success']:
@@ -1025,7 +1025,7 @@ def feedback_view(request: HttpRequest):
                     'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
                     'response': recaptcha_response
                 }
-                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=False)
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=INTERNAL_SSL)
                 result = r.json()
 
                 if not result['success']:
