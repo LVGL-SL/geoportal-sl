@@ -1,17 +1,13 @@
 """
 Constants for the search catalogue app
 """
-from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, PROJECT_DIR
+from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, PROJECT_DIR, PROXIES
 
-EXTENT_SERVICE_URL = HTTP_OR_SSL + HOSTNAME + "/cgi-bin/mapserv?map=" + PROJECT_DIR + "mapbender/tools/wms_extent/extents.map&"
+EXTENT_SERVICE_URL = HTTP_OR_SSL + HOSTNAME + "/cgi-bin/mapserv?map=" + \
+    PROJECT_DIR + "mapbender/tools/wms_extent/extents.map&"
 EXTENT_SERVICE_LAYER = "demis,ows_layer_target,extent,metadata_polygon"
 EXTENT_SERVICE_BBOX = "6.05,48.9,8.6,50.96"
 EXTENT_SERVICE_SRS = "EPSG:4258"
-
-PROXIES = {
-    "http": "http://%%HTTP_PROXY%%/",
-    "https": "http://%%HTTP_PROXY%%/",
-}
 
 iso3166_folder = "iso3166States/"
 __DE_DE = iso3166_folder + "wappen_DE.png"
@@ -31,7 +27,6 @@ __DE_SN = iso3166_folder + "wappen_DE-SN.png"
 __DE_ST = iso3166_folder + "wappen_DE-ST.png"
 __DE_SH = iso3166_folder + "wappen_DE-SH.png"
 __DE_TH = iso3166_folder + "wappen_DE-TH.png"
-
 
 
 ISO3166_FILES = {

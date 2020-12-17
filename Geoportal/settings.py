@@ -9,30 +9,40 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import environ
 import os
+
 from django.utils.translation import gettext_lazy as _
 from django.utils.log import DEFAULT_LOGGING
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+env = environ.Env()
+environ.Env.read_env()
+
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = "/opt/geoportal/GeoPortal.sl"
 PROJECT_DIR = "/opt/geoportal/"
 SESSION_NAME = 'PHPSESSID'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'k?WG:q@>x+}j~k+Q/k?WG:q@>x+}j~k+Q/,=0Z@kEbv8r/*'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env("DEBUG", default=True)
+
 DEFAULT_LOGGING['handlers']['console']['filters'] = []
 
-HOSTNAME = "geoportal.saarland.de"
-HTTP_OR_SSL = "https://"
-SEARCH_API_PROTOCOL = "https"
+HOSTNAME = env("HOSTNAME", default='localhost')
+HTTP_OR_SSL = env("HTTP_OR_SSL", default="http://")
+SEARCH_API_PROTOCOL = env("SEARCH_API_PROTOCOL", default="http")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', HOSTNAME]
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", default=[
+                    'localhost', '127.0.0.1', HOSTNAME, ])
+
+INTERNAL_IPS = env("INTERNAL_IPS", default=[])
 
 # Mediawiki
 INTERNAL_PAGES_CATEGORY = "Portalseite"
@@ -57,9 +67,13 @@ OPEN_DATA_URL = "https://okfn.org/opendata/"
 DEFAULT_GUI = "Geoportal-SL"
 MODERN_GUI = "Geoportal-SL-2020"
 
+# WMC ID that should be loaded on mobile devices
+MOBILE_WMC_ID = None
+
 # Social networking and news feeds
 TWITTER_NAME = ""
-RSS_FILE = "http://www.geoportal.rlp.de" + "/mapbender/geoportal/news/georss.xml"
+RSS_FILE = "http://www.geoportal.rlp.de" + \
+    "/mapbender/geoportal/news/georss.xml"
 
 # Application definition
 INSTALLED_APPS = [
@@ -83,7 +97,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-   'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -94,13 +108,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Geoportal.urls'
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS':[
-            BASE_DIR + "/templates"
-        ],
+        'DIRS': [BASE_DIR + "/templates"],
         'OPTIONS': {
             'loaders': [
                 ('django.template.loaders.cached.Loader', [
@@ -120,43 +131,44 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Geoportal.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'OPTIONS' : {
-                    'options': '-c search_path=django,mapbender,public'
-                    },
-        'NAME':'mapbender',
-        'USER':'mapbender',
-        'PASSWORD':'',
-        'HOST':'127.0.0.1',
-        'PORT':'5432'
+        'OPTIONS': {
+            'options': '-c search_path=django,mapbender,public'
+        },
+        'NAME': env("DATABASE_NAME"),
+        'USER': env("DATABASE_USER"),
+        'PASSWORD': env("DATABASE_PASSWORD"),
+        'HOST': env("DATABASE_HOST"),
+        'PORT': env("DATABASE_PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -169,8 +181,8 @@ LANGUAGE_CODE = 'de'  # Default language
 MULTILINGUAL = True  # whether to use multiple languages or not
 
 LOCALE_PATHS = [
-   os.path.join(BASE_DIR, 'searchCatalogue/locale'),
-   os.path.join(BASE_DIR, 'useroperations/locale'),
+    os.path.join(BASE_DIR, 'searchCatalogue/locale'),
+    os.path.join(BASE_DIR, 'useroperations/locale'),
 ]
 
 TIME_ZONE = 'UTC'
@@ -182,10 +194,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'), )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -194,17 +203,19 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR + "/static/"
 
 # Mailing settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'mrelay01.saarland.de'
-DEFAULT_FROM_EMAIL = 'geoportal.saarland@lvgl.saarland.de'
-DEFAULT_TO_EMAIL = DEFAULT_FROM_EMAIL
-EMAIL_PORT = 25
-ROOT_EMAIL_ADDRESS = "root@geoportal.saarland.de"
-EMAIL_CONTACT = 'geoportal.saarland@lvgl.saarland.de'
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND", default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", default=False)
+EMAIL_HOST = env("EMAIL_HOST", default='')
+EMAIL_HOST_USER = env(
+    "EMAIL_HOST_USER", default='geoportal.saarland@lvgl.saarland.de')
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+EMAIL_PORT = env("EMAIL_PORT", default=25)
+ROOT_EMAIL_ADDRESS = env("ROOT_EMAIL_ADDRESS", default="root@geoportal.tld")
+EMAIL_CONTACT = env("EMAIL_CONTACT", default="root@geoportal.tld")
 
 # Recaptcha Config
-USE_RECAPTCHA = 1
+USE_RECAPTCHA = 0
 GOOGLE_RECAPTCHA_SECRET_KEY = ''
 GOOGLE_RECAPTCHA_PUBLIC_KEY = ''
 
@@ -212,5 +223,11 @@ GOOGLE_RECAPTCHA_PUBLIC_KEY = ''
 MOBILE_WMC_ID = None
 
 # Directory for inspire Downloads
-INSPIRE_ATOM_DIR = "" # eg: "/var/www/html/inspiredownloads/"
-INSPIRE_ATOM_ALIAS = "" # eg: "/inspiredownloads/"
+INSPIRE_ATOM_DIR = ""  # eg: "/var/www/html/inspiredownloads/"
+INSPIRE_ATOM_ALIAS = ""  # eg: "/inspiredownloads/"
+
+# Farward Proxy
+PROXIES = {
+    "http": env("PROXY_HTTP", default=""),
+    "https": env("PROXY_HTTPS", default="")
+}
