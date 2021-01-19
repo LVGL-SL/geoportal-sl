@@ -280,6 +280,7 @@ class ApplicationSliderElement(models.Model):
     title = models.CharField(max_length=50)
     anchor_href = models.URLField(max_length=255)
     image_src = models.URLField(max_length=255)
+    rank = models.IntegerField()
 
     def __str__(self): 
         return self.title
