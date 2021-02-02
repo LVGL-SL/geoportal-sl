@@ -129,7 +129,7 @@ def index_view(request, wiki_keyword=""):
         "content": output,
         "results": results,
         "mobile_wmc_id": MOBILE_WMC_ID,
-        "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
+        "slider_elements": ApplicationSliderElement.objects.order_by('rank'),
         "dispatches": LandingPageDispatch.objects.filter(is_active=True),
     }
     geoportal_context.add_context(context=context)
