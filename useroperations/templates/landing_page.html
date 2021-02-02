@@ -17,6 +17,13 @@
         <p><strong>{% trans 'the information and interaction platform of the geo data infrastructure Saarland (GDI-SL), a central access point web services on spatial data in Saarland.' %}</strong>
         </p>
     </div>
+    {% for dispatch in dispatches %}
+    <div class="landing-page-dispatch landing-page-dispatch-{{ dispatch.dispatch_type }} w3-container">
+        {% if dispatch.title %}<h3>{{ dispatch.title }}</h3>{% endif %}
+        <p>{{ dispatch.text }}</p>
+    </div>
+    {% empty %}
+    {% endfor %}
     <div id="landing-page-slider-container" class="w3-content w3-display-container" style="max-width:676px">
         {% for slider_element in slider_elements %}
         <a title="{{ slider_element.title }}" href="{{ slider_element.anchor_href }}"><img
