@@ -27,7 +27,8 @@ from searchCatalogue.settings import PROXIES
 from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT, INSPIRE_CATEGORIES, ISO_CATEGORIES
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
-from .models import ApplicationSliderElement, MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
+from .models import ApplicationSliderElement, LandingPageDispatch, \
+    MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
 
 logger = logging.getLogger(__name__)
 
@@ -125,11 +126,12 @@ def index_view(request, wiki_keyword=""):
         results = useroperations_helper.get_landing_page(lang)
 
     context = {
-               "content": output,
-               "results": results,
-                "mobile_wmc_id": MOBILE_WMC_ID,
-                "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
-               }
+        "content": output,
+        "results": results,
+        "mobile_wmc_id": MOBILE_WMC_ID,
+        "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
+        "dispatches": LandingPageDispatch.objects.filter(is_active=True),
+    }
     geoportal_context.add_context(context=context)
 
     # check if this is an ajax call from info search

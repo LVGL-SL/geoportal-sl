@@ -1,6 +1,9 @@
 from django.contrib import admin
-from django.contrib.admin import register
-from .models import ApplicationSliderElement
+from .models import ApplicationSliderElement, LandingPageDispatch
 
 
 admin.site.register(ApplicationSliderElement)
+
+@admin.register(LandingPageDispatch)
+class LandingPageDispatchAdmin(admin.ModelAdmin):
+    pass
