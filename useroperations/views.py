@@ -683,9 +683,9 @@ def change_profile_view(request):
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
-                if form.cleaned_data['preferred_gui'] == 'Geoportal-RLP_2019':
+                if form.cleaned_data['preferred_gui'] == 'Geoportal-SL-2020':
                     # set session variable preferred_gui via session wrapper php script
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-RLP_2019', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-SL-2020', verify=INTERNAL_SSL)
                 else:
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value='+DEFAULT_GUI, verify=INTERNAL_SSL)
                 
