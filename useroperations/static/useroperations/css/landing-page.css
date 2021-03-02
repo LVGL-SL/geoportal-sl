@@ -4,10 +4,6 @@
 
 */
 
-.mySlides {
-    display: none
-}
-
 .w3-left,
 .w3-right,
 .w3-badge {
@@ -104,4 +100,16 @@
 .landing-page-dispatch-information {
     background-color: var(--secondary-light);
     border: var(--secondary-placeholder) var(--border-strength) solid;
+}
+
+.carousel-image {
+    width: 100%;
+}
+
+.block {
+    display: block;
+}
+
+.hidden {
+    display: none;
 }

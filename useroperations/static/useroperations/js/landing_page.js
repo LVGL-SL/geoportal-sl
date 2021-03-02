@@ -60,16 +60,15 @@ function displayCarouselElementByIndex(index) {
   } else {
     carouselIndex = index;
   }
+  const currentImage = carouselImages[carouselIndex];
+  const currentDot = carouselDots[carouselIndex];
 
   hideAllElements(carouselImages);
   for (dot of carouselDots) {
     dot.classList.remove("w3-white");
   }
 
-  const currentImage = carouselImages[carouselIndex];
-  const currentDot = carouselDots[carouselIndex];
-
-  currentImage.style.display = "block";
+  displayElementAsBlock(currentImage);
   currentDot.classList.add("w3-white");
 }
 
@@ -88,6 +87,13 @@ function stopCarousel() {
 function hideAllElements(elements) {
 
   for (element of elements) {
-    element.style.display = 'none';
+    element.classList.remove("block");
+    element.classList.add("hidden");
   }
+}
+
+function displayElementAsBlock(element) {
+
+  element.classList.remove("hidden");
+  element.classList.add("block");
 }
