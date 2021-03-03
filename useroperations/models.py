@@ -280,7 +280,18 @@ class ApplicationSliderElement(models.Model):
     title = models.CharField(max_length=50)
     anchor_href = models.URLField(max_length=255)
     image_src = models.URLField(max_length=255)
+    rank = models.IntegerField()
 
     def __str__(self): 
         return self.title
 
+
+class LandingPageDispatch(models.Model):
+    DISPATCH_TYPES = [
+        ('information', 'Information'),
+    ]
+
+    title = models.CharField(max_length=20, null=True, blank=True)
+    text = models.TextField(max_length=1000)
+    is_active = models.BooleanField(default=False)
+    dispatch_type = models.CharField(max_length=20, choices=DISPATCH_TYPES)

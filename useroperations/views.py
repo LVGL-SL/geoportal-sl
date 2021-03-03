@@ -27,7 +27,8 @@ from searchCatalogue.settings import PROXIES
 from useroperations.settings import LISTED_VIEW_AS_DEFAULT, ORDER_BY_DEFAULT, INSPIRE_CATEGORIES, ISO_CATEGORIES
 from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
-from .models import ApplicationSliderElement, MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
+from .models import ApplicationSliderElement, LandingPageDispatch, \
+    MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
 
 logger = logging.getLogger(__name__)
 
@@ -125,11 +126,12 @@ def index_view(request, wiki_keyword=""):
         results = useroperations_helper.get_landing_page(lang)
 
     context = {
-               "content": output,
-               "results": results,
-                "mobile_wmc_id": MOBILE_WMC_ID,
-                "slider_elements": ApplicationSliderElement.objects.order_by('-id'),
-               }
+        "content": output,
+        "results": results,
+        "mobile_wmc_id": MOBILE_WMC_ID,
+        "slider_elements": ApplicationSliderElement.objects.order_by('rank'),
+        "dispatches": LandingPageDispatch.objects.filter(is_active=True),
+    }
     geoportal_context.add_context(context=context)
 
     # check if this is an ajax call from info search
@@ -681,9 +683,9 @@ def change_profile_view(request):
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
-                if form.cleaned_data['preferred_gui'] == 'Geoportal-RLP_2019':
+                if form.cleaned_data['preferred_gui'] == 'Geoportal-SL-2020':
                     # set session variable preferred_gui via session wrapper php script
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-RLP_2019', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-SL-2020', verify=INTERNAL_SSL)
                 else:
                     response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value='+DEFAULT_GUI, verify=INTERNAL_SSL)
                 
