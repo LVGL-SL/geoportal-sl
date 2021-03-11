@@ -1,8 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* 
+  carousel variables and configurations
+*/
+const CAROUSEL_INTERVAL_TIMEOUT_IN_MS = 5000;
+var carouselIndex = 0;
+let carouselInterval;
+initiateCarousel();
 
-  /* 
-      carousel
-  */
+/* 
+  carousel functions
+*/
+
+function initiateCarousel() {
+
   const carouselContainer = document.querySelector('#landing-page-carousel-container');
   const carouselLeftButton = document.querySelector('#btn-carousel-left');
   const carouselRightButton = document.querySelector('#btn-carousel-right');
@@ -22,19 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   displayCarouselElementByIndex(0);
   startCarousel();
-
-});
-
-/* 
-  carousel variables and configurations
-*/
-const CAROUSEL_INTERVAL_TIMEOUT_IN_MS = 5000;
-var carouselIndex = 0;
-let carouselInterval;
-
-/* 
-  carousel functions
-*/
+}
 
 function displayNextCarouselElement() {
 
