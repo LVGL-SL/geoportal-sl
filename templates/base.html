@@ -53,8 +53,11 @@
             </figure>
             <div class="middle-header">
                 <div class="middle-header-top">
-                    <input type="text" id="geoportal-search-field" class="simple-search-field -js-simple-search-field"
-                        placeholder="{% trans 'Search term' %}">
+                    <input type="text" id="geoportal-search-field" class="simple-search-field -js-simple-search-field" 
+                            placeholder="{% trans 'Search term' %}">
+                    <div id="geoportal-empty-search-button" class="empty-search-button">
+                            <i class="fas fa-times"></i>
+                    </div>
                     <div id="geoportal-search-button" class="search-submit-button">
                         <i class="fas fa-search"></i>
                     </div>
@@ -62,10 +65,8 @@
                 </div>
                 <div id="middle-header-bottom">
                     <div class="inline">
-                        <input class="spatial-checkbox-item" id="spatial-checkbox" type="checkbox"
-                            title="{% trans 'Spatial Filter' %}">
-                        <label class="spatial-checkbox-item"
-                            for="spatial-checkbox">{% trans 'Use spatial filter' %}</label>
+                        <input class="spatial-checkbox-item" id="spatial-checkbox" type="checkbox" title="{% trans 'Spatial Filter' %}">
+                        <label class="spatial-checkbox-item" for="spatial-checkbox">{% trans 'Use spatial filter' %}</label>
                     </div>
                 </div>
             </div>
