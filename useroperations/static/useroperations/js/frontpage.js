@@ -1,3 +1,7 @@
+/**
+ * Options
+ */
+const CheckForNewsPlaceIcon = true;
 
 /**
  * Returns the cookie if found
@@ -699,8 +703,6 @@ function checkForNews (){
         })
         .catch(function(error){console.log(error);});
 }
-
-var CheckForNewsPlaceIcon = false;
 
 if( CheckForNewsPlaceIcon == true ) {
         $( document ).ready( function () {
