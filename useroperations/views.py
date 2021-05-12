@@ -1049,7 +1049,7 @@ def feedback_view(request: HttpRequest):
                     + ", \n \n" +
                     form.cleaned_data["message"],
                     form.cleaned_data["email"],
-                    [DEFAULT_TO_EMAIL],
+                    [EMAIL_HOST_USER],
                     fail_silently=False,
                 )
             except smtplib.SMTPException:
