@@ -210,6 +210,7 @@ EMAIL_HOST = env("EMAIL_HOST", default='')
 EMAIL_HOST_USER = env(
     "EMAIL_HOST_USER", default='geoportal.saarland@lvgl.saarland.de')
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+DEFAULT_TO_EMAIL = EMAIL_HOST_USER
 EMAIL_PORT = env("EMAIL_PORT", default=25)
 ROOT_EMAIL_ADDRESS = env("ROOT_EMAIL_ADDRESS", default="root@geoportal.tld")
 EMAIL_CONTACT = env("EMAIL_CONTACT", default="root@geoportal.tld")
