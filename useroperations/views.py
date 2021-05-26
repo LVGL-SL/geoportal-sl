@@ -32,6 +32,7 @@ from .models import ApplicationSliderElement, LandingPageDispatch, \
 
 logger = logging.getLogger(__name__)
 
+
 @check_browser
 def index_view(request, wiki_keyword=""):
     """ Prepares the index view, and renders the page.
@@ -555,7 +556,7 @@ def pw_reset_view(request):
                         _("Hello ") + user.mb_user_name +
                         ", \n\n" +
                         _("This is your new password, please change it immediately!\n Password: ") + newpassword ,
-                        EMAIL_HOST_USER,
+                        DEFAULT_FROM_EMAIL,
                         [user.mb_user_email],
                         fail_silently=False,
                 )
@@ -786,7 +787,7 @@ def delete_profile_view(request):
                                     ", \n \n" +
                                     _("In case the deletion of your account was a mistake, you can reactivate it by clicking this link!")
                                     + "\n Link: " + HTTP_OR_SSL + HOSTNAME + "/activate/" + user.activation_key,
-                                    EMAIL_HOST_USER,
+                                    DEFAULT_FROM_EMAIL,
                                     [user.mb_user_email],
                                     fail_silently=False,
                                 )
