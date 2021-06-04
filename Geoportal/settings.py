@@ -216,9 +216,9 @@ ROOT_EMAIL_ADDRESS = env("ROOT_EMAIL_ADDRESS", default="root@geoportal.tld")
 EMAIL_CONTACT = env("EMAIL_CONTACT", default="root@geoportal.tld")
 
 # Recaptcha Config
-USE_RECAPTCHA = 0
-GOOGLE_RECAPTCHA_SECRET_KEY = ''
-GOOGLE_RECAPTCHA_PUBLIC_KEY = ''
+USE_RECAPTCHA = env("USE_RECAPTCHA", default=0)
+GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default='')
+GOOGLE_RECAPTCHA_PUBLIC_KEY = env("GOOGLE_RECAPTCHA_PUBLIC_KEY", default='')
 
 # WMC ID that should be loaded on mobile devices
 MOBILE_WMC_ID = None
