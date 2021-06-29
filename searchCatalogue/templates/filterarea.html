@@ -42,22 +42,6 @@
                 {% endfor %}
             </div>
         </div>
-
-
-        <!-- Resource type
-        {% if all_resources|length > 0 %}
-        <div>
-            <h4>{% trans 'Type of resource:' %}</h4>
-            <div class="resource--list -js-resources">
-                {% for resource_key, resource_val in all_resources.items %}
-                    <span data-resource="{{ resource_key }}"
-                          class="resource--list--item -js-resource {% if resource_key in resources %} inactive {% endif %}">{{ resource_val }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        -->
-
         <!-- Spatial restrictions -->
         {% if search_filters.searchBbox|length > 0 %}
         <div>
@@ -71,9 +55,6 @@
             </div>
         </div>
         {% endif %}
-
     </div>
-
-
     {% include 'hits_and_sort_option.html' %}
 </div><!-- end .filterarea -->
