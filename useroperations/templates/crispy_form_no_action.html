@@ -60,10 +60,6 @@
         </div>
         <div class="submit-button-wrapper">
             <input type="hidden" name="action" value="submit" />
-            {% if use_recaptcha == 1 %}
-            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
-            {% endif %}
-
             {% if btn_label1 %}
             <input id="change-form-button" class="form-change-submit-button" data-toggle="save" name="submit" type="submit" value="{{ btn_label1 }}">
             {% endif %}
