@@ -2,19 +2,6 @@
 {% load i18n static %}
 {% load crispy_forms_tags %}
 {% block body %}
-{% if use_recaptcha == 1 %}
-<script>
-    grecaptcha.ready(function () {
-        grecaptcha.execute('{{ recaptcha_public_key }}', 
-            { 
-                action: "{% url 'useroperations:feedback' %}" 
-            })
-            .then(function (token) {
-                document.getElementById('g-recaptcha-response').value = token;
-            });
-        });
-</script>
-{% endif %}
 
 <div class="title">
     <h1>{{ headline }}</h1>
@@ -50,6 +37,9 @@
             </tr>
             {% endfor %}
         </table>
+        {% if use_recaptcha == 1 and register == 1 %}
+         <div class="g-recaptcha" data-sitekey="{{ recaptcha_public_key }}"></div>
+        {% endif %}
         <div class="foot-note">
             {% trans '* The field is required.' %}
         </div>
@@ -60,10 +50,6 @@
         </div>
         <div class="submit-button-wrapper">
             <input type="hidden" name="action" value="submit" />
-            {% if use_recaptcha == 1 %}
-            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
-            {% endif %}
-
             {% if btn_label1 %}
             <input id="change-form-button" class="form-change-submit-button" data-toggle="save" name="submit" type="submit" value="{{ btn_label1 }}">
             {% endif %}

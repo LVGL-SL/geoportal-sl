@@ -2,19 +2,6 @@
 {% load i18n %}
 
 {% block body %}
-{% if use_recaptcha == 1 %}
-<script>
-    grecaptcha.ready(function () {
-        grecaptcha.execute('{{ recaptcha_public_key }}', 
-            { 
-                action: "{% url 'useroperations:feedback' %}" 
-            })
-            .then(function (token) {
-                document.getElementById('g-recaptcha-response').value = token;
-            });
-        });
-</script>
-{% endif %}
 <h1>{% trans 'Feedback form' %}</h1>
 <hr>
 <div class="form-wrapper">
@@ -36,6 +23,9 @@
                 </tr>
             {% endfor %}
         </table>
+        {% if use_recaptcha == 1 %}
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_public_key }}"></div>
+        {% endif %}
         <div class="foot-note">
             {% trans 'Remaining characters: ' %}
             <span id="character-counter"></span>
@@ -47,9 +37,6 @@
         </div>
 
         <div class="submit-button-wrapper">
-        {% if use_recaptcha == 1 %}
-            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
-        {% endif %}
             <input id="submit-form-button" class="form-submit-button" type="submit" value="{{ btn_send }}">
         </div>
 
