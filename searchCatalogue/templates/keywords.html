@@ -6,7 +6,7 @@
     </div>
     <div class="keywords--container hide">
         {% for tag in tags %}
-        <span class="keywords--item -js-keyword" data-params="{{ tag.url }}" title="{{ tag.title }}" style="font-size: {{ tag.weight }}px;">{{ tag.title }}</span>
+        <span class="keywords--item -js-keyword" data-params="{{ tag.url }}" data-weight="{{ tag.weight }}" title="{{ tag.title }}">{{ tag.title }}</span>
         {% endfor %}
     </div><!-- end .keywords--container -->
 </div><!-- end .keywords -->
