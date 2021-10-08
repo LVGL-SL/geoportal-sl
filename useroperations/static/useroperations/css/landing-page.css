@@ -113,3 +113,25 @@
 .hidden {
     display: none;
 }
+
+/*
+    News Icon
+*/
+
+.news-icon {
+    position: absolute;
+    margin-left: 5px;
+    color: lightgreen;
+}
+
+/*
+    Landing Page Slider
+*/
+
+#landing-page-carousel-container {
+    max-width: 676px;
+}
+
+.w3-display-bottommiddle {
+    width: 100%;
+}
