@@ -119,6 +119,10 @@ body {
     display: block;
 }
 
+.visible {
+    visibility:visible !important;
+}
+
 .left-header,
 .right-header {
     display: flex;
@@ -128,7 +132,11 @@ body {
 
 .middle-header {
     display: block;
-    flex-grow: 5;
+    margin-top:13px;
+    width: 100%;
+    max-width:900px;
+    padding: 0 0px 0 200px;
+    z-index:3;
 }
 
 .middle-header-top {
@@ -194,6 +202,20 @@ body {
     padding: 0 10px 0 10px;
 }
 
+.spatial-search-text {
+    visibility:hidden;
+    font-size: 0.7em;
+    padding: 5px;
+}
+
+.hidden {
+    display:none;
+}
+
+.spatial-checkbox-input {
+    display:none;
+}
+
 .search-submit-button{
     display: flex;
     align-items: center;
@@ -201,6 +223,23 @@ body {
     color: white;
     padding: 0.5em;
     font-size: 1.5em;
+}
+
+#spatial-checkbox:checked + label{
+    color:var(--hesse-blue) !important;
+}
+
+.spatial-submit-button:hover{
+    color:var(--hesse-lightblue);
+}
+
+.hand{
+    cursor: pointer;
+}
+
+.middle-header-top:focus-within{
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
 }
 
 .search-submit-button:hover {
@@ -908,6 +947,12 @@ footer {
 
     #geoportal-search-field {
         height: 4em;
+    }
+    
+    #spatial-search-text{display:none !important}
+    
+    .middle-header-top.sticky-top{
+       margin-left:0; 
     }
 
     #middle-header-bottom {
