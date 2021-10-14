@@ -341,7 +341,6 @@ var Autocomplete = function(search) {
     };
 
     this.init = function(search) {
-        var self = this;
         _search = search;
         _input = jQuery('.-js-simple-search-field');
         _div = jQuery('.-js-simple-search-autocomplete');
