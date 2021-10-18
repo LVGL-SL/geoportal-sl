@@ -43,6 +43,10 @@ body {
     position: relative;
 }
 
+.hidden {
+    display:none;
+}
+
 .body-content {
     min-height: 800px;
     /* ToDO: As long as the iframe mapviewer is used, we need to provide a minimum height for the body content */
@@ -71,9 +75,7 @@ body {
 }
 
 #logo_gdi {
-    max-height: 100px;
-    max-width: 100%;
-    height: auto;
+    height: 100px;
 }
 
 #logo_country {
@@ -135,7 +137,6 @@ body {
     margin-top:13px;
     width: 100%;
     max-width:900px;
-    padding: 0 0px 0 200px;
     z-index:3;
 }
 
@@ -208,15 +209,31 @@ body {
     padding: 5px;
 }
 
-.hidden {
-    display:none;
+.spatial-checkbox-input {
+    display: none;
+}
+  
+.spatial-submit-button {
+    font-size: 1.5em;
+    padding: 0.45em;
+    color: var(--secondary-placeholder);
+    background-color: white;
+    user-select: none;
+}
+
+.spatial-submit-button:hover{
+    color:var(--primary-light-hover);
 }
 
 .spatial-checkbox-input {
     display:none;
 }
 
-.search-submit-button{
+.spatial-checkbox-input:checked + label {
+    color:var(--primary) !important;
+}
+
+.search-submit-button {
     display: flex;
     align-items: center;
     background-color: var(--primary);
@@ -225,15 +242,7 @@ body {
     font-size: 1.5em;
 }
 
-#spatial-checkbox:checked + label{
-    color:var(--hesse-blue) !important;
-}
-
-.spatial-submit-button:hover{
-    color:var(--hesse-lightblue);
-}
-
-.hand{
+.hand {
     cursor: pointer;
 }
 
