@@ -793,7 +793,6 @@ dl dd {
 .spatial-result-header, .spatial-result-title{
     margin-top: 10px;
     display: flex;
-    align-vertical-items:center;
     background: white;
     border: 1px solid var(--primary);
     padding: 10px;
