@@ -144,6 +144,7 @@ body {
     display: flex;
     justify-content: center;
     position: relative;
+    border: 0.5px solid var(--primary);
 }
 
 .sticky-top {
@@ -185,19 +186,17 @@ body {
     position: relative;
 }
 
-.middle-header-top:hover{
+.middle-header-top:hover {
     border-color: var(--primary);
     box-shadow: 0 0 10px var(--primary);
 }
 
-.simple-search-field{
+.simple-search-field {
     font: inherit;
     width: 100%;
     color: #000;
-    border: 0.5px solid;
-    border-color: var(--primary);
     background-color: #fff;
-    border-radius: 0px;
+    border: none;
     height: 50px;
     line-height: 40px;
     padding: 0 10px 0 10px;
