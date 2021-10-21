@@ -108,7 +108,7 @@
 
 .carousel-dot {
     background-color: transparent;
-    border: 1px solid var(--secondary-placeholder);
+    border: 1px solid var(--secondary-light);
     border-radius: 50%;
     cursor: pointer;
     height: 13px;
