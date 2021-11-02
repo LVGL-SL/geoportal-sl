@@ -2,7 +2,6 @@
 {% load static i18n humanize %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{% static 'useroperations/css/w3.css' %}" media="all" />
 <link rel="stylesheet" type="text/css" href="{% static 'useroperations/css/landing-page.css' %}" media="all" />
 <script type="text/javascript" src="{% static 'useroperations/js/landing_page.js' %}" defer></script>
 {% endblock %}
@@ -12,32 +11,30 @@
     <div class="landing-page-headline">
         <h2>{% trans 'Welcome to the Geoportal Saarland' %}</h2>
     </div>
-    <div class="w3-container">
+    <div class="gp-container">
         <p><strong>{% trans 'the information and interaction platform of the geo data infrastructure Saarland (GDI-SL), a central access point web services on spatial data in Saarland.' %}</strong>
         </p>
     </div>
     {% for dispatch in dispatches %}
-    <div class="landing-page-dispatch landing-page-dispatch-{{ dispatch.dispatch_type }} w3-container">
+    <div class="landing-page-dispatch landing-page-dispatch-{{ dispatch.dispatch_type }} gp-container">
         {% if dispatch.title %}<h3>{{ dispatch.title }}</h3>{% endif %}
         <p>{{ dispatch.text }}</p>
     </div>
     {% empty %}
     {% endfor %}
-    <div id="landing-page-carousel-container" class="w3-content w3-display-container" style="max-width:676px">
+    <div id="landing-page-carousel-container" class="gp-content gp-display-container">
         {% for slider_element in slider_elements %}
         <a title="{{ slider_element.title }}" href="{{ slider_element.anchor_href }}">
             <img class="carousel-image {% if forloop.first %}block{% else %}hidden{% endif %}"
-                    data-index="{{ forloop.counter0 }}"
-                    alt="{{ slider_element.title }}"
-                    src="{{ slider_element.image_src }}"></a>
+                data-index="{{ forloop.counter0 }}" alt="{{ slider_element.title }}"
+                src="{{ slider_element.image_src }}"></a>
         {% empty %}
         {% endfor %}
-        <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle"
-            style="width:100%">
-            <div id="btn-carousel-left" class="w3-left w3-hover-text-khaki">&#10094;</div>
-            <div id="btn-carousel-right" class="w3-right w3-hover-text-khaki">&#10095;</div>
+        <div class="gp-container carousel-control">
+            <div id="btn-carousel-left" class="float-left carousel-control-item">&#10094;</div>
+            <div id="btn-carousel-right" class="float-right carousel-control-item">&#10095;</div>
             {% for slider_element in slider_elements %}
-            <span class="carousel-dot w3-badge w3-border w3-transparent w3-hover-white"
+            <span class="carousel-dot carousel-control-item inline-block"
                 data-index="{{ forloop.counter0 }}" title="{{ slider_element.title }}"></span>
             {% empty %}
             {% endfor %}

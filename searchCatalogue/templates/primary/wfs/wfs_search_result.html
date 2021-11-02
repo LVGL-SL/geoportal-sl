@@ -1,6 +1,6 @@
 {% load static i18n %}
     {% if ftype.mdLink is not None %}
-    <a title='zu {{ ftype.title }}' href='{{ ftype.mdLink }}' target="_blank" style="text-decoration: none;">
+    <a title='zu {{ ftype.title }}' href='{{ ftype.mdLink }}' target="_blank" class="no-text-decoration">
         <div class="search-result-title">
             <!-- {% if parent_result is not None %}{{ parent_result.title }}    ▶   {% endif %}-->{{ ftype.title }}
         </div> </a>

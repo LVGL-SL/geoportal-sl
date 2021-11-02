@@ -707,3 +707,23 @@ caption{text-align:left;padding:2em 1em 0.4em 0.5em;font-weight:bold;}
     margin: 5px 0 5px 5px;
     border-radius: 10px;
 }
+
+.hidden-overflow {
+    overflow: hidden;
+}
+
+.no-display {
+    display:none;
+}
+
+.no-text-decoration {
+    text-decoration: none;
+}
+
+.max-width-100p {
+    max-width:100px;
+}
+
+.display-inline-block {
+    display:inline-block;
+}
