@@ -728,6 +728,7 @@ footer {
 
 .footer-navigation>ul>li>a {
     text-decoration: none;
+    color: black;
 }
 
 .footer-navigation>ul>li:hover {
