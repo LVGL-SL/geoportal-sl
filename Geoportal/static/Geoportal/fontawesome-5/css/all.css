@@ -1464,6 +1464,12 @@ readers do not read off random characters that represent icons */
 .fa-exclamation:before {
   content: "\f12a"; }
 
+  .fa-exclamation-circle {
+    position: absolute;
+    margin-left: 5px;
+    color: lightgreen;
+  }
+  
 .fa-exclamation-circle:before {
   content: "\f06a"; }
 

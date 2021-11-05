@@ -2,6 +2,7 @@
   carousel variables and configurations
 */
 const CAROUSEL_INTERVAL_TIMEOUT_IN_MS = 5000;
+const CAROUSEL_MARK_AS_ACTIVE_CLASS_NAME = 'carousel-active';
 var carouselIndex = 0;
 let carouselInterval;
 initiateCarousel();
@@ -61,12 +62,12 @@ function displayCarouselElementByIndex(index) {
   const currentDot = carouselDots[carouselIndex];
 
   hideAllElements(carouselImages);
-  for (dot of carouselDots) {
-    dot.classList.remove("w3-white");
+  for (let dot of carouselDots) {
+    dot.classList.remove(CAROUSEL_MARK_AS_ACTIVE_CLASS_NAME);
   }
 
   displayElementAsBlock(currentImage);
-  currentDot.classList.add("w3-white");
+  currentDot.classList.add(CAROUSEL_MARK_AS_ACTIVE_CLASS_NAME);
 }
 
 function startCarousel() {

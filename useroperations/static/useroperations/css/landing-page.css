@@ -4,81 +4,33 @@
 
 */
 
-.w3-left,
-.w3-right,
-.w3-badge {
-    cursor: pointer
+.float-left {
+    float: left !important;
 }
 
-.w3-badge {
-    height: 13px;
-    width: 13px;
-    padding: 0
+.float-right {
+    float: right !important;
 }
 
-.w3-content,
-.w3-auto {
+.inline-block {
+    display: inline-block !important;
+}
+
+.gp-content {
+    max-width: 980px;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
-.w3-content {
-    max-width: 980px
+.gp-container {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
 }
 
-.w3-display-container:hover .w3-display-hover {
-    display: block
+.gp-display-container {
+    position: relative;
 }
-
-.w3-display-container:hover span.w3-display-hover {
-    display: inline-block
-}
-
-.w3-tooltip,
-.w3-display-container {
-    position: relative
-}
-
-.w3-container:after,
-.w3-container:before,
-.w3-panel:after,
-.w3-panel:before,
-.w3-row:after,
-.w3-row:before,
-.w3-row-padding:after,
-.w3-row-padding:before,
-.w3-cell-row:before,
-.w3-cell-row:after,
-.w3-clear:after,
-.w3-clear:before,
-.w3-bar:before,
-.w3-bar:after {
-    content: "";
-    display: table;
-    clear: both
-}
-
-.w3-container,
-.w3-panel {
-    padding: 0.01em 16px
-}
-
-.w3-text-khaki,
-.w3-hover-text-khaki:hover {
-    color: #b4aa50 !important
-}
-
-.w3-transparent,
-.w3-hover-none:hover {
-    background-color: transparent !important
-}
-
-.w3-white,
-.w3-hover-white:hover {
-    color: #000 !important;
-    background-color: #fff !important
-}
-
 
 /* 
     Landing Page Dispatches 
@@ -86,7 +38,6 @@
 
 .landing-page-dispatch {
     --border-strength: 5px;
-
     margin: 1em 0 2em 0;
     font-weight: 700;
 }
@@ -102,14 +53,76 @@
     border: var(--secondary-placeholder) var(--border-strength) solid;
 }
 
-.carousel-image {
-    width: 100%;
-}
-
 .block {
     display: block;
 }
 
 .hidden {
     display: none;
+}
+
+/*
+    News Icon
+*/
+
+.news-icon {
+    position: absolute;
+    margin-left: 5px;
+    color: lightgreen;
+}
+
+/*
+    Landing Page Slider
+*/
+
+#landing-page-carousel-container {
+    max-width: 676px;
+}
+
+.carousel-control {
+    font-size: 18px;
+    /* display-bottommiddle - position on center of the bottom */
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 0%);
+    padding: 0.01em 16px;
+    width: 100%;
+    /* end display-bottommiddle */
+    /* center */
+    text-align: center;
+    display: inline-block;
+    /* end center */
+}
+
+.carousel-container:hover {
+    display: block;
+    display: inline-block;
+    position: relative;
+}
+
+.carousel-control-item {
+    color: white;
+    cursor: pointer;
+}
+
+.carousel-dot {
+    background-color: transparent;
+    border: 1px solid var(--secondary-light);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 13px;
+    width: 13px;
+    padding: 0;
+    font-size: 18px;
+}
+
+.carousel-active,
+.carousel-dot:hover {
+    color: var(--primary);
+    background-color: white;
+}
+
+.carousel-image {
+    width: 100%;
 }
