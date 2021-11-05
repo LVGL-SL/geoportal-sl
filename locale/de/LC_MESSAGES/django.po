@@ -1072,7 +1072,7 @@ msgid ""
 "By this selection of topics you get an overview of available data linked to "
 "it."
 msgstr ""
-"Über die Auswahl eines der Themen erhälten Sie eine Übersicht der dazu "
+"Über die Auswahl eines der Themen erhalten Sie eine Übersicht der dazu "
 "verfügbaren Geodaten."
 
 #: useroperations/templates/applications.html:23
