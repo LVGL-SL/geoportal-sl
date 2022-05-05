@@ -41,11 +41,10 @@ body {
     margin: 0;
     height: 100%;
     position: relative;
-    overflow-x: hidden;
 }
 
 .hidden {
-    display: none;
+    display:none;
 }
 
 .body-content {
@@ -79,12 +78,9 @@ body {
     height: 100px;
 }
 
-#id_identity {
-    visibility: hidden;
-}
-
-label[for=id_identity] {
-    visibility: hidden;
+#logo_country {
+    height: 100px;
+    width: 255px;
 }
 
 .cookie-container {
@@ -121,16 +117,12 @@ label[for=id_identity] {
     align-items: center;
 }
 
-.visible {
-    visibility: visible !important;
-}
-
 .show {
     display: block;
 }
 
 .visible {
-    visibility: visible !important;
+    visibility:visible !important;
 }
 
 .left-header,
@@ -142,10 +134,10 @@ label[for=id_identity] {
 
 .middle-header {
     display: block;
-    margin-top: 13px;
+    margin-top:13px;
     width: 100%;
-    max-width: 900px;
-    z-index: 3;
+    max-width:900px;
+    z-index:3;
 }
 
 .middle-header-top {
@@ -199,20 +191,6 @@ label[for=id_identity] {
     box-shadow: 0 0 10px var(--primary);
 }
 
-.spatial-search-text {
-    padding-top: 5px;
-    visibility: hidden;
-}
-
-.hidden {
-    display: none;
-}
-
-.hand {
-    cursor: pointer;
-}
-
-
 .simple-search-field {
     font: inherit;
     width: 100%;
@@ -225,7 +203,7 @@ label[for=id_identity] {
 }
 
 .spatial-search-text {
-    visibility: hidden;
+    visibility:hidden;
     font-size: 0.7em;
     padding: 5px;
 }
@@ -233,7 +211,7 @@ label[for=id_identity] {
 .spatial-checkbox-input {
     display: none;
 }
-
+  
 .spatial-submit-button {
     font-size: 1.5em;
     padding: 0.45em;
@@ -242,16 +220,16 @@ label[for=id_identity] {
     user-select: none;
 }
 
-.spatial-submit-button:hover {
-    color: var(--primary-light-hover);
+.spatial-submit-button:hover{
+    color:var(--primary-light-hover);
 }
 
 .spatial-checkbox-input {
-    display: none;
+    display:none;
 }
 
-.spatial-checkbox-input:checked+label {
-    color: var(--primary) !important;
+.spatial-checkbox-input:checked + label {
+    color:var(--primary) !important;
 }
 
 .search-submit-button {
@@ -267,7 +245,7 @@ label[for=id_identity] {
     cursor: pointer;
 }
 
-.middle-header-top:focus-within {
+.middle-header-top:focus-within{
     border-color: var(--primary);
     box-shadow: 0 0 10px var(--primary);
 }
@@ -306,18 +284,18 @@ label[for=id_identity] {
     font-weight: bold;
 }
 
-.simple-search-autocomplete .suggestion {
+.simple-search-autocomplete .suggestion{
     display: flex;
     cursor: pointer;
     font-size: 0.9rem;
     color: var(--primary);
 }
 
-.simple-search-autocomplete .location-suggestion {
+.simple-search-autocomplete .location-suggestion{
     width: auto;
 }
 
-.simple-search-autocomplete .suggestion-copy {
+.simple-search-autocomplete .suggestion-copy{
     float: right;
     margin-top: 0.5rem;
     padding: 0.5rem 0.5rem;
@@ -328,12 +306,12 @@ label[for=id_identity] {
 }
 
 .simple-search-autocomplete .suggestion:hover,
-.simple-search-autocomplete .suggestion.active {
+.simple-search-autocomplete .suggestion.active{
     background-color: var(--primary);
     color: white;
-}
+    }
 
-.simple-search-autocomplete .suggestion-copy:hover {
+.simple-search-autocomplete .suggestion-copy:hover{
     background-color: white;
     color: var(--primary);
     width: 2rem;
@@ -344,15 +322,11 @@ label[for=id_identity] {
     display: block;
 }
 
-.simple-search-autocomplete:not( :hover) {
-    display: none;
-}
-
-.empty-search-button:hover {
+.empty-search-button:hover{
     cursor: pointer;
 }
 
-.empty-search-button {
+.empty-search-button{
     display: none;
     align-items: center;
     background-color: white;
@@ -464,9 +438,7 @@ ul {
 }
 
 .map-viewer-selector,
-.map-applications-toggler,
-.scroll-to-bottom,
-.scroll-to-top {
+.map-applications-toggler {
     margin: 0.75em 0 0 0;
     background-color: var(--primary);
     font-size: 1.50em;
@@ -477,9 +449,7 @@ ul {
 }
 
 .map-viewer-selector:hover,
-.map-applications-toggler:hover,
-.scroll-to-bottom:hover,
-.scroll-to-top:hover {
+.map-applications-toggler:hover {
     cursor: pointer;
     -webkit-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
     -moz-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .5));
@@ -493,19 +463,6 @@ ul {
     top: 50px;
     right: -2em;
     transition: all 0.25s ease-in-out;
-}
-
-.scroll-to-bottom {
-    position: absolute;
-    top: 600px;
-    right: -5px;
-}
-
-.scroll-to-top {
-
-    position: absolute;
-    bottom: 10px;
-    right: -35px;
 }
 
 .map-sidebar.open {
@@ -527,12 +484,6 @@ ul {
     display: none;
 }
 
-.map-applications-list {
-    display: none;
-    overflow: auto;
-    height: 480px;
-}
-
 .map-applications-list-entry,
 .map-viewer-list-entry {
     color: white;
@@ -540,7 +491,7 @@ ul {
     padding: 0.5em;
     margin-top: 0.25em;
     background-color: var(--primary-light);
-    border-radius: 0.75em 0.75em 0.75em 0.75em;
+    border-radius: 0.75em 0 0 0.75em;
 }
 
 .map-applications-list-entry:hover,
@@ -1006,13 +957,11 @@ footer {
     #geoportal-search-field {
         height: 4em;
     }
-
-    #spatial-search-text {
-        display: none !important
-    }
-
-    .middle-header-top.sticky-top {
-        margin-left: 0;
+    
+    #spatial-search-text{display:none !important}
+    
+    .middle-header-top.sticky-top{
+       margin-left:0; 
     }
 
     #middle-header-bottom {
