@@ -22,6 +22,12 @@ msgstr ""
 msgid "Modern"
 msgstr ""
 
+msgid "Scroll to top"
+msgstr "Zum Seitenanfang"
+
+msgid "Scroll to bottom"
+msgstr "Zum Seitenanende"
+
 #: Geoportal/geoportalObjects.py:67
 msgid "Klassik"
 msgstr ""
@@ -1593,3 +1599,129 @@ msgstr ""
 #: useroperations/views.py:1048
 msgid "Feedback from "
 msgstr "Feedback Formular"
+
+
+#: searchCatalogue/templates/search_result_list_entry.html:57
+#: searchCatalogue/templates/search_result_list_entry.html:80
+#: searchCatalogue/templates/search_result_list_entry.html:102
+#: useroperations/templates/landing_page.html:80
+msgid "Map URL copied to clipboard"
+msgstr "Link zur Karte wurde in Zwischenablage kopiert"
+
+#: useroperations/templates/base.html:222
+msgid "Accessibility"
+msgstr "Erklärung zur Barrierefreiheit"
+
+msgid "Spatial filter activated!"
+msgstr "Räumlicher Filter aktiviert!"
+
+msgid "What is this?"
+msgstr "Was ist das?"
+
+#~ msgid "The letter W, as used for wikipedia"
+#~ msgstr "Der Buchstabe W, bekannt im Zusammenhang mit Wikipedia"
+
+#~ msgid "An arrow pointing out of a box"
+#~ msgstr "Ein Pfeil, der aus einer Box hinaus deutet"
+
+#~ msgid "An eye icon"
+#~ msgstr "Ein Augensymbol"
+
+#~ msgid "A download icon"
+#~ msgstr "Ein Downloadsymbol"
+
+#~ msgid "A document icon"
+#~ msgstr "Ein Dokumentensymbol"
+
+#~ msgid "Open atom client"
+#~ msgstr "Öffne Atom Client"
+
+#~ msgid "An organization logo"
+#~ msgstr "Ein Organisationslogo"
+
+#~ msgid "A calendar icon"
+#~ msgstr "Ein Kalendarsymbol"
+
+#~ msgid "A key above an envelope"
+#~ msgstr "Ein Schlüssel über einem Briefumschlag"
+
+#~ msgid "A black closed padlock"
+#~ msgstr "Ein schwarzes, geschlossenes Vorhängeschloss"
+
+#~ msgid "Signal waves emerging from a single point"
+#~ msgstr "Signalwellen strahlen aus einem einzelnen Punkt"
+
+#~ msgid "A white stylized bird in front of a blue background"
+#~ msgstr "Ein weißer stilisierter Vogel vor blauem Hintergrund"
+
+#~ msgid "A lowercase letter"
+#~ msgstr "Einen Kleinbuchstaben"
+
+#~ msgid "A uppercase letter"
+#~ msgstr "Einen Großbuchstaben"
+
+#~ msgid "A number"
+#~ msgstr "Eine Zahl"
+
+#~ msgid ""
+#~ "A mapviewer switcher icon, shaped as two arrows pointing in opposite "
+#~ "directions"
+#~ msgstr ""
+#~ "Ein Wechselsymbol für den Kartenviewer, in der Form zweier Pfeile, welche "
+#~ "in entgegengesetzte Richtungen zeigen"
+
+#~ msgid "INSPIRE Topic"
+#~ msgstr "INSPIRE Thema"
+
+#~ msgid "An information icon, shaped like the letter i"
+#~ msgstr "Ein Informationssymbol in Form des Buchstabens i"
+
+#~ msgid "A stylized mobile phone"
+#~ msgstr "Ein stilisiertes Smartphone"
+
+#~ msgid "Open directly in the mobile map viewer"
+#~ msgstr "Im mobilen Kartenviewer öffnen"
+
+#~ msgid "Account not active"
+#~ msgstr "Nicht aktiv"
+
+#~ msgid ""
+#~ "A fingerprint icon, which indicates that this service usage will be logged"
+#~ msgstr ""
+#~ "Ein Fingerabdrucksymbol. Die Nutzung dieses Dienstes wird protokolliert"
+
+#~ msgid "Layers"
+#~ msgstr "Ebenen"
+
+#~ msgid "A metadata symbol"
+#~ msgstr "Ein Metadatensymbol"
+
+#~ msgid "A magnifying glass"
+#~ msgstr "Eine Lupe"
+
+#~ msgid "A stylized globe"
+#~ msgstr "Ein stylisierter Globus"
+
+#~ msgid "Three dots in a row"
+#~ msgstr "Drei Punkte in einer Reihe"
+
+#~ msgid "A service icon, shaped as two arrows pointing in opposite directions"
+#~ msgstr ""
+#~ "Ein Dienstesymbol in der Form zweier Pfeile, die in entgegengesetzte "
+#~ "Richtungen zeigen"
+
+#~ msgid "A web feature service icon, shaped as a magnifying glass over a map"
+#~ msgstr ""
+#~ "Ein Web Feature Service Symbol, in der Form einer Lupe über einer Karte"
+
+#~ msgid "A web map service icon, shaped as a lying map"
+#~ msgstr "Ein Web Map Service Symbol, in der Form einer liegenden Karte"
+
+#~ msgid "A magnifying class"
+#~ msgstr "Ein Ver"
+
+#~ msgid "Reset Password"
+#~ msgstr "Passwort zurücksetzen"
+
+#~ msgid "A magnifying glass icon"
+#~ msgstr "Ein Lupensymbol"
