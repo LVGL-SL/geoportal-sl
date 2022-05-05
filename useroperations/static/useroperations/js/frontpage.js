@@ -10,7 +10,7 @@ function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') {
             c = c.substring(1);
@@ -23,25 +23,25 @@ function getCookie(cname) {
 }
 
 function resizeIframe(obj) {
-  obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
 }
 
-function setCookie(cname, cvalue){
-    document.cookie = cname + "=" + cvalue + ";path=/;";
+function setCookie(cname, cvalue) {
+    document.cookie = cname + "=" + cvalue + ";path=/;SameSite=Lax";
 }
 
-function startSearch(){
+function startSearch() {
     // since the all.js might be loaded slower or faster, we need to make sure it exists before we call prepareAndSearch()
     // which lives in all.js
     var script = $("#all-script");
-    $(script).ready(function(){
+    $(script).ready(function () {
         // Collect query parameters
         var inputTerms = $(".-js-simple-search-field").val().trim();
         search.setParam("terms", inputTerms);
 
         // collapse extended search if open
         var extendedSearchHeader = $(".-js-extended-search-header");
-        if(extendedSearchHeader.hasClass("active")){
+        if (extendedSearchHeader.hasClass("active")) {
             extendedSearchHeader.click();
         }
         prepareAndSearch(); // search and render
@@ -53,7 +53,7 @@ function startSearch(){
  * Resize the sidebar's height according to the body content height.
  * If the body does not provide enough content to wrap the sidebar, the body needs to be resized!
  */
-function resizeSidebar(){
+function resizeSidebar() {
     var sidebar = $(".sidebar-wrapper");
     var content = $(".body-content .wrapper");
     var body = $("#body-content");
@@ -61,12 +61,12 @@ function resizeSidebar(){
     var contentLength = content.outerHeight();
     var sidebarLength = sidebar.outerHeight();
 
-    if(sidebar.outerHeight() != body.outerHeight()){
+    if (sidebar.outerHeight() != body.outerHeight()) {
         sidebar.outerHeight(body.outerHeight());
     }
 }
 
-function resizeMapOverlay(){
+function resizeMapOverlay() {
     var elem = $(this);
     var mapLayer = $(".map-viewer-overlay");
     var bodyContent = $(".body-content");
@@ -76,51 +76,51 @@ function resizeMapOverlay(){
 /*
  * Switch between mobile and default map viewer
  */
-function toggleMapViewers(target){
+function toggleMapViewers(target) {
     var iframe = $("#mapviewer");
     var oldSrc = iframe.attr("data-toggle");
     var src = iframe.attr("src");
-    if(src !== oldSrc){
+    if (src !== oldSrc) {
         iframe.attr("data-toggle", src);
         iframe.attr("src", oldSrc);
         iframe.toggleClass("mobile-viewer");
     }
 }
 
-function toggleSubMenu(elem){
+function toggleSubMenu(elem) {
     var elem = $(elem);
     elem.parents().children(".sidebar-area-content").slideToggle("slow");
 }
 
-function toggleMapviewer(servicetype){
+function toggleMapviewer(servicetype) {
     // for dsgvo not accepted
-    if ($("#dsgvo").val() == "False"){
-    window.location.href = "/change-profile";
-    return;
+    if ($("#dsgvo").val() == "False") {
+        window.location.href = "/change-profile";
+        return;
     }
     //mobile
     if ($(window).width() < 689 || /Mobi|Tablet|android|iPad|iPhone/.test(navigator.userAgent)) {
         // servicetype is true when coming from search
         if (servicetype) {
             // start mobile from wms search
-            if (servicetype.match(/wms/)){
-                var layerid=servicetype.match(/\d+/);
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?layerid='+layerid[0];
-            // start mobile from wmc search
+            if (servicetype.match(/wms/)) {
+                var layerid = servicetype.match(/\d+/);
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/') + '/mapbender/extensions/mobilemap2/index.html?layerid=' + layerid[0];
+                // start mobile from wmc search
             } else if (servicetype.match(/wmc/)) {
-                var wmcid=servicetype.match(/\d+/);
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?wmc_id='+wmcid[0];
-            // start mobile with default mobile wmc (from index)
+                var wmcid = servicetype.match(/\d+/);
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/') + '/mapbender/extensions/mobilemap2/index.html?wmc_id=' + wmcid[0];
+                // start mobile with default mobile wmc (from index)
             }
-        }else{
+        } else {
             const mobile_wmc_id = $("#mapviewer-sidebar").attr("mobile_wmc");
             if (Number.isInteger(mobile_wmc_id)) {
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?wmc_id='+$("#mapviewer-sidebar").attr("mobile_wmc");
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/') + '/mapbender/extensions/mobilemap2/index.html?wmc_id=' + $("#mapviewer-sidebar").attr("mobile_wmc");
             } else {
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html';
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/') + '/mapbender/extensions/mobilemap2/index.html';
             }
         }
-    }else{
+    } else {
         // get preferred gui
         var toggler = $(".map-viewer-toggler");
         var preferred_gui = toggler.attr("data-gui");
@@ -133,16 +133,16 @@ function toggleMapviewer(servicetype){
         // change mb_user_gui Parameter if default gui  differs
         var url = new URL(dataParams)
         var params = new URLSearchParams(url.search);
-        if(preferred_gui == "Geoportal-RLP" || preferred_gui.length == 0 ){
-            params.set('gui_id',"Geoportal-RLP")
-        }else{
+        if (preferred_gui == "Geoportal-RLP" || preferred_gui.length == 0) {
+            params.set('gui_id', "Geoportal-RLP")
+        } else {
             params.set('gui_id', preferred_gui)
         }
         url.search = params.toString();
         dataParams = url.toString();
         var dataToggler = iframe.attr("data-toggle");
 
-        if(dataParams !== src && (dataToggler == src || src == "about:blank")){
+        if (dataParams !== src && (dataToggler == src || src == "about:blank")) {
             iframe.attr("src", dataParams);
         }
         // resize the overlay
@@ -152,9 +152,17 @@ function toggleMapviewer(servicetype){
         mapLayer.slideToggle("slow")
         mapLayer.toggleClass("closed");
         // close the sidebar
-        if(!$(".sidebar-wrapper").hasClass("closed")){
+        if (!$(".sidebar-wrapper").hasClass("closed")) {
             $(".sidebar-toggler").click();
         }
+
+        if (!$(".map-viewer-overlay").hasClass("closed") && $(window).height() > 900) {
+            document.body.style.overflowY = "hidden";
+        } else {
+            document.body.style.overflowY = "visible";
+        }
+        document.getElementById('scroll-to-top').click();
+
     }
 }
 
@@ -164,9 +172,9 @@ function toggleMapviewer(servicetype){
  * and reopens the search module again, the european catalogue will still be selected. This is not the
  * behaviour we want.
  */
-function resetSearchCatalogue(src){
+function resetSearchCatalogue(src) {
     // reset catalogue source to primary if we are not in the search module
-    if(!location.pathname.includes("search") && search.getParam("source") != src){
+    if (!location.pathname.includes("search") && search.getParam("source") != src) {
         search.setParam("source", src)
     }
 }
@@ -175,12 +183,12 @@ function resetSearchCatalogue(src){
  * If the search page is reloaded, e.g. due to language changing or normal F5 reload,
  * we need to make sure the search starts again automatically. Otherwise the users will be confused and cry.
  */
-function startAutomaticSearch(){
+function startAutomaticSearch() {
     // wait until the document is loaded completely, then start the automatic search!
-    $(document).ready(function(){
-        if(location.pathname.includes("search")){
+    $(document).ready(function () {
+        if (location.pathname.includes("search")) {
             var searchBody = $(".search-overlay-content");
-            if(searchBody.html().trim().length == 0){
+            if (searchBody.html().trim().length == 0) {
                 prepareAndSearch();
             }
         }
@@ -189,70 +197,71 @@ function startAutomaticSearch(){
 }
 
 function fallbackCopyTextToClipboard(text) {
-  var textArea = document.createElement("textarea");
-  textArea.value = text;
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
 
-  // Avoid scrolling to bottom
-  textArea.style.top = "0";
-  textArea.style.left = "0";
-  textArea.style.position = "fixed";
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
 
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
 
-  try {
-    var successful = document.execCommand('copy');
-    var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Fallback: Copying text command was ' + msg);
-  } catch (err) {
-    console.error('Fallback: Oops, unable to copy', err);
-  }
+    try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
 
-  document.body.removeChild(textArea);
+    document.body.removeChild(textArea);
 }
 function copyTextToClipboard(text) {
-  if (!navigator.clipboard) {
-    fallbackCopyTextToClipboard(text);
-    return;
-  }
-  navigator.clipboard.writeText(text).then(function() {
-    console.log('Async: Copying to clipboard was successful!');
-  }, function(err) {
-    console.error('Async: Could not copy text: ', err);
-  });
+    if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+    }
+    navigator.clipboard.writeText(text).then(function () {
+        console.log('Async: Copying to clipboard was successful!');
+    }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+    });
 }
 
-$(document).on("click", ".share-button", function(){
+$(document).on("click", ".share-button", function () {
 
     //landing page
-    if ($(".landing-page-headline")[0]){
-      var elem = $(this).parents(".tile").find(".tile-header");
-    //search
+    if ($(".landing-page-headline")[0]) {
+        var elem = $(this).parents(".tile").find(".tile-header");
+        //search
     } else {
-      var elem = $(this).parents(".resource-element-actions").find(".share-button")
+        var elem = $(this).parents(".resource-element-actions").find(".share-button")
     }
 
     var id = elem.attr("data-id");
     type = id.split("=")[0];
     id = id.split("=")[1];
 
-    copyTextToClipboard(window.location.origin+"/map?"+type+"="+id);
-    var popup = document.getElementsByName("sharepopup"+id);
+    copyTextToClipboard(window.location.origin + "/map?" + type + "=" + id);
+    var popup = document.getElementsByName("sharepopup" + id);
 
     for (var i = 0; i < popup.length; i++) {
-      popup[i].classList.add("show-popup");
+        popup[i].classList.add("show-popup");
 
-      setTimeout(function(){
-        $(".popuptext-landing."+id).removeClass( "show-popup" );
-        $(".popuptext-search."+id).removeClass( "show-popup" )  }, 3000);
+        setTimeout(function () {
+            $(".popuptext-landing." + id).removeClass("show-popup");
+            $(".popuptext-search." + id).removeClass("show-popup")
+        }, 3000);
 
     }
 
 });
 
 
-$(document).on("click", ".mobile-button", function(){
+$(document).on("click", ".mobile-button", function () {
     // get wmc id
     var elem = $(this).parents(".tile").find(".tile-header");
     var id = elem.attr("data-id");
@@ -261,13 +270,13 @@ $(document).on("click", ".mobile-button", function(){
     openInNewTab("/mapbender/extensions/mobilemap2/index.html?wmc_id=" + id);
 });
 
-$(document).on("click", ".map-viewer-selector", function(){
+$(document).on("click", ".map-viewer-selector", function () {
     var elem = $(this);
     var mapViewerSelector = $(".map-applications-toggler");
 
     elem.toggleClass("open")
     // close other menu
-    if(mapViewerSelector.hasClass("open") && elem.hasClass("open")){
+    if (mapViewerSelector.hasClass("open") && elem.hasClass("open")) {
         mapViewerSelector.click();
     }
 
@@ -275,20 +284,45 @@ $(document).on("click", ".map-viewer-selector", function(){
     viewerList.slideToggle("medium");
 
     var sideBar = elem.closest(".map-sidebar");
-    if((mapViewerSelector.hasClass("open") || elem.hasClass("open")) && !sideBar.hasClass("open")){
+    if ((mapViewerSelector.hasClass("open") || elem.hasClass("open")) && !sideBar.hasClass("open")) {
         sideBar.addClass("open");
-    }else if(!mapViewerSelector.hasClass("open") && !elem.hasClass("open") && sideBar.hasClass("open")){
+    } else if (!mapViewerSelector.hasClass("open") && !elem.hasClass("open") && sideBar.hasClass("open")) {
         sideBar.removeClass("open");
     }
 });
 
-$(document).on("click", ".map-applications-toggler", function(){
+$(document).on("click", ".scroll-to-bottom", function () {
+    window.scrollTo(0, document.body.scrollHeight);
+    document.getElementById("scroll-to-bottom").classList.add("hidden");
+    document.getElementById("scroll-to-top").classList.remove("hidden");
+
+});
+
+$(document).on("click", ".scroll-to-top", function () {
+    document.getElementById("scroll-to-top").classList.add("hidden");
+    document.getElementById("scroll-to-bottom").classList.remove("hidden");
+    window.scrollTo({
+        top: 1,
+        behavior: 'smooth'
+    });
+
+});
+
+
+$(document).on("click", ".map-applications-toggler", function () {
+
+    var mapViewerToggler = $(".map-applications-toggler");
+    if (mapViewerToggler.hasClass("open")) {
+        document.getElementById("scroll-to-bottom").classList.remove("hidden");
+    }
+
+
     var elem = $(this);
     var mapViewerSelector = $(".map-viewer-selector");
 
     elem.toggleClass("open")
     // close other menu
-    if(mapViewerSelector.hasClass("open") && elem.hasClass("open")){
+    if (mapViewerSelector.hasClass("open") && elem.hasClass("open")) {
         mapViewerSelector.click();
     }
 
@@ -296,39 +330,32 @@ $(document).on("click", ".map-applications-toggler", function(){
     applicationsList.slideToggle("medium");
 
     var sideBar = elem.closest(".map-sidebar");
-    if((mapViewerSelector.hasClass("open") || elem.hasClass("open")) && !sideBar.hasClass("open")){
+    if ((mapViewerSelector.hasClass("open") || elem.hasClass("open")) && !sideBar.hasClass("open")) {
         sideBar.addClass("open");
-    }else if(!mapViewerSelector.hasClass("open") && !elem.hasClass("open") && sideBar.hasClass("open")){
+    } else if (!mapViewerSelector.hasClass("open") && !elem.hasClass("open") && sideBar.hasClass("open")) {
         sideBar.removeClass("open");
     }
 });
 
-$(document).on("click", ".map-viewer-list-entry", function(){
+$(document).on("click", ".map-viewer-list-entry", function () {
     var elem = $(this);
     var iFrame = $("#mapviewer");
 
-    // move viewport for user
-    window.scrollTo({
-        top:150,
-        left:0,
-        behavior:'smooth'
-    });
-
     gui_id = elem.attr("data-resource");
-    if(gui_id.includes("http")){
+    if (gui_id.includes("http")) {
         // Open the mobile client in a new window
-        if(gui_id.includes("mobilemap2")){
+        if (gui_id.includes("mobilemap2")) {
             window.open(gui_id);
         } else {
-        // simply paste in the new url
-        iFrame.attr("src", gui_id);
+            // simply paste in the new url
+            iFrame.attr("src", gui_id);
         }
-    }else{
+    } else {
         var srcUrl = null;
-        if(!iFrame.attr("src").includes("gui_id")){
+        if (!iFrame.attr("src").includes("gui_id")) {
             // there is a url in the src which can not be changed directly. We need to go back to the fallback uri!
             srcUrl = iFrame.attr("data-resource");
-        }else{
+        } else {
             // this is just another gui id, we need to put it inside the matching parameter
             srcUrl = iFrame.attr("src");
         }
@@ -346,23 +373,16 @@ $(document).on("click", ".map-viewer-list-entry", function(){
     $(".map-viewer-selector").click();
 });
 
-$(document).on("click", ".map-applications-list-entry", function(){
+$(document).on("click", ".map-applications-list-entry", function () {
     var elem = $(this);
     var iframe = $("#mapviewer");
-
-    // move viewport for user
-    window.scrollTo({
-        top:150,
-        left:0,
-        behavior:'smooth'
-    });
 
     iframeSrc = iframe.attr("src").toString();
     iframeDataParams = iframe.attr("data-resource").toString();
 
     var srcUrl = new URL(iframeDataParams);
     var params = new URLSearchParams(srcUrl.search);
-    params.set('gui_id',elem.attr("data-id"))
+    params.set('gui_id', elem.attr("data-id"))
 
     srcUrl.search = params.toString();
     src = srcUrl.toString();
@@ -374,13 +394,13 @@ $(document).on("click", ".map-applications-list-entry", function(){
 
 });
 
-$(document).on("keypress", "#id_message", function(){
+$(document).on("keypress", "#id_message", function () {
     var elem = $(this);
     var out = $(".foot-note span");
     var maxLength = elem.attr("maxlength");
     var restLength = maxLength - elem.val().length;
-    if((restLength == 0 && !out.hasClass("warning")) ||
-        (restLength > 0 && out.hasClass("warning"))){
+    if ((restLength == 0 && !out.hasClass("warning")) ||
+        (restLength > 0 && out.hasClass("warning"))) {
         out.toggleClass("warning");
     }
     out.html(restLength);
@@ -389,7 +409,7 @@ $(document).on("keypress", "#id_message", function(){
 /*
  * Handles the sidebar toggler functionality
  */
-$(document).on("click", ".sidebar-toggler", function(){
+$(document).on("click", ".sidebar-toggler", function () {
     var elem = $(this);
     var sidebar = $(".sidebar-wrapper");
     var bodyContent = $("#body-content");
@@ -402,67 +422,67 @@ $(document).on("click", ".sidebar-toggler", function(){
 /*
  * Handles the sidebar toggler functionality
  */
-$(document).on("click", ".map-viewer-button", function(){
+$(document).on("click", ".map-viewer-button", function () {
     var elem = $(this);
     var form = $("#map-viewer-selector");
     form.toggle("fast");
 });
 
-$(".body-content").change(function(){
+$(".body-content").change(function () {
 });
 
-$(document).on("click", "#geoportal-search-button", function(){
+$(document).on("click", "#geoportal-search-button", function () {
     // for dsgvo not accepted
-    if ($("#dsgvo").val() == "False"){
+    if ($("#dsgvo").val() == "False") {
         window.location.href = "/change-profile";
         return;
     }
 
     // check if the search page is already opened
-    if(!window.location.pathname.includes("/search")){
+    if (!window.location.pathname.includes("/search")) {
         // no index page loaded for search -> load it!
         // we lose all searchbar data on reloading, so we need to save it until the page is reloaded
         //window.sessionStorage.setItem("startSearch", true);
         window.sessionStorage.setItem("searchbarBackup", $(".-js-simple-search-field").val().trim());
         window.sessionStorage.setItem("isSpatialCheckboxChecked", $("#spatial-checkbox").is(":checked"));
         window.location.href = "/search";
-    }else{
+    } else {
         startSearch();
     }
 
 });
 
 
- $(document).on("click", ".quickstart.search", function(event){
-     event.preventDefault();
-     var elem = $(this);
-     var resource = elem.attr("data-resource");
-     var searchButton = $("#geoportal-search-button");
-     search.setParam("singleResourceRequest", resource);
-     search.setParam("source", "primary");
-     searchButton.click();
- });
-
- $(document).on("click", ".topics .tile-header", function(){
-     var elem = $(this);
-     var filterName = elem.attr("data-name");
-     var filterId = elem.attr("data-id");
-     var searchButton = $("#geoportal-search-button");
-     const searchCategory = elem.attr("data-search-category");
-     search.setParam("facet", [searchCategory, filterName, filterId].join(","));
-     searchButton.click();
- });
-
- $(document).on("hover", ".topics .tile-header", function(){
-     var elem = $(this).children(".tile-header-img").children(".tile-img");
-     elem.toggleClass("highlight");
- });
-
-
- $(document).on("click", ".favourite-wmcs .tile-header", function(event){
+$(document).on("click", ".quickstart.search", function (event) {
     event.preventDefault();
     var elem = $(this);
-    if(elem.attr("id") == "show-all-tile-content"){
+    var resource = elem.attr("data-resource");
+    var searchButton = $("#geoportal-search-button");
+    search.setParam("singleResourceRequest", resource);
+    search.setParam("source", "primary");
+    searchButton.click();
+});
+
+$(document).on("click", ".topics .tile-header", function () {
+    var elem = $(this);
+    var filterName = elem.attr("data-name");
+    var filterId = elem.attr("data-id");
+    var searchButton = $("#geoportal-search-button");
+    const searchCategory = elem.attr("data-search-category");
+    search.setParam("facet", [searchCategory, filterName, filterId].join(","));
+    searchButton.click();
+});
+
+$(document).on("hover", ".topics .tile-header", function () {
+    var elem = $(this).children(".tile-header-img").children(".tile-img");
+    elem.toggleClass("highlight");
+});
+
+
+$(document).on("click", ".favourite-wmcs .tile-header", function (event) {
+    event.preventDefault();
+    var elem = $(this);
+    if (elem.attr("id") == "show-all-tile-content") {
         $("#geoportal-search-button").click();
         return;
     }
@@ -472,9 +492,9 @@ $(document).on("click", "#geoportal-search-button", function(){
     //}
     startAjaxMapviewerCall(href);
 
- });
+});
 
-$(document).on("click", ".message-toggler", function(){
+$(document).on("click", ".message-toggler", function () {
     var elem = $(this);
     elem.toggle();
     elem.parent().toggle();
@@ -482,7 +502,7 @@ $(document).on("click", ".message-toggler", function(){
 
 
 // Password message popup
-$(document).on('focus blur', "#id_password", function(){
+$(document).on('focus blur', "#id_password", function () {
     // use nice transition css hack from
     // https://css-tricks.com/content-jumping-avoid/
     $("#password_message").toggleClass("in");
@@ -490,94 +510,94 @@ $(document).on('focus blur', "#id_password", function(){
 });
 
 // Client side password validation
-$(document).on('keyup', "#id_password", function(){
+$(document).on('keyup', "#id_password", function () {
 
-  var PasswordInput = document.getElementById("id_password");
-  var special = document.getElementById("special");
-  var length = document.getElementById("length");
+    var PasswordInput = document.getElementById("id_password");
+    var special = document.getElementById("special");
+    var length = document.getElementById("length");
 
-  // Validate special chars
-  if(PasswordInput.value.match(/[@#$%&+=!:-_]/g)) {
-    special.classList.remove("invalid");
-    special.classList.add("valid");
-  } else {
-    special.classList.remove("valid");
-    special.classList.add("invalid");
-  }
-
-  // Validate length
-  if(PasswordInput.value.length >= 9) {
-    length.classList.remove("invalid");
-    length.classList.add("valid");
-  } else {
-    length.classList.remove("valid");
-    length.classList.add("invalid");
-  }
-
-});
-
-$(document).on('click', ".sidebar-area", function(){
-
-if ($(window).width() < 689) {
-    var elem = this.innerHTML;
-    // check if there is a submenu at the sidebar area
-    if (elem.indexOf("toggleSubMenu") < 0){
-        if(!$(".sidebar-wrapper").hasClass("closed")){
-                $(".sidebar-toggler").click();
-        }
-
-    }
-}
-});
-
-
-$(document).on('click', ".sidebar-list-element", function(){
-if ($(window).width() < 689) {
-         if(!$(".sidebar-wrapper").hasClass("closed")){
-            $(".sidebar-toggler").click();
-         }
-}
-
-});
-
-
-
-$(document).on('click', "#change-form-button", function(){
-
-  var userLang = navigator.language || navigator.userLanguage;
-  var PasswordInput = document.getElementById("id_password");
-  var PasswordInputConfirm = document.getElementById("id_passwordconfirm");
-
-
-  if(PasswordInput.value != PasswordInputConfirm.value) {
-    if(userLang == "de") {
-      alert("Passwörter stimmen nicht überein");
+    // Validate special chars
+    if (PasswordInput.value.match(/[@#$%&+=!:-_]/g)) {
+        special.classList.remove("invalid");
+        special.classList.add("valid");
     } else {
-      alert("Passwords do not match");
+        special.classList.remove("valid");
+        special.classList.add("invalid");
     }
-    event.preventDefault();
 
-  }
+    // Validate length
+    if (PasswordInput.value.length >= 9) {
+        length.classList.remove("invalid");
+        length.classList.add("valid");
+    } else {
+        length.classList.remove("valid");
+        length.classList.add("invalid");
+    }
+
+});
+
+$(document).on('click', ".sidebar-area", function () {
+
+    if ($(window).width() < 689) {
+        var elem = this.innerHTML;
+        // check if there is a submenu at the sidebar area
+        if (elem.indexOf("toggleSubMenu") < 0) {
+            if (!$(".sidebar-wrapper").hasClass("closed")) {
+                $(".sidebar-toggler").click();
+            }
+
+        }
+    }
+});
+
+
+$(document).on('click', ".sidebar-list-element", function () {
+    if ($(window).width() < 689) {
+        if (!$(".sidebar-wrapper").hasClass("closed")) {
+            $(".sidebar-toggler").click();
+        }
+    }
+
+});
+
+
+
+$(document).on('click', "#change-form-button", function () {
+
+    var userLang = navigator.language || navigator.userLanguage;
+    var PasswordInput = document.getElementById("id_password");
+    var PasswordInputConfirm = document.getElementById("id_passwordconfirm");
+
+
+    if (PasswordInput.value != PasswordInputConfirm.value) {
+        if (userLang == "de") {
+            alert("Passwörter stimmen nicht überein");
+        } else {
+            alert("Passwords do not match");
+        }
+        event.preventDefault();
+
+    }
 
 
 });
 
 
 //captcha refresh
-$(function() {
+$(function () {
     // Add refresh button after field (this can be done in the template as well)
     $('img.captcha').after(
-            $('<a href="#void" class="captcha-refresh">↻</a>')
-            );
+        $('<a href="#void" class="captcha-refresh">↻</a>')
+    );
 
     // Click-handler for the refresh-link
-    $('.captcha-refresh').click(function(){
+    $('.captcha-refresh').click(function () {
         var $form = $(this).parents('form');
         var url = location.protocol + "//" + window.location.hostname + ":"
-                  + location.port + "/captcha/refresh/";
+            + location.port + "/captcha/refresh/";
 
         // Make the AJAX-call
-        $.getJSON(url, {}, function(json) {
+        $.getJSON(url, {}, function (json) {
             $form.find('input[name="captcha_0"]').val(json.key);
             $form.find('img.captcha').attr('src', json.image_url);
         });
@@ -589,7 +609,7 @@ $(function() {
 
 
 
-$(window).resize(function(){
+$(window).resize(function () {
     resizeSidebar();
     resizeMapOverlay();
 });
@@ -598,18 +618,18 @@ $(window).resize(function(){
 /*
  * Contains functions that shall be executed when the page is reloaded
  */
-$(window).on("load", function(param){
+$(window).on("load", function (param) {
     resizeSidebar();
     resizeMapOverlay();
 
     var searchbar = $(".-js-simple-search-field");
     var checkbox = $("#spatial-checkbox");
-    if (window.sessionStorage.getItem("isSpatialCheckboxChecked") == 'true'){
+    if (window.sessionStorage.getItem("isSpatialCheckboxChecked") == 'true') {
         checkbox.prop("checked", true);
     }
 
     var searchbarBackup = window.sessionStorage.getItem("searchbarBackup");
-    if (searchbarBackup !== null){
+    if (searchbarBackup !== null) {
         searchbar.val(searchbarBackup);
         window.sessionStorage.removeItem("searchbarBackup");
     }
@@ -621,9 +641,9 @@ $(window).on("load", function(param){
     // check if a service is called via GET (wmc or wms)
     var route = location.pathname;
     var params = location.search;
-    if(route.includes("/map")){
+    if (route.includes("/map")) {
         var params = location.search;
-        if(params.length > 0 ){
+        if (params.length > 0) {
             params = params.replace("?", "");
             startAjaxMapviewerCall(params);
         }
@@ -631,19 +651,19 @@ $(window).on("load", function(param){
 
 });
 
-$(document).on("scroll", function(){
+$(document).on("scroll", function () {
     var searchbar = $(".middle-header-top");
     // check if searchbar is out of viewport
     var searchbarPositionHeight = searchbar.outerHeight() + searchbar.innerHeight();
     // get viewport Y offset
     var viewportOffset = window.pageYOffset;
 
-    // sticky search bar makes mobile search unusable 
+    // sticky search bar makes mobile search unusable
     if ($(window).width() > 689) {
-        if(searchbarPositionHeight <= viewportOffset){
+        if (searchbarPositionHeight <= viewportOffset) {
             // make searchbar sticky to the viewport top
             searchbar.addClass("sticky-top");
-        }else{
+        } else {
             // revert this effect
             searchbar.removeClass("sticky-top");
         }
@@ -654,7 +674,7 @@ $(document).on("scroll", function(){
 /*
  * Things that should start when the document is fully loaded
  */
-$(document).ready(function(){
+$(document).ready(function () {
     resizeSidebar();
     resizeMapOverlay();
 
@@ -662,7 +682,7 @@ $(document).ready(function(){
     startAutomaticSearch();
 
     if ($(window).width() < 689) {
-        if(!$(".sidebar-wrapper").hasClass("closed")){
+        if (!$(".sidebar-wrapper").hasClass("closed")) {
             $(".sidebar-toggler").click();
         }
     }
@@ -672,7 +692,7 @@ $(document).ready(function(){
     $(".messages-container").delay(5000).slideToggle("medium");
 });
 
-$(document).on("click", "#geoportal-empty-search-button", function(){
+$(document).on("click", "#geoportal-empty-search-button", function () {
     document.getElementById("geoportal-search-field").value = '';
     document.getElementById("geoportal-empty-search-button").style.display = 'none';
     $(".simple-search-autocomplete").hide();
@@ -683,30 +703,29 @@ $(document).on("click", "#geoportal-empty-search-button", function(){
  * add badge to menu item NEWS if there is new content in the article Meldungen, keep the badge for 6 days
  */
 
-function checkForNews (){
-        const currentDate = new Date();
-        const currentTimestamp = currentDate.getTime();
-        const url = "https://" + location.hostname + "/mediawiki/api.php?action=query&prop=revisions&rvlimit=1&rvprop=timestamp&rvdir=older&titles=Meldungen&format=json";
-        fetch(url)
-        .then(function(response){return response.json();})
-        .then(function(response) {
+function checkForNews() {
+    const currentDate = new Date();
+    const currentTimestamp = currentDate.getTime();
+    const url = "https://" + location.hostname + "/mediawiki/api.php?action=query&prop=revisions&rvlimit=1&rvprop=timestamp&rvdir=older&titles=Meldungen&format=json";
+    fetch(url)
+        .then(function (response) { return response.json(); })
+        .then(function (response) {
             var pages = response.query.pages;
             for (var p in pages) {
                 articleDate = pages[p].revisions[0].timestamp;
                 articleDate = new Date(articleDate);
                 articleTimestamp = articleDate.getTime();
             }
-            showIcon = (articleTimestamp + 86400000 * 6  >= currentTimestamp) ? true : false;
+            showIcon = (articleTimestamp + 86400000 * 6 >= currentTimestamp) ? true : false;
             if (showIcon == true) {
                 $('.menuMeldungen').append('<i class="fas fa-exclamation-circle news-icon"></i>');
             }
         })
-        .catch(function(error){console.log(error);});
+        .catch(function (error) { console.log(error); });
 }
 
-if(CheckForNewsPlaceIcon) {
-    $( document ).ready( function () {
+if (CheckForNewsPlaceIcon) {
+    $(document).ready(function () {
         checkForNews();
     });
 }
-

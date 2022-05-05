@@ -2,101 +2,100 @@
 installation_folder="/data/"
 geoportal_url="https://www.geoportal.rlp.de"
 
+custom_update() {
 
-custom_update(){
+  if [ -e ${installation_folder}"custom_files.txt" ]; then
+    if [ "$1" == "save" ]; then
+      input="${installation_folder}/custom_files.txt"
+      while IFS= read -r line; do
+        directory=$(echo $line | cut -d / -f 3-)
+        filename=$(echo $line | cut -d / -f 3- | rev | cut -d / -f -1 | rev)
+        directory=${directory%$filename}
 
-    if [ -e ${installation_folder}"custom_files.txt" ];then
-        if [ "$1" == "save" ];then
-          input="${installation_folder}/custom_files.txt"
-          while IFS= read -r line
-          do
-            directory=`echo $line | cut -d / -f 3-`
-            filename=`echo $line | cut -d / -f 3- | rev | cut -d / -f -1 | rev`
-            directory=${directory%$filename}
-
-            mkdir -p /tmp/custom_files/$directory
-            cp -a $line /tmp/custom_files/$directory
-          done < "$input"
-        fi
-
-        if [ "$1" == "restore" ];then
-            cp -a /tmp/custom_files/* ${installation_folder}
-        fi
-      fi
-
-
-    if [ "$1" == "script" ];then
-
-      while true; do
-          read -p "Do you want to use a custom update script? Should lie under ${installation_folder}custom_update.sh y/n?" yn
-          case $yn in
-              [Yy]* ) source ${installation_folder}custom_update.sh;break;;
-              [Nn]* ) break;;
-              * ) echo "Please answer yes or no.";;
-          esac
-      done
+        mkdir -p /tmp/custom_files/$directory
+        cp -a $line /tmp/custom_files/$directory
+      done <"$input"
     fi
+
+    if [ "$1" == "restore" ]; then
+      cp -a /tmp/custom_files/* ${installation_folder}
+    fi
+  fi
+
+  if [ "$1" == "script" ]; then
+
+    while true; do
+      read -p "Do you want to use a custom update script? Should lie under ${installation_folder}custom_update.sh y/n?" yn
+      case $yn in
+      [Yy]*)
+        source ${installation_folder}custom_update.sh
+        break
+        ;;
+      [Nn]*) break ;;
+      *) echo "Please answer yes or no." ;;
+      esac
+    done
+  fi
 }
 
-check_settings(){
-   missing_items=()
+check_settings() {
+  missing_items=()
 
-   cd /tmp/
-   dottedname=`echo $1 | sed s/"\/"/"."/g`
-   rm $dottedname
+  cd /tmp/
+  dottedname=$(echo $1 | sed s/"\/"/"."/g)
+  rm $dottedname
 
-   if [ $2 == "django" ]; then
-     wget https://git.osgeo.org/gitea/GDI-RP/GeoPortal.rlp/raw/branch/master/$1 -O $dottedname
-   fi
+  if [ $2 == "django" ]; then
+    wget https://raw.githubusercontent.com/mrmap-community/GeoPortal.rlp/master/$1 -O $dottedname
+  fi
 
-   if [ $2 == "mapbender" ]; then
-     wget https://git.osgeo.org/gitea/GDI-RP/Mapbender2.8/raw/branch/master/$1-dist -O $dottedname
-   fi
+  if [ $2 == "mapbender" ]; then
+    wget https://raw.githubusercontent.com/mrmap-community/Mapbender2.8/master/$1-dist -O $dottedname
+  fi
 
-   while IFS="" read -r p || [ -n "$p" ]
-     do
+  while IFS="" read -r p || [ -n "$p" ]; do
 
-        if [ $2 == "django" ]; then
-          h=`printf '%s\n' "$p" | cut -d = -f 1`
-          h_full=`printf '%s\n' "$p"`
+    if [ $2 == "django" ]; then
+      h=$(printf '%s\n' "$p" | cut -d = -f 1)
+      h_full=$(printf '%s\n' "$p")
 
-          if ! grep -Fq "$h" ${installation_folder}/GeoPortal.rlp/$1
-          then
-              missing_items+=("$h_full")
-          fi
-        fi
+      if ! grep -Fq "$h" ${installation_folder}/GeoPortal.rlp/$1; then
+        missing_items+=("$h_full")
+      fi
+    fi
 
-        if [ $2 == "mapbender" ]; then
-          h=`printf '%s\n' "$p" | cut -d , -f 1`
-          h_full=`printf '%s\n' "$p"`
-          if ! grep -Fq "$h" ${installation_folder}/mapbender/$1
-          then
-              missing_items+=("$h_full")
-          fi
-        fi
+    if [ $2 == "mapbender" ]; then
+      h=$(printf '%s\n' "$p" | cut -d , -f 1)
+      h_full=$(printf '%s\n' "$p")
+      if ! grep -Fq "$h" ${installation_folder}/mapbender/$1; then
+        missing_items+=("$h_full")
+      fi
+    fi
 
-   done < /tmp/$dottedname
+  done </tmp/$dottedname
 
-   if [ ${#missing_items[@]} -ne 0 ]; then
-     echo "The following items are present in the masters $1 but are missing in your local $1"
-     printf '%s\n' "${missing_items[@]}"
+  if [ ${#missing_items[@]} -ne 0 ]; then
+    echo "The following items are present in the masters $1 but are missing in your local $1"
+    printf '%s\n' "${missing_items[@]}"
 
-     while true; do
-         read -p "Do you want to continue y/n?" yn
-         case $yn in
-             [Yy]* ) break;;
-             [Nn]* ) exit;break;;
-             * ) echo "Please answer yes or no.";;
-         esac
-     done
+    while true; do
+      read -p "Do you want to continue y/n?" yn
+      case $yn in
+      [Yy]*) break ;;
+      [Nn]*)
+        exit
+        break
+        ;;
+      *) echo "Please answer yes or no." ;;
+      esac
+    done
   fi
 
 }
 
-
 # needed for building new postgres python modules psycop2
 apt-get update
-apt-get install -y libpq-dev
+apt-get install -y libpq-dev libffi-dev
 
 custom_update "save"
 
@@ -122,7 +121,6 @@ cp -av ${installation_folder}mapbender/conf/bkgGeocoding.conf ${installation_fol
 cp -av ${installation_folder}mapbender/conf/excludeproxyurls.conf ${installation_folder}config_backup_for_update/excludeproxyurls.conf_$(date +"%m_%d_%Y")
 cp -av ${installation_folder}mapbender/conf/mobilemap.conf ${installation_folder}config_backup_for_update/mobilemap.conf_$(date +"%m_%d_%Y")
 
-
 echo "Updating Mapbender Sources"
 cd ${installation_folder}svn/mapbender
 su -c 'git reset --hard'
@@ -143,7 +141,6 @@ cp -av ${installation_folder}config_backup_for_update/twitter.conf_$(date +"%m_%
 cp -av ${installation_folder}config_backup_for_update/bkgGeocoding.conf_$(date +"%m_%d_%Y") ${installation_folder}mapbender/conf/bkgGeocoding.conf
 cp -av ${installation_folder}config_backup_for_update/excludeproxyurls.conf_$(date +"%m_%d_%Y") ${installation_folder}mapbender/conf/excludeproxyurls.conf
 cp -av ${installation_folder}config_backup_for_update/mobilemap.conf_$(date +"%m_%d_%Y") ${installation_folder}mapbender/conf/mobilemap.conf
-
 
 cd ${installation_folder}mapbender/tools
 sh ./i18n_update_mo.sh
@@ -171,7 +168,6 @@ sed -i 's/options.isGeonames = true;/options.isGeonames = false;/' ${installatio
 sed -i 's/options.helpText = "";/options.helpText = "Orts- und Straßennamen sind bei der Adresssuche mit einem Komma voneinander zu trennen!<br><br>Auch Textfragmente der gesuchten Adresse reichen hierbei aus.<br><br>\&nbsp\&nbsp\&nbsp\&nbsp Beispiel:<br>\&nbsp\&nbsp\&nbsp\&nbsp\&nbsp\\"Am Zehnthof 10 , St. Goar\\" oder<br>\&nbsp\&nbsp\&nbsp\&nbsp\&nbsp\\"zehnt 10 , goar\\"<br><br>Der passende Treffer muss in der erscheinenden Auswahlliste per Mausklick ausgewählt werden!";/' ${installation_folder}mapbender/http/plugins/mod_jsonAutocompleteGazetteer.php
 sed -i "s/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/mapbender\/frames\/login.php\");/g" ${installation_folder}mapbender/conf/mapbender.conf
 sed -i "s/define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/#define(\"LOGIN\", \"http:\/\/\".\$_SERVER\['HTTP_HOST'\].\"\/portal\/anmelden.html\");/g" ${installation_folder}mapbender/conf/mapbender.conf
-
 
 echo "Mapbender Update Done"
 

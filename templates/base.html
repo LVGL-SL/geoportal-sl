@@ -24,9 +24,9 @@
 	<script src="{% static 'useroperations/js/html5shiv.js' %}"></script>
 	<script src="{% static 'useroperations/js/html5shiv-printshiv.js' %}"></script>
     <![endif]-->
-{% if use_recaptcha == 1 %}
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-{% endif %}
+    {% if USE_RECAPTCHA == 1 %}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    {% endif %}
     {% block head %}
     {% endblock %}
 </head>
@@ -55,17 +55,18 @@
             </figure>
             <div class="middle-header">
                 <div id="spatial-search-text" class="spatial-search-text">
-                    <a href="/article/Suche/" >{% trans "What's the spatial filter?" %}</a>
+                    <a href="/article/Suche/">{% trans "What's the spatial filter?" %}</a>
                 </div>
                 <div class="middle-header-top">
                     <div class="spatial-submit-button" id="spatial-submit-button">
                         <input type="checkbox" class="spatial-checkbox-input" id="spatial-checkbox">
-                        <label for="spatial-checkbox"><i title="{% trans 'Activate spatial filter' %}" class="hand fas fa-map-marked-alt"></i></label>
+                        <label for="spatial-checkbox"><i title="{% trans 'Activate spatial filter' %}"
+                                class="hand fas fa-map-marked-alt"></i></label>
                     </div>
-                    <input type="text" id="geoportal-search-field" class="simple-search-field -js-simple-search-field" 
-                            placeholder="{% trans 'Search term' %}">
+                    <input type="text" id="geoportal-search-field" class="simple-search-field -js-simple-search-field"
+                        placeholder="{% trans 'Search term' %}">
                     <div id="geoportal-empty-search-button" class="empty-search-button">
-                            <i class="fas fa-times"></i>
+                        <i class="fas fa-times"></i>
                     </div>
                     <div id="geoportal-search-button" class="search-submit-button">
                         <i class="fas fa-search"></i>
@@ -292,7 +293,8 @@
             <ul>
                 <li><a href="/article/Kontakt">{% trans 'Contact' %}</a></li>
                 <li><a href="/article/Impressum">{% trans 'Legal Disclosure' %}</a></li>
-                <li><a href="/article/Datenschutz">{% trans 'Privacy' %}</a></li>
+                <li><a href="https://www.saarland.de/SharedDocs/Downloads/DE/LVGL/Datenschutz/datenschutz_geoportal.html"
+                        target="_blank">{% trans 'Privacy' %}</a></li>
                 <li><a href="/feedback">{% trans 'Feedback' %}</a></li>
             </ul>
         </nav>
