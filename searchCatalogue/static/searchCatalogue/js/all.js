@@ -354,13 +354,6 @@ var Autocomplete = function (search) {
         });
         _input.on('click', function (e) {
             self.keyUp(e.keyCode);
-            document.getElementById("geoportal-empty-search-button").style.display = 'flex';
-            if (document.getElementById("geoportal-search-field").value == '') {
-                document.getElementById("geoportal-empty-search-button").style.display = 'none';
-            };
-        });
-        _input.on('click', function (e) {
-            self.keyUp(e.keyCode);
         });
 
     };

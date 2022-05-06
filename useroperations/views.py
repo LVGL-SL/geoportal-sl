@@ -64,8 +64,7 @@ def index_view(request, wiki_keyword=""):
     else:
         lang = LANGUAGE_CODE
     get_params = request.GET.dict()
-    dsgvo_list = ["Datenschutz", "Kontakt", "Impressum",
-                  "Rechtshinweis", "Transparenzgesetz"]
+    dsgvo_list = ["Datenschutz", "Kontakt", "Impressum", "Rechtshinweis", "Transparenzgesetz"]
 
     output = ""
     results = []
@@ -81,13 +80,11 @@ def index_view(request, wiki_keyword=""):
             messages.success(request, _("Successfully logged in"))
             return redirect('useroperations:index')
         elif request.GET['status'] == "notactive":
-            messages.error(request, _(
-                "Account not active, please check your emails to reactivate!"))
+            messages.error(request, _("Account not active, please check your emails to reactivate!"))
             return redirect('useroperations:index')
         elif request.GET['status'] == "fail3":
             user = MbUser.objects.get(mb_user_name=request.GET['name'])
-            messages.error(request, _(
-                "Password failed too many times! Account is deactivated! Activation mail was sent to you!"))
+            messages.error(request, _("Password failed too many times! Account is deactivated! Activation mail was sent to you!"))
             try:
 
                 send_mail(
@@ -102,10 +99,10 @@ def index_view(request, wiki_keyword=""):
                 )
             except smtplib.SMTPException:
                 logger.error("Could not send activation mail!")
-                messages.error(request, _(
-                    "An error occured during sending. Please inform an administrator."))
+                messages.error(request, _("An error occured during sending. Please inform an administrator."))
 
             return redirect('useroperations:index')
+
 
     geoportal_context = GeoportalContext(request)
     context_data = geoportal_context.get_context()
@@ -118,8 +115,7 @@ def index_view(request, wiki_keyword=""):
         # display the wiki article in the template
         template = "wiki.html"
         try:
-            output = useroperations_helper.get_wiki_body_content(
-                wiki_keyword, lang)
+            output = useroperations_helper.get_wiki_body_content(wiki_keyword, lang)
             request.session["current_page"] = wiki_keyword
         except (error.HTTPError, FileNotFoundError) as e:
             template = "404.html"
@@ -141,8 +137,7 @@ def index_view(request, wiki_keyword=""):
     # check if this is an ajax call from info search
     if get_params.get("info_search", "") == 'true':
         category = get_params.get("category", "")
-        output = useroperations_helper.get_wiki_body_content(
-            wiki_keyword, lang, category)
+        output = useroperations_helper.get_wiki_body_content(wiki_keyword, lang, category)
         return GeoportalJsonResponse(html=output).get_response()
     else:
         return render(request, template, geoportal_context.get_context())
@@ -160,7 +155,7 @@ def applications_view(request: HttpRequest):
     request.session["current_page"] = "apps"
 
     geoportal_context = GeoportalContext(request)
-
+    
     order_by_options = OrderedDict()
     order_by_options["rank"] = _("Relevance")
     order_by_options["title"] = _("Alphabetically")
@@ -230,10 +225,8 @@ def categories_view(request: HttpRequest):
     template = "topics.html"
 
     topics = []
-    inspire_topics = useroperations_helper.get_topics(
-        request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
-    iso_topics = useroperations_helper.get_topics(
-        request.LANGUAGE_CODE, ISO_CATEGORIES)
+    inspire_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
+    iso_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, ISO_CATEGORIES)
     topics += inspire_topics.get("tags", []) + iso_topics.get("tags", [])
 
     context = {
@@ -269,8 +262,7 @@ def categories_iso_view(request: HttpRequest):
     template = "topics.html"
 
     topics = []
-    iso_topics = useroperations_helper.get_topics(
-        request.LANGUAGE_CODE, ISO_CATEGORIES)
+    iso_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, ISO_CATEGORIES)
     topics += iso_topics.get("tags", [])
 
     context = {
@@ -306,8 +298,7 @@ def categories_inspire_view(request: HttpRequest):
     template = "topics.html"
 
     topics = []
-    inspire_topics = useroperations_helper.get_topics(
-        request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
+    inspire_topics = useroperations_helper.get_topics(request.LANGUAGE_CODE, INSPIRE_CATEGORIES)
     topics += inspire_topics.get("tags", [])
 
     context = {
@@ -406,13 +397,11 @@ def register_view(request):
                     'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
                     'response': recaptcha_response
                 }
-                r = requests.post('https://www.google.com/recaptcha/api/siteverify',
-                                  proxies=PROXIES, data=data, verify=INTERNAL_SSL)
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=INTERNAL_SSL)
                 result = r.json()
 
                 if not result['success']:
-                    messages.error(request, _(
-                        "Invalid reCAPTCHA. Please try again."))
+                    messages.error(request, _("Invalid reCAPTCHA. Please try again."))
                     return redirect('useroperations:register')
 
             #bot honeypot field
@@ -420,13 +409,11 @@ def register_view(request):
                 return redirect('useroperations:register')
 
             if MbUser.objects.filter(mb_user_name=form.cleaned_data['name']).exists():
-                messages.error(request, _("The Username") + " {str_name} ".format(
-                    str_name=form.cleaned_data['name']) + _("is already taken"))
+                messages.error(request, _("The Username") + " {str_name} ".format(str_name=form.cleaned_data['name']) + _("is already taken"))
                 return redirect('useroperations:register')
 
             if re.match(r'[A-Za-z0-9@#$%&+=!:-_]{9,}', form.cleaned_data['password']) is None:
-                messages.error(request, _(
-                    "Password does not meet specified criteria, you should have at least 9 characters, allowed special chars are: @#$%&+=!:-_"))
+                messages.error(request, _("Password does not meet specified criteria, you should have at least 9 characters, allowed special chars are: @#$%&+=!:-_"))
                 return redirect('useroperations:register')
 
             user = MbUser()
@@ -442,8 +429,7 @@ def register_view(request):
 
             # check if passwords match
             if form.cleaned_data['password'] == form.cleaned_data['passwordconfirm']:
-                user.password = (str(bcrypt.hashpw(
-                    form.cleaned_data['password'].encode('utf-8'), bcrypt.gensalt(12)), 'utf-8'))
+                user.password = (str(bcrypt.hashpw(form.cleaned_data['password'].encode('utf-8'), bcrypt.gensalt(12)),'utf-8'))
             else:
                 form = RegistrationForm(request.POST)
                 context = {
@@ -460,18 +446,16 @@ def register_view(request):
                 return render(request, 'crispy_form_no_action.html', geoportal_context.get_context())
 
             try:
-                realm = mbConfReader.get_mapbender_config_value(
-                    PROJECT_DIR, 'REALM')
-                portaladmin = mbConfReader.get_mapbender_config_value(
-                    PROJECT_DIR, 'PORTAL_ADMIN_USER_ID')
-                byte_aldigest = (
-                    form.cleaned_data['name'] + ":" + realm + ":" + form.cleaned_data['password']).encode('utf-8')
+                realm = mbConfReader.get_mapbender_config_value(PROJECT_DIR,'REALM')
+                portaladmin = mbConfReader.get_mapbender_config_value(PROJECT_DIR,'PORTAL_ADMIN_USER_ID')
+                byte_aldigest = (form.cleaned_data['name'] + ":" + realm + ":" + form.cleaned_data['password']).encode('utf-8')
                 user.mb_user_aldigest = hashlib.md5(byte_aldigest).hexdigest()
                 user.mb_user_owner = portaladmin
             except KeyError:
                 user.mb_user_owner = 1
                 user.mb_user_aldigest = "Could not find realm"
                 print("Could not read from Mapbender Config")
+
 
             user.mb_user_login_count = 0
             user.mb_user_resolution = 72
@@ -480,15 +464,16 @@ def register_view(request):
             user.activation_key = useroperations_helper.random_string(50)
 
             send_mail(
-                _("Activation Mail"),
+                 _("Activation Mail"),
                 _("Hello ") + user.mb_user_name +
                 ", \n \n" +
                 _("This is your activation link. It will be valid until the end of the day, please click it!")
-              	+ "\n Link: " + HTTP_OR_SSL + HOSTNAME + "/activate/" + user.activation_key,
+              	+ "\n Link: "  + HTTP_OR_SSL + HOSTNAME + "/activate/" + user.activation_key,
                 DEFAULT_FROM_EMAIL,
                 [user.mb_user_email],
                 fail_silently=False,
             )
+
 
             user.save()
 
@@ -504,7 +489,7 @@ def register_view(request):
             UserGroupRel.save()
 
             messages.success(request, _("Account creation was successful. "
-                                        "You have to activate your account via email before you can login!"))
+                "You have to activate your account via email before you can login!"))
 
             return redirect('useroperations:login')
         else:
@@ -556,33 +541,31 @@ def pw_reset_view(request):
             username = form.cleaned_data['name']
             email = form.cleaned_data['email']
 
+
             if not MbUser.objects.filter(mb_user_name=username, mb_user_email=email):
-                messages.error(request, _(
-                    "No Account with this Username or Email found"))
+                messages.error(request, _("No Account with this Username or Email found"))
             else:
-                user = MbUser.objects.get(
-                    mb_user_name=username, mb_user_email=email)
+                user = MbUser.objects.get(mb_user_name=username, mb_user_email=email)
                 email = user.mb_user_email
 
                 newpassword = useroperations_helper.random_string(20)
 
-                user.password = (
-                    str(bcrypt.hashpw(newpassword.encode('utf-8'), bcrypt.gensalt(12)), 'utf-8'))
+                user.password = (str(bcrypt.hashpw(newpassword.encode('utf-8'), bcrypt.gensalt(12)),'utf-8'))
 
                 user.save()
 
                 send_mail(
-                    _("Lost Password"),
-                    _("Hello ") + user.mb_user_name +
-                    ", \n\n" +
-                    _("This is your new password, please change it immediately!\n Password: ") + newpassword,
-                    DEFAULT_FROM_EMAIL,
-                    [user.mb_user_email],
-                    fail_silently=False,
+                        _("Lost Password"),
+                        _("Hello ") + user.mb_user_name +
+                        ", \n\n" +
+                        _("This is your new password, please change it immediately!\n Password: ") + newpassword ,
+                        DEFAULT_FROM_EMAIL,
+                        [user.mb_user_email],
+                        fail_silently=False,
                 )
 
-                messages.success(request, _(
-                    "Password reset was successful, check your mails."))
+
+                messages.success(request, _("Password reset was successful, check your mails."))
                 return redirect('useroperations:login')
 
     return render(request, "crispy_form_no_action.html", geoportal_context.get_context())
@@ -604,14 +587,13 @@ def change_profile_view(request):
          Afterwards password is checked for both options and action is takes on.
 
     """
-    dsgvo_flag = True  # guest
+    dsgvo_flag = True # guest
 
     request.session["current_page"] = "change_profile"
     form = ChangeProfileForm()
     user = None
     if request.COOKIES.get(SESSION_NAME) is not None:
-        session_data = php_session_data.get_mapbender_session_by_memcache(
-            request.COOKIES.get(SESSION_NAME))
+        session_data = php_session_data.get_mapbender_session_by_memcache(request.COOKIES.get(SESSION_NAME))
         if session_data != None:
             if b'mb_user_id' in session_data and session_data[b'mb_user_name'] != b'guest':
                 userid = session_data[b'mb_user_id']
@@ -623,8 +605,7 @@ def change_profile_view(request):
         return redirect('useroperations:index')
     if user is None:
         # we expect it to be read out of the session data until this point!!
-        messages.add_message(request, messages.ERROR, _(
-            "The user could not be found. Please contact an administrator!"))
+        messages.add_message(request, messages.ERROR, _("The user could not be found. Please contact an administrator!"))
         return redirect('useroperations:index')
 
     if request.method == 'GET':
@@ -638,8 +619,8 @@ def change_profile_view(request):
                     'organization': user.mb_user_organisation_name,
                     'newsletter': user.mb_user_newsletter,
                     'survey': user.mb_user_allow_survey,
-                    'create_digest': user.create_digest,
-                    'preferred_gui': user.fkey_preferred_gui_id,
+                    'create_digest' : user.create_digest,
+                    'preferred_gui' : user.fkey_preferred_gui_id,
                     }
         if user.timestamp_dsgvo_accepted:
             userdata["dsgvo"] = True
@@ -648,8 +629,7 @@ def change_profile_view(request):
 
         if context_data['dsgvo'] == 'no' and context_data['loggedin'] == True:
             dsgvo_flag = False
-            messages.error(request, _(
-                "Please accept the General Data Protection Regulation or delete your account!"))
+            messages.error(request, _("Please accept the General Data Protection Regulation or delete your account!"))
 
     if request.method == 'POST':
         form = ChangeProfileForm(request.POST)
@@ -672,26 +652,21 @@ def change_profile_view(request):
                     # user wants to change the password
                     # first, the old pasword has to be checked
                     if form.cleaned_data['oldpassword']:
-                        password = useroperations_helper.bcrypt_password(
-                            form.cleaned_data["oldpassword"], user)
+                        password = useroperations_helper.bcrypt_password(form.cleaned_data["oldpassword"], user)
                         # if the old password didn't match with the one associated to the user, we can abort here!
                         if password != user.password:
-                            messages.error(request, _(
-                                "Your current password was wrong"))
+                            messages.error(request, _("Your current password was wrong"))
                             return redirect('useroperations:change_profile')
                         else:
                             # if the old password is fine, we can continue with checking the new provided one
                             if form.cleaned_data['password'] == form.cleaned_data['passwordconfirm']:
-                                user.password = (str(bcrypt.hashpw(
-                                    form.cleaned_data['password'].encode('utf-8'), bcrypt.gensalt(12)), 'utf-8'))
+                                user.password = (str(bcrypt.hashpw(form.cleaned_data['password'].encode('utf-8'), bcrypt.gensalt(12)), 'utf-8'))
                             else:
-                                messages.error(request, _(
-                                    "Passwords do not match"))
+                                messages.error(request, _("Passwords do not match"))
                                 return redirect('useroperations:change_profile')
                     else:
                         # user provided a new password but not the old one!
-                        messages.error(request, _(
-                            "For changing your password, you have to enter your current password as well."))
+                        messages.error(request, _("For changing your password, you have to enter your current password as well."))
                         return redirect("useroperations:change_profile")
                 user.mb_user_email = form.cleaned_data['email']
                 user.mb_user_department = form.cleaned_data['department']
@@ -706,21 +681,17 @@ def change_profile_view(request):
                 if form.cleaned_data['dsgvo'] == True:
                     user.timestamp_dsgvo_accepted = time.time()
                     # set session variable dsgvo via session wrapper php script
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId=' +
-                                            request.COOKIES.get(SESSION_NAME)+'&operation=set&key=dsgvo&value=true', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=dsgvo&value=true', verify=INTERNAL_SSL)
                 else:
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId=' +
-                                            request.COOKIES.get(SESSION_NAME) + '&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME) +'&operation=set&key=dsgvo&value=false', verify=INTERNAL_SSL)
                     user.timestamp_dsgvo_accepted = None
 
                 if form.cleaned_data['preferred_gui'] == 'Geoportal-SL-2020':
                     # set session variable preferred_gui via session wrapper php script
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(
-                        SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-SL-2020', verify=INTERNAL_SSL)
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value=Geoportal-SL-2020', verify=INTERNAL_SSL)
                 else:
-                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(
-                        SESSION_NAME)+'&operation=set&key=preferred_gui&value='+DEFAULT_GUI, verify=INTERNAL_SSL)
-
+                    response = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_sessionWrapper.php?sessionId='+request.COOKIES.get(SESSION_NAME)+'&operation=set&key=preferred_gui&value='+DEFAULT_GUI, verify=INTERNAL_SSL)
+                
                 user.save()
                 messages.success(request, _("Successfully changed data"))
                 return redirect('useroperations:index')
@@ -762,13 +733,11 @@ def delete_profile_view(request):
     """
     geoportal_context = GeoportalContext(request=request)
     if request.COOKIES.get(SESSION_NAME) is not None:
-        session_data = php_session_data.get_mapbender_session_by_memcache(
-            request.COOKIES.get(SESSION_NAME))
+        session_data = php_session_data.get_mapbender_session_by_memcache(request.COOKIES.get(SESSION_NAME))
         if session_data != None:
             if b'mb_user_id' in session_data and session_data[b'mb_user_name'] != b'guest':
 
-                session_data = php_session_data.get_mb_user_session_data(
-                    request)
+                session_data = php_session_data.get_mb_user_session_data(request)
 
                 request.session["current_page"] = "delete_profile"
 
@@ -786,8 +755,7 @@ def delete_profile_view(request):
                     if form.is_valid():
                         # get user
                         session_id = request.COOKIES.get(SESSION_NAME)
-                        session_data = php_session_data.get_mapbender_session_by_memcache(
-                            session_id)
+                        session_data = php_session_data.get_mapbender_session_by_memcache(session_id)
                         try:
                             userid = session_data[b'mb_user_id']
                         except KeyError:
@@ -797,27 +765,22 @@ def delete_profile_view(request):
                         user = MbUser.objects.get(mb_user_id=userid)
 
                         # check if password is correct!
-                        pw = form.cleaned_data.get(
-                            "confirmation_password", None)
+                        pw = form.cleaned_data.get("confirmation_password", None)
                         if pw is not None and user.password == useroperations_helper.bcrypt_password(pw, user):
                             error = False
                             if Wms.objects.filter(wms_owner=userid).exists() or Wfs.objects.filter(wfs_owner=userid).exists():
-                                messages.error(request, _(
-                                    "You are owner of registrated services - please delete them or give the ownership to another user."))
+                                messages.error(request, _("You are owner of registrated services - please delete them or give the ownership to another user."))
                                 error = True
                             if GuiMbUser.objects.filter(fkey_mb_user_id=userid).exists() and GuiMbUser.objects.filter(mb_user_type='owner'):
-                                messages.error(request, _(
-                                    "You are owner of guis/applications - please delete them or give the ownership to another user."))
+                                messages.error(request, _("You are owner of guis/applications - please delete them or give the ownership to another user."))
                                 error = True
                             if MbProxyLog.objects.filter(fkey_mb_user_id=userid).exists():
-                                messages.error(request, _(
-                                    "There are logged service accesses for this user profile. Please connect the service administrators for the billing first."))
+                                messages.error(request, _("There are logged service accesses for this user profile. Please connect the service administrators for the billing first."))
                                 error = True
 
                             if not error:
                                 user.is_active = False
-                                user.activation_key = useroperations_helper.random_string(
-                                    50)
+                                user.activation_key = useroperations_helper.random_string(50)
                                 user.timestamp_delete = time.time()
                                 user.save()
 
@@ -832,8 +795,7 @@ def delete_profile_view(request):
                                     fail_silently=False,
                                 )
 
-                                php_session_data.delete_mapbender_session_by_memcache(
-                                    session_id)
+                                php_session_data.delete_mapbender_session_by_memcache(session_id)
                                 messages.success(request, _("Successfully deleted the user:")
                                                  + " {str_name} ".format(str_name=user.mb_user_name)
                                                  + _(". In case this was an accident, we sent you a link where you can reactivate "
@@ -841,8 +803,7 @@ def delete_profile_view(request):
 
                                 return redirect('useroperations:logout')
                         else:
-                            messages.error(request, _(
-                                "Password invalid. Profile not deleted."))
+                            messages.error(request, _("Password invalid. Profile not deleted."))
                             return redirect("useroperations:change_profile")
             else:
                 return redirect('useroperations:index')
@@ -909,18 +870,13 @@ def map_viewer_view(request):
     request_get_params_dict = request.GET.dict()
 
     # is regular call means the request comes directly from the navigation menu in the page, without selecting a search result
-    is_regular_call = len(request_get_params_dict) == 0 or request_get_params_dict.get(
-        "searchResultParam", None) is None
-    request_get_params = dict(urllib.parse.parse_qsl(
-        request_get_params_dict.get("searchResultParam"), keep_blank_values=True))
+    is_regular_call = len(request_get_params_dict) == 0 or request_get_params_dict.get("searchResultParam", None) is None
+    request_get_params = dict(urllib.parse.parse_qsl(request_get_params_dict.get("searchResultParam"), keep_blank_values=True))
     template = "geoportal_external.html"
-    # get selected gui from params, use default gui otherwise!
-    gui_id = context_data.get("preferred_gui", DEFAULT_GUI)
+    gui_id = context_data.get("preferred_gui", DEFAULT_GUI)  # get selected gui from params, use default gui otherwise!
 
-    wmc_id = request_get_params.get(
-        "WMC", "") or request_get_params.get("wmc", "")
-    wms_id = request_get_params.get(
-        "WMS", "") or request_get_params.get("wms", "")
+    wmc_id = request_get_params.get("WMC", "") or request_get_params.get("wmc", "")
+    wms_id = request_get_params.get("WMS", "") or request_get_params.get("wms", "")
 
     # resolve wms_id to LAYER[id] if the given parameter is not an uri but rather an integer
     try:
@@ -1026,8 +982,7 @@ def activation_view(request, activation_key=""):
         template = '404.html'
 
     else:
-        user = MbUser.objects.get(
-            activation_key=activation_key, is_active=False)
+        user = MbUser.objects.get(activation_key=activation_key, is_active=False)
         user.is_active = True
         user.mb_user_login_count = 0
         activated = True
@@ -1046,6 +1001,7 @@ def activation_view(request, activation_key=""):
 
 @check_browser
 def feedback_view(request: HttpRequest):
+
     """ Renders a feedback form for the user
 
     Args:
@@ -1074,14 +1030,13 @@ def feedback_view(request: HttpRequest):
                     'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
                     'response': recaptcha_response
                 }
-                r = requests.post('https://www.google.com/recaptcha/api/siteverify',
-                                  proxies=PROXIES, data=data, verify=INTERNAL_SSL)
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', proxies=PROXIES, data=data, verify=INTERNAL_SSL)
                 result = r.json()
 
                 if not result['success']:
-                    messages.error(request, _(
-                        "Invalid reCAPTCHA. Please try again."))
+                    messages.error(request, _("Invalid reCAPTCHA. Please try again."))
                     return redirect('useroperations:feedback')
+
 
             messages.success(request, _("Feedback sent. Thank you!"))
             msg = {
@@ -1093,9 +1048,7 @@ def feedback_view(request: HttpRequest):
 
                 send_mail(
                     _("Geoportal Feedback"),
-                    _("Feedback from ") +
-                    form.cleaned_data["first_name"] + " " +
-                    form.cleaned_data["family_name"]
+                    _("Feedback from ") + form.cleaned_data["first_name"] + " " + form.cleaned_data["family_name"]
                     + ", \n \n" +
                     form.cleaned_data["message"],
                     form.cleaned_data["email"],
@@ -1104,8 +1057,7 @@ def feedback_view(request: HttpRequest):
                 )
             except smtplib.SMTPException:
                 logger.error("Could not send feedback mail!")
-                messages.error(request, _(
-                    "An error occured during sending. Please inform an administrator."))
+                messages.error(request, _("An error occured during sending. Please inform an administrator."))
             return index_view(request=request)
         else:
             messages.error(request, _("Captcha was wrong! Please try again"))
@@ -1126,7 +1078,7 @@ def feedback_view(request: HttpRequest):
             "btn_send": _("Send"),
             "disclaimer": disclaimer,
             "use_recaptcha": USE_RECAPTCHA,
-            "recaptcha_public_key": GOOGLE_RECAPTCHA_PUBLIC_KEY,
+            "recaptcha_public_key" : GOOGLE_RECAPTCHA_PUBLIC_KEY,
         }
         geoportal_context = GeoportalContext(request=request)
         geoportal_context.add_context(params)
@@ -1135,6 +1087,7 @@ def feedback_view(request: HttpRequest):
 
 @check_browser
 def service_abo(request: HttpRequest):
+
     """ Displays the serice abos of a user
 
     Args:
@@ -1154,9 +1107,9 @@ def service_abo(request: HttpRequest):
     geoportal_context = GeoportalContext(request=request)
     return render(request=request, context=geoportal_context.get_context(), template_name=template)
 
-
 @check_browser
 def open_linked_data(request: HttpRequest):
+
     """ Open Linked Data Page
 
     Args:
