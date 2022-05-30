@@ -12,21 +12,16 @@ import requests
 from pymemcache.client import base
 from phpserialize import *
 from django.http import HttpRequest
-from Geoportal.settings import DEFAULT_GUI, HTTP_OR_SSL, INTERNAL_SSL, PROJECT_DIR, SESSION_NAME
+from Geoportal.settings import DEFAULT_GUI, HTTP_OR_SSL, INTERNAL_SSL, PROJECT_DIR, SESSION_NAME, MEMCACHED_SESSION_PREFIX
 from Geoportal.utils.mbConfReader import get_mapbender_config_value
 from useroperations.models import MbUser
 
 
-
-### IMPORTANT NOTE ####
-# LATER VERSIONS OF php-memcached will use "memc.sess.key.XYZ" as session storage string,
-# If users dont see their login status anymore in the frontend after php upgrade, 
-# this will probably be the reason why, has to be changed in line 28 AND 42.
 def get_mapbender_session_by_memcache(session_id):
     client = base.Client(('localhost', 11211))
 
     try:
-        session_data = client.get('memc.sess.' + session_id)
+        session_data = client.get(MEMCACHED_SESSION_PREFIX + session_id)
     except ConnectionRefusedError:
         print("Connection Refused!Memcached not running?")
 
@@ -39,7 +34,7 @@ def get_mapbender_session_by_memcache(session_id):
 
 def delete_mapbender_session_by_memcache(session_id):
     client = base.Client(('localhost', 11211))
-    client.delete('memc.sess.' + session_id)
+    client.delete(MEMCACHED_SESSION_PREFIX + session_id)
 
 
 def get_session_data(request):

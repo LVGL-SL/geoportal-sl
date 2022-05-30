@@ -27,11 +27,9 @@ SESSION_NAME = 'PHPSESSID'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", default=True)
+DEBUG = env("DEBUG", default=False)
 
 DEFAULT_LOGGING['handlers']['console']['filters'] = []
 
@@ -232,3 +230,6 @@ PROXIES = {
     "http": env("PROXY_HTTP", default=""),
     "https": env("PROXY_HTTPS", default="")
 }
+
+# Memcached
+MEMCACHED_SESSION_PREFIX = env("MEMCACHED_SESSION_PREFIX", default='memc.sess.')
