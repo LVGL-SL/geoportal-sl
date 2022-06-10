@@ -138,11 +138,11 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=django,mapbender,public'
         },
-        'NAME': env("DATABASE_NAME"),
-        'USER': env("DATABASE_USER"),
-        'PASSWORD': env("DATABASE_PASSWORD"),
-        'HOST': env("DATABASE_HOST"),
-        'PORT': env("DATABASE_PORT"),
+        'NAME': env("DATABASE_NAME", default="mapbender"),
+        'USER': env("DATABASE_USER", default=""),
+        'PASSWORD': env("DATABASE_PASSWORD", default=""),
+        'HOST': env("DATABASE_HOST", default=""),
+        'PORT': env("DATABASE_PORT", default=""),
     }
 }
 
