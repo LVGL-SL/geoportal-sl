@@ -76,6 +76,9 @@ def download(request):
         if host not in whitelist:
             response = HttpResponse("host not in whitelist",status=418)
 
+    if numURLs > 20:
+        response = HttpResponse("maximum 20 tiles allowed", status=409)
+
     # check if directory has space left
     disk = shutil.disk_usage(INSPIRE_ATOM_DIR)
 
@@ -92,7 +95,7 @@ def download(request):
             response = HttpResponse("No space left please try again later!",status=400)
 
     # download and send email
-    if response == "":
+    if response is "":
 
         os.mkdir(INSPIRE_ATOM_DIR + body['uuid'])
 

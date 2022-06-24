@@ -3,7 +3,6 @@ setup/setup.conf
 
 # Visual Studio Code
 .vscode
-.dcignore
 
 # https://gist.github.com/santoshpurbey/6f982faf1eacdac153ffd86a3a694239
 
@@ -62,7 +61,7 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-static/
+/static/
 
 # Flask stuff:
 instance/

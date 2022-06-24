@@ -13,13 +13,12 @@
     </article>
     {% endif %}
     <article class="cookie-text">
+
         {% blocktrans %}
         This webpage uses cookies to provide you the best user experience. <br>
         On further questions regarding personal data security, please read our
         {% endblocktrans %}
-        <a href="https://www.saarland.de/SharedDocs/Downloads/DE/LVGL/Datenschutz/datenschutz_geoportal.html" target="_blank">
-            {% trans 'data policy' %}
-        </a>.
+        <a href="{%url 'useroperations:index' wiki_keyword='Datenschutz' %}">{% trans 'data policy' %}</a>.
     </article>
     <div class="cookie-button form-submit-button" onclick="sc()">{% trans 'I understand!' %}</div>
 </div>
