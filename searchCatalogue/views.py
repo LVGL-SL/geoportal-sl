@@ -11,7 +11,7 @@ import smtplib
 import time
 
 from django.core.mail import send_mail
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
