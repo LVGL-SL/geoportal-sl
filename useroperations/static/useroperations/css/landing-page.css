@@ -48,6 +48,10 @@
     text-align: center;
 }
 
+.landing-page-dispatch p {
+    margin: 1.5em;
+}
+
 .landing-page-dispatch-information {
     background-color: var(--secondary-light);
     border: var(--secondary-placeholder) var(--border-strength) solid;
