@@ -71,9 +71,9 @@ def download(request):
 
 
     #check if it is an internal server, if so only internal email address will have access
-    if re.match('.*\.rlp$', downloadurl.hostname):
+    if re.match('.*\.saarland$', downloadurl.hostname):
         #print("rlp")
-        if not re.match('.*\.rlp.de$',body['user_email'].split("@")[1]):
+        if not re.match('.*\.saarland.de$',body['user_email'].split("@")[1]):
             #print("no rlp email")
             return HttpResponse('User is not allowed to access this ressource',status=403)
     #else:
@@ -166,7 +166,7 @@ def download(request):
         elif secured == 1:
             query = urllib.parse.urlparse(urllib.parse.unquote(url)).query
             # transform url to local owsproxy http://localhost/owsproxy/{sessionid}/{securityhash}?{request}
-            new_url = "https://www.geoportal.rlp.de/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
+            new_url = "https://www.geoportal.saarland.de/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
             #print(urllib.parse.urlparse(urllib.parse.unquote(url)).query)
             #print(new_url)
             download = requests.get(new_url, stream=True, proxies=None, verify=False)

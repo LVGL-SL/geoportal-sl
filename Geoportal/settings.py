@@ -23,7 +23,7 @@ environ.Env.read_env()
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = "/opt/geoportal/GeoPortal.sl"
 PROJECT_DIR = "/opt/geoportal/"
-SESSION_NAME = 'MAPBENDER'
+SESSION_NAME = 'PHPSESSID'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -222,8 +222,8 @@ GOOGLE_RECAPTCHA_PUBLIC_KEY = env("GOOGLE_RECAPTCHA_PUBLIC_KEY", default='')
 MOBILE_WMC_ID = None
 
 # Directory for inspire Downloads
-INSPIRE_ATOM_DIR = ""  # eg: "/var/www/html/inspiredownloads/"
-INSPIRE_ATOM_ALIAS = ""  # eg: "/inspiredownloads/"
+INSPIRE_ATOM_DIR = "/data2/inspiredownloads/"  # eg: "/var/www/html/inspiredownloads/"
+INSPIRE_ATOM_ALIAS = "/inspiredownloads/"  # eg: "/inspiredownloads/"
 
 # Farward Proxy
 PROXIES = {

@@ -1,7 +1,7 @@
 /**
  * Options
  */
-const CheckForNewsPlaceIcon = true;
+//const CheckForNewsPlaceIcon = true;
 
 /**
  * Returns the cookie if found
