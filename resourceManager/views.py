@@ -14,9 +14,14 @@ import urllib
 import requests
 import shutil
 import os
+import environ
+
 
 @csrf_exempt
 def download(request):
+
+    env = environ.Env()
+    environ.Env.read_env()
 
     if request.META['HTTP_HOST'] not in ["127.0.0.1","localhost",HOSTNAME]:
         return HttpResponse('Only internal requests!')
@@ -166,7 +171,8 @@ def download(request):
         elif secured == 1:
             query = urllib.parse.urlparse(urllib.parse.unquote(url)).query
             # transform url to local owsproxy http://localhost/owsproxy/{sessionid}/{securityhash}?{request}
-            new_url = "https://www.geoportal.saarland.de/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
+            # new_url = "https://www.geoportal.saarland.de/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
+            new_url = 'https://'+env("HOSTNAME",default="https://geoportal.saarland.de")+"/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
             #print(urllib.parse.urlparse(urllib.parse.unquote(url)).query)
             #print(new_url)
             download = requests.get(new_url, stream=True, proxies=None, verify=False)
