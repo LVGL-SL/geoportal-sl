@@ -784,7 +784,7 @@ msgid "A navigation menu icon"
 msgstr "Ein Navigationsmenüsymbol"
 
 #: templates/base.html:230
-msgid "Informations"
+msgid "Information"
 msgstr "Informationen"
 
 #: templates/base.html:240 useroperations/templates/landing_page.html:49
