@@ -1311,8 +1311,9 @@ msgid "More information"
 msgstr "Layer trägt Informationen"
 
 #: useroperations/templates/topics.html:103
-msgid "Information"
-msgstr "Informationen"
+#commented out due to duplicate definition for navigation bar
+#msgid "Information"
+#msgstr "Informationen"
 
 #: useroperations/views.py:77
 msgid "Login failed"
