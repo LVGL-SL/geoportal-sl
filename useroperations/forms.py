@@ -47,7 +47,7 @@ class ChangeProfileForm(forms.Form):
     newsletter = forms.BooleanField(initial=True, label=_("I want to sign up for the newsletter"), required=False, widget=forms.CheckboxInput(attrs={'title':_("Sign up for the newsletter.")}))
     survey = forms.BooleanField(initial=True, label=_("I want to participate in surveys"), required=False, widget=forms.CheckboxInput(attrs={'title':_("Participate in surveys.")}))
     create_digest = forms.BooleanField(initial=False, label=_("Use HTTP Digest Authentication for secured Services"), required=False, widget=forms.CheckboxInput(attrs={'title':_("Use HTTP Digest Authentication for secured Services.")}))
-    dsgvo = forms.BooleanField(initial=False, label=mark_safe(_("I understand and accept that my data will be automatically processed and securely stored, as it is stated in the general data protection regulation (GDPR).") + '(<a href="/article/Datenschutz" target="_blank">' + str(_("privacy policy")) + '</a>)'), required=False, widget=forms.CheckboxInput(attrs={'title':_("Accept privacy policy.")}))
+    dsgvo = forms.BooleanField(initial=False, label=mark_safe(_("I understand and accept that my data will be automatically processed and securely stored, as it is stated in the general data protection regulation (GDPR).") + '(<a href="https://www.saarland.de/SharedDocs/Downloads/DE/LVGL/Datenschutz/datenschutz_geoportal.html" target="_blank">' + str(_("privacy policy")) + '</a>)'), required=False, widget=forms.CheckboxInput(attrs={'title':_("Accept privacy policy.")}))
 
 class PasswordResetForm(forms.Form):
     name = forms.CharField(max_length=100, label=_("Username"), widget=forms.TextInput(attrs={'title':_("Please enter your username.")}))
