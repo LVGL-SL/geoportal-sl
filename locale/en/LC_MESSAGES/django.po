@@ -772,8 +772,8 @@ msgstr ""
 #: templates/base.html:230
 #, fuzzy
 #| msgid "Information"
-msgid "Information"
-msgstr ""
+#msgid "Information"
+#msgstr ""
 
 # Navigation items
 #: templates/base.html:240 useroperations/templates/landing_page.html:49
