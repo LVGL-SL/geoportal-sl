@@ -172,7 +172,8 @@ def download(request):
             query = urllib.parse.urlparse(urllib.parse.unquote(url)).query
             # transform url to local owsproxy http://localhost/owsproxy/{sessionid}/{securityhash}?{request}
             # new_url = "https://www.geoportal.saarland.de/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
-            new_url = 'https://'+env("HOSTNAME",default="https://geoportal.saarland.de")+"/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
+            #new_url = 'https://'+env("HOSTNAME",default="https://geoportal.saarland.de")+"/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
+            new_url = "https://127.0.0.1/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
             #print(urllib.parse.urlparse(urllib.parse.unquote(url)).query)
             #print(new_url)
             download = requests.get(new_url, stream=True, proxies=None, verify=False)
