@@ -771,7 +771,6 @@ msgstr ""
 # Navigation items
 #: templates/base.html:230
 #, fuzzy
-#| msgid "Information"
 #msgid "Information"
 #msgstr ""
 
