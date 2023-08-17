@@ -29,6 +29,7 @@ from useroperations.utils import useroperations_helper
 from .forms import RegistrationForm, LoginForm, PasswordResetForm, ChangeProfileForm, DeleteProfileForm, FeedbackForm
 from .models import ApplicationSliderElement, LandingPageDispatch, \
     MbUser, MbGroup, MbUserMbGroup, MbRole, GuiMbUser, MbProxyLog, Wfs, Wms
+from Geoportal.utils.utils import print_debug
 
 logger = logging.getLogger(__name__)
 
@@ -541,17 +542,22 @@ def pw_reset_view(request):
             username = form.cleaned_data['name']
             email = form.cleaned_data['email']
 
-
-            if not MbUser.objects.filter(mb_user_name=username, mb_user_email=email):
+            #Ticket #6412 Fix for case-sensitive e-mail and username lookup (Mail adresses in DB were populated as entered during registration)
+            user = None
+            try:
+                user = useroperations_helper.model_objects_case_insensitive_get(MbUser, mb_user_name = username, mb_user_email = email)
+            except ValueError as e:
                 messages.error(request, _("No Account with this Username or Email found"))
-            else:
-                user = MbUser.objects.get(mb_user_name=username, mb_user_email=email)
+                print_debug("Error: No Account with this Username or Email found - Exception:" + str(e))
+            except Exception as e:
+                messages.error(request, _("An unexpected internal server error occured." +
+                                          "Please contact our support."))
+                print_debug("Unexpected exception raised: " + str(e))
+          
+            if user is not None:
                 email = user.mb_user_email
-
                 newpassword = useroperations_helper.random_string(20)
-
                 user.password = (str(bcrypt.hashpw(newpassword.encode('utf-8'), bcrypt.gensalt(12)),'utf-8'))
-
                 user.save()
 
                 send_mail(
@@ -564,10 +570,10 @@ def pw_reset_view(request):
                         fail_silently=False,
                 )
 
-
                 messages.success(request, _("Password reset was successful, check your mails."))
                 return redirect('useroperations:login')
-
+            
+                
     return render(request, "crispy_form_no_action.html", geoportal_context.get_context())
 
 

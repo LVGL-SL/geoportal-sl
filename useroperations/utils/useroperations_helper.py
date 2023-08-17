@@ -8,8 +8,11 @@ from lxml import html
 from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, INTERNAL_SSL, MULTILINGUAL
 from Geoportal.utils import utils
 from searchCatalogue.utils.searcher import Searcher
-from useroperations.models import MbUser
+from useroperations.models import *
 from useroperations.settings import INSPIRE_CATEGORIES, ISO_CATEGORIES
+from django.core.exceptions import MultipleObjectsReturned
+from operator import and_
+from functools import reduce
 
 
 def random_string(stringLength=15):
@@ -192,3 +195,39 @@ def bcrypt_password(pw: str, user: MbUser):
          The encrypted password string
     """
     return (str(bcrypt.hashpw(pw.encode('utf-8'), user.password.encode('utf-8')), 'utf-8'))
+
+
+def model_objects_case_insensitive_get(model, **kwargs):
+    """ Database lookup for "columnname: value"-pairs of a model to return one single model-object as the model.objects.get-Method does
+        with an additional case insensitive lookup
+
+    Args:
+        model (Type): The django model class to query
+        **kwargs: Variable number of keyword arguments representing column-value pairs to filter the queryset
+    Returns:
+        model[Type] The model instance that matches the filtering criteria, if found
+
+    Raises:
+        ValueError: If no matching instance is found
+        ValueError: If multiple instances match the given criteria
+
+    Example usage:
+            try:
+                user = useroperations_helper.model_objects_case_insensitive_get(MbUser, mb_username = username, mb_user_email = email)
+            except ValueError as e:
+                #Create useful errormessage here
+    """
+
+
+    queryset = reduce(and_, [model.objects.filter(**{f'{column_name}__iexact': value_to_filter_on}) for column_name, value_to_filter_on in kwargs.items()])
+    result_count = queryset.count()
+
+    if result_count == 1:
+        return model(**queryset.values().first())  # Convert dictionary to model object
+    elif result_count == 0:
+        raise ValueError(f'{model.__name__} matching query does not exist.')
+    else:
+        raise MultipleObjectsReturned('get() returned more than one {} -- it returned {}! Lookup parameters were {}__iexact={!r}'.format(
+            model.__name__, result_count, kwargs
+        ))
+
