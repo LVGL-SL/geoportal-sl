@@ -1,10 +1,10 @@
 {% load static i18n %}
-    {% if ftype.mdLink is not None %}
+    <!-- {% if ftype.mdLink is not None %}-->
     <a title='zu {{ ftype.title }}' href='{{ ftype.mdLink }}' target="_blank" class="no-text-decoration">
         <div class="search-result-title">
             <!-- {% if parent_result is not None %}{{ parent_result.title }}    ▶   {% endif %}-->{{ ftype.title }}
         </div> </a>
-    {% endif %}
+   <!--  {% endif %}-->
 <div class="search-result-area">
 
         <div class="img-area result-overview">
@@ -50,7 +50,7 @@
         {% endwith %}
     {% endwith %}
 
-{% if ftype.modul is not None %}
+{% if ftype.ftype is not None  %}
     <!-- There are more children for this result. Make it collapsible! -->
     <div class="sublayer">
         <div class="sublayer-more">
@@ -59,15 +59,20 @@
                 <span class="accordion icon closed" title="Ausklappen"></span>
             </div>
         </div>
+		
         {% with ftype as parent_result %}
-            {% for modul in ftype.modul %}
-                {% with modul as ftype %}
-                    <div class="result-item-layer hide">
+            {% for ftype2 in ftype.ftype %}
+                {% with ftype2  as ftype %}
+				<div class="result-item-layer hide">
+				<div class="result--item -js-result-wfs">
+                    <!-- <div class="result-item-layer hide"> -->
                         {% include 'primary/wfs/wfs_search_result.html' %}
-                    </div>
+                     </div>
+				</div>
                 {% endwith %}
             {% endfor %}
         {% endwith %}
+		
     </div>
 {% else %}
     <!-- ToDo: Add to map functionality for lower level  -->

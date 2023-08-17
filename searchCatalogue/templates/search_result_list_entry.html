@@ -109,7 +109,7 @@
                     </div>
                 </a>
             {% else %}
-                <a class="resource-element-action icn-add-map" href="FEATURETYPE[id]={{ layer_data.id }}" id="add-map-button" title="{% trans 'Add to mapviewer' %}">
+                    <a class="resource-element-action icn-add-map" href="https://{{ hostname }}/spatial-objects/{{result.id}}/collections/{{layer_data.name}}" target="_blank" title="{% trans 'Add to mapviewer' %}">
                     <div >
                         <i class="fas fa-plus"></i>
                     </div>

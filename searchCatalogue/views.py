@@ -552,7 +552,8 @@ def get_data_primary(request: HttpRequest):
         "view_map_url": "//localhost/portal/karten.html?",
         "wms_action_url": HTTP_OR_SSL + HOSTNAME + "/mapbender/php/wms.php?",
         "OPEN_DATA_URL": OPEN_DATA_URL,
-        "sources": viewHelper.get_source_catalogues(False)
+        "sources": viewHelper.get_source_catalogues(False),
+        "hostname" : HOSTNAME
     }
 
     # since we need to return plain text to the ajax handler, we need to use render_to_string
