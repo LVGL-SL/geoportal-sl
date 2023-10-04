@@ -219,6 +219,10 @@ msgid "No results found, please use another search term..."
 msgstr ""
 "Keine Ergebnisse gefunden, bitte versuchen Sie einen anderen Suchbegriff..."
 
+#: searchCatalogue/templates/search_result_actions.html:94
+msgid "OGC API - Featuretype:"
+msgstr "OGC API - Featuretype:"
+
 #: searchCatalogue/templates/other/coupled_resources.html:6
 #: searchCatalogue/templates/search_result_actions.html:10
 #: searchCatalogue/templates/search_result_actions.html:22

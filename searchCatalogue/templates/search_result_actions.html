@@ -81,7 +81,14 @@
                         <li class="resource-element">
                             <a href="{{ feed.htmlLink }}" target="_blank">
                                 <div class="resource-view-title" title="{% trans 'Metadata' %}">
-                                    {{ feed.serviceTitle }}
+                                    <!--#6654 Added a condition for ogcapifeatures because the serviceTitle doesn't 
+                                    contain the Featuretype information which is supposed to be shown as it's the case for the WFS Interface
+                                    Information is populated in the resourceName field in this case-->
+                                    {% if feed.type != 'ogcapifeatures' %}
+                                        {{ feed.serviceTitle }}
+                                    {% else %}
+                                        {% trans 'OGC API - Featuretype:' %} {{feed.resourceName}}
+                                        {% endif %}
                                     <br>
                                     ({{ feed.serviceUuid }})
                                 </div></a>
