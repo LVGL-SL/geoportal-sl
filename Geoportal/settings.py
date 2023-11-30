@@ -57,7 +57,7 @@ PRIMARY_CATALOGUE = 2
 PRIMARY_SRC_IMG = "primary_results.png"
 DE_CATALOGUE = 2
 DE_SRC_IMG = "de_results.png"
-EU_CATALOGUE = 3
+EU_CATALOGUE = 4
 EU_SRC_IMG = "eu_results.png"
 OPEN_DATA_URL = "https://okfn.org/opendata/"
 
