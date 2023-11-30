@@ -11,7 +11,8 @@
                 <img alt="{% trans 'Smaller version of map preview' %}" title="{% trans 'Click for large image' %}" class="img-preview max-width-100p" src="{% if layer.previewURL is not None %}{{ layer.previewURL }}{% else %}{% static 'searchCatalogue/images/no_image.png' %}{% endif %}">
                 <img alt="{% trans 'Bounding box around area of interest on a map' %}" title="{% trans 'Click for large image' %}" class="img-preview max-width-100p" src="{% if layer.extent_url is not None or layer.extent_url|length != 0 %}{{ layer.extent_url }}{% else %}{% static 'searchCatalogue/images/no_image.png' %}{% endif %}">
             </div>
-            <article class="search-result-detail">{{ layer.abstract }}</article>
+            <!--Ticket #5238 Text was html formatted -> Escape off-->
+            <article class="search-result-detail">{% autoescape off %} {{ layer.abstract }}{% endautoescape %}</article>
         </div>
         <div title="{% trans 'Total view count' %}" class="view-count">
             <i class="fas fa-eye"></i>
