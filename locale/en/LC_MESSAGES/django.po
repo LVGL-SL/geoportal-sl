@@ -902,10 +902,8 @@ msgid "Please enter your username."
 msgstr ""
 
 #: useroperations/forms.py:18 useroperations/forms.py:37
-msgid ""
-"Please enter your password with at least 9 characters. Allowed special chars "
-"are: @#$%&+=!:-_"
-msgstr ""
+msgid "Please enter your password with at least 9 characters."
+msgstr "Please enter your password with at least 9 characters. Allowed special chars are: @#$%&+=!:-_"
 
 #: useroperations/forms.py:18
 msgid "Please use at least 9 characters."
@@ -922,7 +920,7 @@ msgstr "Information"
 
 #: useroperations/forms.py:19
 msgid "PasswordConfirmation"
-msgstr ""
+msgstr "Password confirmation"
 
 #: useroperations/forms.py:21 useroperations/forms.py:40
 msgid "Organization"
