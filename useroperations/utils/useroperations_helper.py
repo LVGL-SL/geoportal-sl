@@ -39,7 +39,10 @@ def __set_tag(dom, tag, attribute, prefix):
         if tag == 'a':
             # check if the page we want to go to is an internal or external page
             title = elem.get("title", "").replace(" ", "_")
-            if title and searcher.is_article_internal(title):
+            #At least temporarily removed the check on title being initial due to internal links on 
+            #mediawiki pages like "information" not working anymore
+            #if title and searcher.is_article_internal(title):
+            if searcher.is_article_internal(title):
                 attrib = "/article/" + title
         if protocol not in attrib:
             elem.set(attribute, prefix + attrib)
