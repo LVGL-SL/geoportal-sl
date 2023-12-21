@@ -11,7 +11,7 @@
                 <img class="img-preview max-width-100p" src="{% if result.previewURL is not None %}{{ result.previewURL }}{% else %}{% static 'searchCatalogue/images/no_image.png' %}{% endif %}">
                 <img class="img-preview max-width-100p" src="{% if result.extent_url is not None or result.extent_url|length == 0 %}{{ result.extent_url }}{% else %}{% static 'searchCatalogue/images/no_image.png' %}{% endif %}">
             </div>
-            <article class="search-result-detail">{{ result.abstract }}</article>
+            <article class="search-result-detail">{% autoescape off %} {{ result.abstract }}{% endautoescape %}</article>
         </div>
         <div title="{% trans 'Total view count' %}" class="view-count">
             <i class="fas fa-eye"></i>
