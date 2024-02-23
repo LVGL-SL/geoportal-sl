@@ -916,7 +916,7 @@ msgstr ""
 # Navigation items
 #: useroperations/forms.py:19 useroperations/forms.py:38
 msgid "Password confirmation."
-msgstr "Information"
+msgstr "Password confirmation."
 
 #: useroperations/forms.py:19
 msgid "PasswordConfirmation"
