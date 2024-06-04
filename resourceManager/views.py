@@ -76,6 +76,7 @@ def download(request):
 
 
     #check if it is an internal server, if so only internal email address will have access
+    #if re.match('.*\lkvk.saarland.de$', downloadurl.hostname):??
     if re.match('.*\.saarland$', downloadurl.hostname):
         #print("rlp")
         if not re.match('.*\.saarland.de$',body['user_email'].split("@")[1]):
@@ -103,7 +104,11 @@ def download(request):
     elif resourceType == "wfs":
         resourceType="featuretype"
         wfs_id = refererparams["wfsid"][0]
-        ressource_id = WfsFeaturetype.objects.get(fkey_wfs_id=wfs_id).featuretype_id
+        #Ticket #7352: Including inspire_download=1 to enable logic for wfs
+        #Currently a working workaround since the flag is only supposed to be set once for our services
+        #For an adeqequate solution we'd need the featuretype_id here -> Delivered from php -> js (data)-> request params
+        #Alternatively -> Change select conditions to make sure the correct ft is selected 
+        ressource_id = WfsFeaturetype.objects.get(fkey_wfs_id=wfs_id, inspire_download=1).featuretype_id
         secured_service_hash = Wfs.objects.get(wfs_id=wfs_id).wfs_owsproxy
         #print(ressource_id)
     else:
@@ -165,11 +170,19 @@ def download(request):
     for id, url in enumerate(body['urls']):
         if "/" in body['names'][id]:
             body['names'][id] = body['names'][id].replace("/", "-")
-
+ 
         if secured == 0:
-            download = requests.get(urllib.parse.unquote(url), stream=True, proxies=PROXIES, verify=False)
+            #Ticket #7275: "Encoding" the +-symbol explicitely due to issues with certain servers
+            #Might make sense to generally do this but for now this is only getting tested for one case 
+            decoded_url = urllib.parse.unquote_plus(url)
+            url_with_encoded_plus = decoded_url.replace("gml+xml", "gml%2Bxml")
+            #download = requests.get(urllib.parse.unquote_plus(url,encoding='utf-8',  errors='replace'), stream=True, proxies=PROXIES, verify=False)
+            download = requests.get(url_with_encoded_plus, stream=True, proxies=PROXIES, verify=False)
+            #print(download.raw)
         elif secured == 1:
             query = urllib.parse.urlparse(urllib.parse.unquote(url)).query
+            #Ticket #7275: "Encoding" the +-symbol explicitely due to issues with certain servers
+            query = query.replace("gml+xml", "gml%2Bxml")
             # transform url to local owsproxy http://localhost/owsproxy/{sessionid}/{securityhash}?{request}
             # new_url = "https://www.geoportal.saarland.de/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
             #new_url = 'https://'+env("HOSTNAME",default="https://geoportal.saarland.de")+"/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
