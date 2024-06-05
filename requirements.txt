@@ -32,4 +32,3 @@ sqlparse==0.4.2
 ua-parser==0.10.0
 urllib3==1.26.8
 user-agents==2.2.0
-Werkzeug==2.0.3
