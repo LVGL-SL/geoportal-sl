@@ -1,0 +1,117 @@
+/*@author LVGL*/
+:root {
+  --akzentfarbe: #002f5c;
+  --grau: #eeeeee;
+  --gruen: #5e9627;
+  --weiss: #ffffff;
+}
+
+
+body{
+    line-height: 1.2;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+#article_content a{
+    color: var(--akzentfarbe);
+}
+
+.map-viewer-toggler {
+    box-sizing: content-box;
+
+}
+.map-viewer-selector, .map-applications-toggler{
+    box-sizing: content-box;
+    margin: 1em 0 0 0;
+}
+
+#article_content button.btn.btn-link {
+	color:var(--akzentfarbe);
+	font-weight: bold;
+	font-size: 18px;
+    text-decoration: none;
+}
+
+#article_content button.btn.btn-link, .accordion-button:focus {
+    box-shadow:0 0 0 0;
+}
+
+.accordion-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 1rem;
+    color: var(--akzentfarbe);
+    text-align: left;
+    border: 0;
+    border-radius: 0;
+    overflow-anchor: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
+}
+
+
+
+
+.accordion-button:not(.collapsed) {
+    color:var(--akzentfarbe); 
+    background-color: #fff;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.125);
+}
+
+
+.accordion .accordion-item{
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+
+
+.accordion-body img {
+    max-width: 100%;
+    height: auto;
+}
+.list-unstyled li {
+    margin-bottom: 1.6rem;
+}
+.accordion-body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+@media (min-width: 768px) {
+    .accordion-body {
+        flex-direction: row;
+    }
+}
+.links-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+@media (max-width: 767.98px) {
+    .accordion-body {
+        flex-direction: column;
+    }
+    .links-container {
+        margin-top: 1.5rem;
+    }
+    .list-unstyled li {
+        margin-bottom: 2rem;
+    }
+}
+.btn-link {
+    text-align: start;
+    padding-left: 0;
+}
+.card-header h3 {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+.card-header button {
+    width: 100%;
+    text-align: start;
+}

@@ -1,0 +1,136 @@
+{
+    "article_title": "Geobasisdaten (opendata)",
+    "article_description": "",
+    "data" : [
+        {
+            "title": "DOP20 (2023)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46746",
+            "group": "Digitale Orthophotos",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46746&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&q=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46746&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3De7995adf-2aeb-4fa4-a536-041e3cc8b24a%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46326"}
+				
+				
+            ]
+        },
+        {
+            "title": "ALKIS Saarland SW",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=38960",
+			"group": "ALKIS",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=38960&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=2cd9351d-91e0-4ddb-a678-26766a633972&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38960&LAYER[visible]=0&LAYER[querylayer]=0"}
+                
+            ]
+        },
+        {
+            "title": "DGM1 (2016)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46159",
+			"group": "Digitale Geländemodelle",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46159&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=839a5500-b3e4-4a44-a9a3-417cb1736fe4&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46159&LAYER[visible]=0&LAYER[querylayer]=0"},
+				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D839a5500-b3e4-4a44-a9a3-417cb1736fe4%26type%3DSERVICE%26generateFrom%3Dmetadata"}
+				
+				
+            ]
+        },
+        {
+            "title": "DTK5",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=31255",
+			"group": "Digitale Topographische Karten",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=31255&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=54fc6a4a-1544-4b23-bd0d-994b3b9da792&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=31255&LAYER[visible]=0&LAYER[querylayer]=0"},
+				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D54fc6a4a-1544-4b23-bd0d-994b3b9da792%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D31256"}
+				
+				
+				
+            ]
+        },
+        {
+            "title": "DTK25",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=42004",
+			"group": "Digitale Topographische Karten",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=42004&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=3a9543bc-0485-4319-b737-4a1744f2c7fe&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=42004&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D3a9543bc-0485-4319-b737-4a1744f2c7fe%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D42006"}
+
+            ]
+        },
+        {
+            "title": "DTK50",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=36890",
+			"group": "Digitale Topographische Karten",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=36890&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=25473a50-cb77-4f4f-8e09-9e697ceb6f34&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=36890&LAYER[visible]=0&LAYER[querylayer]=0"},
+				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D25473a50-cb77-4f4f-8e09-9e697ceb6f34%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D36891"}
+            ]
+        },
+        {
+            "title": "DTK100",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=38189",
+			"group": "Digitale Topographische Karten",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=38189&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=bcacb5f6-2d81-402f-a355-2a9872167d1e&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38189&LAYER[visible]=0&LAYER[querylayer]=0"},
+				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dbcacb5f6-2d81-402f-a355-2a9872167d1e%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D38190"}
+            ]
+        },
+        {
+            "title": "Shaded Relief (2016)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46160",
+			"group": "Digitale Geländemodelle",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46160&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=16875dd1-ebd5-4021-aaf5-f4a148417ecb&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46160&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D16875dd1-ebd5-4021-aaf5-f4a148417ecb%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46160"}
+				
+				
+            ]
+        },
+        {
+            "title": "ALKIS Bodenschätzung",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=41583",
+			"group": "ALKIS",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=41583&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=89894dfb-ea46-4520-b529-697f03f7d5c8&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=41583&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Darstellung (WFS)", "link":"https://geoportal.saarland.de/registry/wfs/332?REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WFS"}
+            ]
+        },
+        {
+            "title": "Übersichtskarte Saarland",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=35423",
+			"group": "Digitale Landschaftsmodelle",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=35423&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=35423&LAYER[visible]=0&LAYER[querylayer]=0"}
+                
+            ]
+        },
+        {
+            "title": "WFS SL ALKIS Vereinfacht",
+            "image_url": "/var/opt/geoportal/media/preview/keinevorschau.jpg",
+            "group": "ALKIS",
+            "links": [
+                {"name": "WFS Capabilities", "link":""},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":""}
+                
+            ]
+        }
+    ]
+}
+

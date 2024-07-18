@@ -172,6 +172,63 @@ def applications_view(request: HttpRequest):
     geoportal_context.add_context(params)
     return render(request, template, geoportal_context.get_context())
 
+@check_browser
+def app_article_view(request, article_keyword=""):
+    """ Renders a view for configured lists of datasets
+
+    Args:
+        request: The incoming request
+    Returns:
+         A rendered view
+    """
+
+    request.session["current_page"] = "app_article"
+    if MULTILINGUAL:
+        lang = request.LANGUAGE_CODE
+    else:
+        lang = LANGUAGE_CODE
+
+    #Array for application list content
+    results = []
+
+    geoportal_context = GeoportalContext(request)
+
+    results = useroperations_helper.get_article_conf(article_keyword, lang)
+
+    if results:
+        # Define the default group name
+        default_group = "Unkategorisiert"
+
+        # Ensure every dataset has a group and collect groups 
+        groups = set() 
+        for dataset in results['data']:
+            if 'group' not in dataset:
+                dataset['group'] = default_group
+            groups.add(dataset['group'])
+
+        # Convert the set of groups to a list
+        distinct_groups = sorted(list(groups))
+
+
+
+        template = 'app_article.html'
+
+        context = {
+            "results": results,
+            "topic_groups": distinct_groups,
+            "mobile_wmc_id": MOBILE_WMC_ID,
+            "slider_elements": ApplicationSliderElement.objects.order_by('rank'),
+            "dispatches": LandingPageDispatch.objects.filter(is_active=True),
+        }
+        
+        geoportal_context.add_context(context=context)
+
+    else:
+        template = "404.html"
+
+
+    return render(request, template, geoportal_context.get_context())
+
 
 @check_browser
 def organizations_view(request: HttpRequest):

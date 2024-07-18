@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete-profile/', delete_profile_view, name='delete_profile'),
     path('logout/', logout_view, name='logout'),
     path('article/<slug:wiki_keyword>/', index_view, name='index'),
+    path('app-article/<slug:article_keyword>/', app_article_view, name='app_article'),
     path('activate/<slug:activation_key>', activation_view, name='activation'),
     path('incompatible/', incompatible_browser, name='incompatible-browser'),
     path('service_abo/', service_abo, name='service_abo'),

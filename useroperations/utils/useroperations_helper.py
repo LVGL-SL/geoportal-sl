@@ -5,7 +5,8 @@ import string
 import bcrypt
 import requests
 from lxml import html
-from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, INTERNAL_SSL, MULTILINGUAL
+import json
+from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, INTERNAL_SSL, MULTILINGUAL, BASE_DIR
 from Geoportal.utils import utils
 from searchCatalogue.utils.searcher import Searcher
 from useroperations.models import *
@@ -165,7 +166,7 @@ def get_all_applications():
     Returns:
          A list of all applications
     """
-    searcher = Searcher(keywords="", resource_set=["application"], host=HOSTNAME, max_results=50)
+    searcher = Searcher(keywords="", resource_set=["application"], host=HOSTNAME, max_results=55)
     return searcher.search_primary_catalogue_data().get("application", {}).get("application", {}).get("application", {}).get("srv", [])
 
 
@@ -233,4 +234,28 @@ def model_objects_case_insensitive_get(model, **kwargs):
         raise MultipleObjectsReturned('get() returned more than one {} -- it returned {}! Lookup parameters were {}__iexact={!r}'.format(
             model.__name__, result_count, kwargs
         ))
+    
 
+def get_article_conf(conf_file_name, lang, is_url = False):
+    """ Returns the HTML body content of the corresponding mediawiki page
+
+    Args:
+        conf_file_name (str): A keyword that matches a mediawiki article title
+        lang (str): The currently selected language
+    Returns:
+        str: The html content of the wiki article
+    """
+    if is_url:
+        return False
+
+    else:
+        config_name = BASE_DIR + '/useroperations/article_conf/' + conf_file_name + ".json"
+        #json_config = open(config_name)
+
+
+        try:
+            with open(config_name, encoding='utf-8') as file:
+                data = json.load(file)
+                return data
+        except Exception as e:
+            return False
