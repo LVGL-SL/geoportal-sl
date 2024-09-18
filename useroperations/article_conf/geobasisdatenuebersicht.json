@@ -4,14 +4,28 @@
     "data" : [
         {
             "title": "DOP20 (2023)",
-            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46746",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46747",
             "group": "Digitale Orthophotos",
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46746&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&q=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&f="},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46746&LAYER[visible]=0&LAYER[querylayer]=0"},
-                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3De7995adf-2aeb-4fa4-a536-041e3cc8b24a%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46326"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46746&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3De7995adf-2aeb-4fa4-a536-041e3cc8b24a%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46747"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{
+            "title": "TrueDOP",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46303",
+            "group": "Digitale Orthophotos",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46302&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=6c2eb4e4-6b85-4858-93f8-b62a2ef87987&q=6c2eb4e4-6b85-4858-93f8-b62a2ef87987&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46302&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed), RGB", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6c2eb4e4-6b85-4858-93f8-b62a2ef87987%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46303"},
+				{"name": "Download (AtomFeed),CIR","link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6c2eb4e4-6b85-4858-93f8-b62a2ef87987%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46304"},
+				{"name": "Download (AtomFeed), IR", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6c2eb4e4-6b85-4858-93f8-b62a2ef87987%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46305"},
+				{"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
             ]
         },
         {
@@ -21,7 +35,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=38960&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=2cd9351d-91e0-4ddb-a678-26766a633972&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38960&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38960&LAYER[visible]=1&LAYER[querylayer]=0"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
                 
             ]
@@ -33,7 +47,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46159&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=839a5500-b3e4-4a44-a9a3-417cb1736fe4&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46159&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46159&LAYER[visible]=1&LAYER[querylayer]=0"},
 				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D839a5500-b3e4-4a44-a9a3-417cb1736fe4%26type%3DSERVICE%26generateFrom%3Dmetadata"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
 				
@@ -47,7 +61,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=31255&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=54fc6a4a-1544-4b23-bd0d-994b3b9da792&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=31255&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=31255&LAYER[visible]=1&LAYER[querylayer]=0"},
 				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D54fc6a4a-1544-4b23-bd0d-994b3b9da792%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D31256"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
 				
@@ -62,7 +76,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=42004&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=3a9543bc-0485-4319-b737-4a1744f2c7fe&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=42004&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=42004&LAYER[visible]=1&LAYER[querylayer]=0"},
                 {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D3a9543bc-0485-4319-b737-4a1744f2c7fe%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D42006"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
 
@@ -75,7 +89,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=36890&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=25473a50-cb77-4f4f-8e09-9e697ceb6f34&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=36890&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=36890&LAYER[visible]=1&LAYER[querylayer]=0"},
 				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D25473a50-cb77-4f4f-8e09-9e697ceb6f34%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D36891"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
             ]
@@ -87,7 +101,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=38189&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=bcacb5f6-2d81-402f-a355-2a9872167d1e&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38189&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38189&LAYER[visible]=1&LAYER[querylayer]=0"},
 				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dbcacb5f6-2d81-402f-a355-2a9872167d1e%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D38190"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
             ]
@@ -99,7 +113,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46160&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=16875dd1-ebd5-4021-aaf5-f4a148417ecb&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46160&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46160&LAYER[visible]=1&LAYER[querylayer]=0"},
                 {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D16875dd1-ebd5-4021-aaf5-f4a148417ecb%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46160"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
 				
@@ -113,7 +127,7 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=41583&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=89894dfb-ea46-4520-b529-697f03f7d5c8&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=41583&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=41583&LAYER[visible]=1&LAYER[querylayer]=0"},
                 {"name": "Download (WFS)", "link":"https://geoportal.saarland.de/registry/wfs/332?REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WFS"},
                 {"name": "Lizenz: Creative Commons Namensnennung – 4.0 International (CC BY 4.0) Quellenvermerk: © GDI-SL (Jahr)", "link": "https://creativecommons.org/licenses/by/4.0/"}		
             ]
@@ -124,7 +138,19 @@
 			"group": "Digitale Landschaftsmodelle",
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=35423&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
-                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=35423&LAYER[visible]=0&LAYER[querylayer]=0"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=35423&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+                
+            ]
+        },
+		{
+            "title": "ATKIS Basis-DLM",
+            "image_url": "/var/opt/geoportal/media/preview/keinevorschau.jpg",
+			"group": "Digitale Landschaftsmodelle",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46170&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46170&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://geoportal.saarland.de/gdi-sl/inspirecsw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetRecordById&ELEMENTSETNAME=full&OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&ID=7c761b75-54c6-4a0a-afe0-fa0dc93a586b"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
                 
             ]
@@ -134,12 +160,200 @@
             "image_url": "/var/opt/geoportal/media/preview/keinevorschau.jpg",
             "group": "ALKIS",
             "links": [
-                {"name": "WFS Capabilities", "link":""},
-                {"name": "Metadaten zum Datensatz (Extern)", "link":""},
+                {"name": "WFS Capabilities", "link":"https://geoportal.saarland.de/registry/wfs/414?REQUEST=GetCapabilities&VERSION=2.0.0&SERVICE=WFS"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=2cd9351d-91e0-4ddb-a678-26766a633972&q=2cd9351d-91e0-4ddb-a678-26766a633972"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
                 
             ]
+        },
+        {   "title": "DOP20 (2022)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46338",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46337&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=5cc6059e-804e-46ad-9104-11a8d4d5d267&q=5cc6059e-804e-46ad-9104-11a8d4d5d267&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46337&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D5cc6059e-804e-46ad-9104-11a8d4d5d267%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46338"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{    "title": "DOP20 (2021)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=44414",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=44413&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=45541dd0-d467-4a8d-a86e-c51165b96775&q=45541dd0-d467-4a8d-a86e-c51165b96775%09&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=44413&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D45541dd0-d467-4a8d-a86e-c51165b96775%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D44414"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2020)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=43492",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=43491&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=02b8c271-d862-47d6-83e1-00dad17e1e70&q=02b8c271-d862-47d6-83e1-00dad17e1e70%09&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=43491&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D02b8c271-d862-47d6-83e1-00dad17e1e70%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D43492"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2019)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=42877",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=42876&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=79498e71-7015-470f-a321-18bc6cafcde3&q=79498e71-7015-470f-a321-18bc6cafcde3&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=42876&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D79498e71-7015-470f-a321-18bc6cafcde3%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D42877"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2018)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=43867",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=43866&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=88469ffd-eedc-4fb2-9daa-46fc610508b4&q=88469ffd-eedc-4fb2-9daa-46fc610508b4&f="},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=43866&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D88469ffd-eedc-4fb2-9daa-46fc610508b4%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D43867"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2017)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=43863",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=43862&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=6a1f2ed2-339a-4ce9-a357-cb55eed879cd&q=6a1f2ed2-339a-4ce9-a357-cb55eed879cd&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=43862&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6a1f2ed2-339a-4ce9-a357-cb55eed879cd%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D43863"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2016)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=42769",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=42768&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=5e7651ba-8cff-49da-b4c9-3eee3c18c4f3&q=5e7651ba-8cff-49da-b4c9-3eee3c18c4f3%09"},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=42768&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D5e7651ba-8cff-49da-b4c9-3eee3c18c4f3%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D42769"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2015)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=42654",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=42653&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=f16b1807-89a7-4169-b291-08920abe0fbe&q=f16b1807-89a7-4169-b291-08920abe0fbe"},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=42653&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Df16b1807-89a7-4169-b291-08920abe0fbe%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D42654"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2014)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=41420",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=41419&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=958dc993-1230-4565-990f-6820a6f92dd9&q=958dc993-1230-4565-990f-6820a6f92dd9&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=41419&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D958dc993-1230-4565-990f-6820a6f92dd9%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41420"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2013)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=40285",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=40284&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=07751cd2-be8c-4e26-821d-1aaac7ce250d&q=07751cd2-be8c-4e26-821d-1aaac7ce250d"},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=40284&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D07751cd2-be8c-4e26-821d-1aaac7ce250d%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D40285"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2012)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=39051",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=39050&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=fa34e823-5066-483f-98bf-43a0e00099f7&q=%09fa34e823-5066-483f-98bf-43a0e00099f7&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=39050&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dfa34e823-5066-483f-98bf-43a0e00099f7%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D39051"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2011)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=38323",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=38322&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=f706ebca-9631-4983-9210-d4319bff503e&q=%09f706ebca-9631-4983-9210-d4319bff503e&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=38322&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Df706ebca-9631-4983-9210-d4319bff503e%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D38323"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2010)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=35003",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=35002&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=a1528270-051b-4d85-aa1d-e4690d248e1f&q=a1528270-051b-4d85-aa1d-e4690d248e1f&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=35002&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Da1528270-051b-4d85-aa1d-e4690d248e1f%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D35003"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2009)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=36416",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=36415&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=326f89cf-7cce-4aac-b0c1-853f9a9de8fa&q=326f89cf-7cce-4aac-b0c1-853f9a9de8fa&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=36415&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D326f89cf-7cce-4aac-b0c1-853f9a9de8fa%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D36416"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP20 (2008)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=31305",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=31304&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=e82a057a-a23c-4376-a938-2e9a6b379fec&q=e82a057a-a23c-4376-a938-2e9a6b379fec&f="},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=31304&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3De82a057a-a23c-4376-a938-2e9a6b379fec%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D31305"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP40 (2006)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=31112",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=31111&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://metaver.de/trefferanzeige?docuuid=883dcdab-bc68-4812-950f-31af24b244a5&q=883dcdab-bc68-4812-950f-31af24b244a5"},
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=31111&LAYER[visible]=1&LAYER[querylayer]=0"},
+                {"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D883dcdab-bc68-4812-950f-31af24b244a5%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D31112"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
+		{   "title": "DOP40 (2003)",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=36413",
+            "group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=36412&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                
+				{"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=36412&LAYER[visible]=1&LAYER[querylayer]=0"},
+                
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
         }
+		
     ]
 }
 
