@@ -16,25 +16,35 @@
                     <div class="accordion" id="accordionGroup{{ forloop.counter }}">
                         {% for item in results.data %}
                             {% if item.group == group %}
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                        {{ item.title }}
-                                    </button>
-                                </h2>
-                                <div id="collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#accordionGroup{{ forloop.parentloop.counter }}">
-                                    <div class="accordion-body">
-                                        <img src="{{ item.image_url }}" alt="Image for {{ item.title }}" class="me-3 mb-3 mb-md-0 item-image">
-                                        <div class="links-container">
-                                            <ul class="list-unstyled">
-                                                {% for link in item.links %}
-                                                <li class="link-item"><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></li> 
-                                                {% endfor %}
-                                            </ul>
+                                {% if item.url  %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                        <!-- <button class="accordion-button" type="button"> -->
+                                            <a class="accordion-button no-collapse" href="{{item.url}}" target="_blank">{{ item.title }}</a>
+                                        <!-- </button> -->
+                                    </h2>
+                                </div>
+                                {% else %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                {{ item.title }}
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#accordionGroup{{ forloop.parentloop.counter }}">
+                                            <div class="accordion-body">
+                                                <img src="{{ item.image_url }}" alt="Image for {{ item.title }}" class="me-3 mb-3 mb-md-0 item-image">
+                                                <div class="links-container">
+                                                    <ul class="list-unstyled">
+                                                        {% for link in item.links %}
+                                                        <li class="link-item"><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></li> 
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>

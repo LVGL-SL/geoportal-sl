@@ -352,7 +352,16 @@
                 
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
             ]
-        }
+        },
+        {   
+        "title": "Inspire Anwendung",
+        "url": "https://geoportal.saarland.de/mapbender/php/mod_invokeApplicationFromMetadata.php?id=4057",
+        "image_url": "https://geoportal.saarland.de/mediawiki/images/e/ed/Inspire_200x150.jpg",
+        "group": "Inspire",
+        "links": [
+            {"name": "Übersicht", "link":"https://geoportal.saarland.de/mapbender/php/mod_invokeApplicationFromMetadata.php?id=4057"}	
+        ]
+    }
 		
     ]
 }
