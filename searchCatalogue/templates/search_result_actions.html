@@ -61,7 +61,7 @@
         <!-- WMC -->
         {% if type == 'wmc' or type == 'wfs' or type == 'service_DE' %}
         <div class="resource-list view_{{ layer.id }} no-display">
-            <ul class="overflow-hidden">
+            <ul style="overflow: hidden;">
                 <li class="resource-category-header">{% trans 'Compilations' %}</li>
                     {% with layer as layer_data %}
                         {% with result as layer_info %}
@@ -76,14 +76,11 @@
             <!-- DATASET -->
             {% if feeds is not None and feeds|length > 0 %}
             <div class="resource-list download_{{ result.id }} no-display">
-                <ul class="overflow-hidden">
+                <ul style="overflow: hidden">
                     {% for feed in feeds %}
                         <li class="resource-element">
                             <a href="{{ feed.htmlLink }}" target="_blank">
                                 <div class="resource-view-title" title="{% trans 'Metadata' %}">
-                                    <!--#6654 Added a condition for ogcapifeatures because the serviceTitle doesn't 
-                                    contain the Featuretype information which is supposed to be shown as it's the case for the WFS Interface
-                                    Information is populated in the resourceName field in this case-->
                                     {% if feed.type != 'ogcapifeatures' %}
                                         {{ feed.serviceTitle }}
                                     {% else %}
@@ -112,7 +109,7 @@
             <!-- WMS -->
             {% if layer.download_url is not None and layer.download_url|length > 0%}
             <div class="resource-list download_{{ layer.id }} no-display">
-                <ul class="overflow-hidden">
+                <ul style="overflow: hidden;">
                     <li class="resource-category-header">{% trans 'Download services' %}</li>
                     <li class="resource-element">
                         <a href="{{ layer.download_url }}" target="_blank" >
@@ -128,7 +125,7 @@
 
             {% if layers is not None and layers|length > 0 %}
                 <div class="resource-list view_{% if type == 'wms' %}{{ layer.id }}{% elif type == 'dataset' %}{{ result.id }}{% endif %} no-display">
-                <ul class="overflow-hidden">
+                <ul style="overflow: hidden;">
                     {% if type == 'dataset' %}
                         {% for layer in layers %}
                             {% with layer.srv.layer.0 as layer_data %}
