@@ -522,8 +522,6 @@ msgstr ""
 msgid "Show Capabilities"
 msgstr "Capabilities anzeigen"
 
-msgid "Show Capabilities"
-msgstr "Capabilities anzeigen"
 
 #: searchCatalogue/templates/search_result_list_entry.html:59
 #: searchCatalogue/templates/search_result_list_entry.html:75
