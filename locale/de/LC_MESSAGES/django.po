@@ -250,6 +250,9 @@ msgstr "Originaler Atom Feed"
 msgid "Open atom feed client"
 msgstr "Öffne Atom Feed Client"
 
+msgid "Open in html client"
+msgstr "Öffne in HTML Client"
+
 #: searchCatalogue/templates/other/dataset/dataset_category.html:6
 #: searchCatalogue/templates/other/dataset/dataset_category.html:7
 #: searchCatalogue/templates/primary/dataset/dataset_category.html:7
@@ -340,6 +343,9 @@ msgstr "Senden"
 #: searchCatalogue/templates/primary/dataset/dataset_search_result.html:3
 msgid "Open metadata for"
 msgstr "Metadaten öffnen für"
+
+msgid "Open metadata in new window"
+msgstr "Metadaten in neuem Fenster öffnen"
 
 #: searchCatalogue/templates/primary/application/application_search_result.html:16
 #: searchCatalogue/templates/primary/dataset/dataset_search_result.html:16
@@ -513,11 +519,15 @@ msgstr "Link zur Karte wurde in Zwischenablage kopiert"
 msgid "Capabilities"
 msgstr ""
 
-#: searchCatalogue/templates/search_result_list_entry.html:67
-#: searchCatalogue/templates/search_result_list_entry.html:89
-#: searchCatalogue/templates/search_result_list_entry.html:106
-#: searchCatalogue/templates/search_result_list_entry.html:112
-#: searchCatalogue/templates/search_result_list_entry.html:127
+msgid "Show Capabilities"
+msgstr "Capabilities anzeigen"
+
+
+#: searchCatalogue/templates/search_result_list_entry.html:59
+#: searchCatalogue/templates/search_result_list_entry.html:75
+#: searchCatalogue/templates/search_result_list_entry.html:86
+#: searchCatalogue/templates/search_result_list_entry.html:92
+#: searchCatalogue/templates/search_result_list_entry.html:107
 msgid "Add to mapviewer"
 msgstr "Kartenviewer hinzufügen"
 
