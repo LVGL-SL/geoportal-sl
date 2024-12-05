@@ -16,7 +16,7 @@
     <div class="search-result-actions">
         {% if coupled_resources.view_links|length > 0 %}
         <div class="resource-list view_{{ coupled_resources.id }} no-display">
-            <ul class="overflow-hidden">
+            <ul style="overflow: hidden;">
                 {% for view in coupled_resources.view_links %}
                     {% with view as layer_data %}
                         {% with result as layer_info %}
@@ -30,7 +30,7 @@
 
         {% if coupled_resources.download_links|length > 0 %}
         <div class="resource-list download_{{ coupled_resources.id }} no-display">
-            <ul class="overflow-hidden">
+            <ul style="overflow: hidden;">
                 {% for download in coupled_resources.download_links %}
                 <li class="resource-element">
                     <a href="{{ download.htmlLink }}" target="_blank">
