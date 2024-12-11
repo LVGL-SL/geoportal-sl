@@ -1148,7 +1148,7 @@ $(document).ready(function () {
             success: function(data) {
                 location.reload();
             },
-            timeout: 10000,
+            timeout: 30000,
             error: function (jqXHR, textStatus, errorThrown) {
                 if (textStatus === "timeout") {
                     alert("The catalogue provider didn't respond. Please try again later.");

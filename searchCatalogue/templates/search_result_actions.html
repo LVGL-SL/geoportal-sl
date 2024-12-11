@@ -77,7 +77,7 @@
             {% if feeds is not None and feeds|length > 0 %}
             <div class="resource-list download_{{ result.id }}" style="display:none;">
                 <ul style="overflow: hidden;">
-                    {% for feed in feeds|dictsort:"serviceTitle" %}
+                    {% for feed in feeds %}
                         <li class="resource-element">
                             <a title="{% trans 'Open metadata in new window' %}" href="{{ feed.htmlLink }}" target="_blank">
                                 <div class="resource-view-title">
