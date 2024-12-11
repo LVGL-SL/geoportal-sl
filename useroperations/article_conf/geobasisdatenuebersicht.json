@@ -388,6 +388,25 @@
                 
             ]
         },
+        {
+            "title": "WMS SL Historische Karten",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=41884",
+			"group": "Historisch",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=41884&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=41884&LAYER[visible]=1&LAYER[querylayer]=0"},
+				{"name": "Download (AtomFeed, KDS 1963)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Da652eedb-ec4b-4ef4-94d0-0f2929144c28%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41893"},
+				{"name": "Download (AtomFeed, TK25 Ausgaben 1978-1982)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D00fc8683-56ce-4483-9389-dca00fc1d465%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41892"},
+				{"name": "Download (AtomFeed, TK25 Ausgaben 1957-1965)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3De27f7e8f-df63-46f4-b350-d7163736d544%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41891"},
+				{"name": "Download (AtomFeed, TK25 Ausgaben 1935-1940)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D3bb25680-b7b5-4531-8822-d755ea448e14%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41890"},
+				{"name": "Download (AtomFeed, Karte des Deutschen Reiches)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dc9037c84-4eb7-4c12-96bb-d476949779c1%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41889"},
+				{"name": "Download (AtomFeed, Ur-Messtischblätter)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Db524536e-c232-4503-86cc-98a0ed9c196f%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41888"},
+				{"name": "Download (AtomFeed, Preußische Generalstabskarte)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dcf7d4d15-b35a-4b5c-8ee0-f6e95f27b612%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41887"},
+				{"name": "Download (AtomFeed, Bayrische Originalpositionsblätter)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dffc2dfc6-a336-4b51-bb9f-9bd7b763bbef%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41886"},
+				{"name": "Download (AtomFeed, Kartenaufnahme Tranchot und von Müffling)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D14af4a21-8d9f-4a6d-8ad2-8e3de8cb3380%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D41885"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+            ]
+        },
         {   
         "title": "Inspire Anwendung",
         "url": "https://geoportal.saarland.de/mapbender/php/mod_invokeApplicationFromMetadata.php?id=4057",
