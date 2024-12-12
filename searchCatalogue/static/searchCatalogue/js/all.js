@@ -196,7 +196,7 @@ Search.prototype = {
             success: function (data) {
                 self.parseSearchResult(data);
             },
-            timeout: 10000,
+            timeout: 30000,
             error: function (jqXHR, textStatus, errorThrown) {
                 // set old checkbox checked, so the user will not be confused if the failed catalogues checkbox is checked
                 // but the results from the last working search are displayed
@@ -1148,7 +1148,7 @@ $(document).ready(function () {
             success: function(data) {
                 location.reload();
             },
-            timeout: 30000,
+            timeout: 10000,
             error: function (jqXHR, textStatus, errorThrown) {
                 if (textStatus === "timeout") {
                     alert("The catalogue provider didn't respond. Please try again later.");
