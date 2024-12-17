@@ -196,7 +196,7 @@ Search.prototype = {
             success: function (data) {
                 self.parseSearchResult(data);
             },
-            timeout: 30000,
+            timeout: 20000,
             error: function (jqXHR, textStatus, errorThrown) {
                 // set old checkbox checked, so the user will not be confused if the failed catalogues checkbox is checked
                 // but the results from the last working search are displayed
