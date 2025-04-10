@@ -17,8 +17,8 @@ URL_BASE = URL_BASE_LOCALHOST if DEBUG else HTTP_OR_SSL + HOSTNAME + "/mapbender
 URL_AUTO_COMPLETE_SUFFIX = "geoportal/mod_getCatalogueKeywordSuggestion.php"
 URL_SEARCH_PRIMARY_SUFFIX = "php/mod_callMetadata.php"
 URL_SEARCH_DE_SUFFIX = "php/mod_callCswMetadata.php"
-#URL_SEARCH_INFO = HTTP_OR_SSL + '127.0.0.1' + "/mediawiki/api.php"
-URL_SEARCH_INFO = HTTP_OR_SSL + HOSTNAME + "/mediawiki/api.php"
+URL_SEARCH_INFO = HTTP_OR_SSL + '127.0.0.1' + "/mediawiki/api.php"
+#URL_SEARCH_INFO = HTTP_OR_SSL + HOSTNAME + "/mediawiki/api.php"
 
 URL_GET_ORGANIZATIONS = "php/mod_showOrganizationList.php"
 URL_GET_TOPICS = "php/tagCloud.php"
