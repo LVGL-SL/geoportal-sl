@@ -470,7 +470,7 @@ def register_view(request):
                 messages.error(request, _("The Username") + " {str_name} ".format(str_name=form.cleaned_data['name']) + _("is already taken"))
                 return redirect('useroperations:register')
 
-            if re.match(r'[A-Za-z0-9@#$%&+=!:-_]{9,}', form.cleaned_data['password']) is None:
+            if re.match(r'[A-Za-z0-9@#$%&+=!:_-]{9,}', form.cleaned_data['password']) is None:
                 messages.error(request, _("Password does not meet specified criteria, you should have at least 9 characters, allowed special chars are: @#$%&+=!:-_"))
                 return redirect('useroperations:register')
 
