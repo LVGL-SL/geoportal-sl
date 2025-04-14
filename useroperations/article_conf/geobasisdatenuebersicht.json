@@ -192,11 +192,11 @@
         },
         {   
             "title": "Historische Daten - Anwendung",
-            "url": "https://lapllgeopte02.lkvk.saarland.de/app-article/historische_geobasisdatenuebersicht/",
+            "url": "https://geoportal.saarland.de/app-article/historische_geobasisdatenuebersicht/",
             "image_url": "https://geoportal.saarland.de/mediawiki/images/e/ed/Inspire_200x150.jpg",
             "group": "Historisch",
             "links": [
-                {"name": "Übersicht", "link":"https://lapllgeopte02.lkvk.saarland.de/app-article/historische_geobasisdatenuebersicht/"}	
+                {"name": "Übersicht", "link":"https://geoportal.saarland.de/app-article/historische_geobasisdatenuebersicht/"}	
             ]
         },
         {
