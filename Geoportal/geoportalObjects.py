@@ -10,7 +10,7 @@ from django.http.response import JsonResponse
 from django.utils.translation import ugettext_lazy as _, activate, LANGUAGE_SESSION_KEY
 
 from Geoportal import settings
-from Geoportal.settings import DEFAULT_GUI, RSS_FILE, HOSTNAME, HTTP_OR_SSL, IFRAME_HEIGHT, IFRAME_WIDTH, MODERN_GUI, \
+from Geoportal.settings import DEFAULT_GUI, RSS_FILE, HOSTNAME, HTTP_OR_SSL, IFRAME_HEIGHT, IFRAME_WIDTH, MODERN_GUI, CLASSIC_GUI, \
     MULTILINGUAL, LANGUAGE_CODE, USE_RECAPTCHA
 from Geoportal.utils import utils, php_session_data
 from useroperations.conf import COOKIE_VALUE, GEOPORTAL_IDENTIFIER, LOGO_GEOPORTAL_TITLE, LOGO_COUNTRY_LINK_DE, \
@@ -64,7 +64,7 @@ class GeoportalContext:
             'guis': session_data.get("guis", ""),
             'mapviewers': {
                 _("Modern"): MODERN_GUI,
-                _("Klassik"): DEFAULT_GUI,
+                _("Klassik"): CLASSIC_GUI,
                 _("Mobil"): HTTP_OR_SSL + HOSTNAME + "/mapbender/extensions/mobilemap2/index.html?wmc_id=current",
             },
             'dsgvo': session_data.get("dsgvo", "no"),

@@ -62,8 +62,9 @@ EU_SRC_IMG = "eu_results.png"
 OPEN_DATA_URL = "https://okfn.org/opendata/"
 
 # Gui settings
-DEFAULT_GUI = "Geoportal-SL"
 MODERN_GUI = "Geoportal-SL-2020"
+DEFAULT_GUI = MODERN_GUI
+CLASSIC_GUI = "Geoportal-SL"
 
 # WMC ID that should be loaded on mobile devices
 MOBILE_WMC_ID = None
@@ -219,7 +220,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default='')
 GOOGLE_RECAPTCHA_PUBLIC_KEY = env("GOOGLE_RECAPTCHA_PUBLIC_KEY", default='')
 
 # WMC ID that should be loaded on mobile devices
-MOBILE_WMC_ID = None
+#MOBILE_WMC_ID = None
 
 # Directory for inspire Downloads
 INSPIRE_ATOM_DIR = "/data2/inspiredownloads/"  # eg: "/var/www/html/inspiredownloads/"
