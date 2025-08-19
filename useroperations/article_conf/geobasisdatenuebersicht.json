@@ -79,6 +79,20 @@
             ]
         },
         {
+            "title": "SL_RELIEF",
+            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=31263",
+			"group": "Digitale Geländemodelle",
+            "links": [
+                {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=31263&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
+                {"name": "Metadaten zum Datensatz (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=b7e2d573-436c-4b2b-b08f-c507d552e85a&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=31263&LAYER[visible]=1&LAYER[querylayer]=0"},
+				{"name": "Download (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Db7e2d573-436c-4b2b-b08f-c507d552e85a%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D31264"},
+                {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
+				
+				
+            ]
+        },
+        {
             "title": "DTK5",
             "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=31255",
 			"group": "Digitale Topographische Karten",
@@ -163,6 +177,28 @@
             "links": [
                 {"name": "Darstellung (WMS)", "link":"https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=35423&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"},
                 {"name": "Link zum Kartenviewer", "link":"https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=35423&LAYER[visible]=1&LAYER[querylayer]=0"},
+      			{"name": "Metadaten zum Datensatz - Landesfläche (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=51415443-38bb-44ef-be1a-0b2303560239&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Landesfläche (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D51415443-38bb-44ef-be1a-0b2303560239%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Wald (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=29ff5c61-2802-45a1-9706-56a94b6663fd&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Wald (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D29ff5c61-2802-45a1-9706-56a94b6663fd%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Sonderkultur (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=5e344bae-ad1f-43ee-88fd-5447924843e4&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Sonderkultur (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D5e344bae-ad1f-43ee-88fd-5447924843e4%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Ortslage (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=920f4725-9ff2-4183-b07d-af6a1793b5ad&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Ortslage (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D920f4725-9ff2-4183-b07d-af6a1793b5ad%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Industrie (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=90e6b7df-2a78-4fe6-8cd5-d0cbadb57cc3&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Industrie (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D90e6b7df-2a78-4fe6-8cd5-d0cbadb57cc3%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Flüsse (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=896c29ef-acf8-4659-aabf-90cbb1126006&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Flüsse (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D896c29ef-acf8-4659-aabf-90cbb1126006%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Seen (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=fae1f2ba-8e7e-4ef2-8efc-5de923b8da17&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Seen (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Dfae1f2ba-8e7e-4ef2-8efc-5de923b8da17%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Wege (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=6133ed6f-16a6-4aea-9420-ee6f088571a8&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Wege (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6133ed6f-16a6-4aea-9420-ee6f088571a8%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Straßen (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=2710c268-6719-4359-99a2-439480236689&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Straßen (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D2710c268-6719-4359-99a2-439480236689%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Bahn (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=9471ab46-e244-4ba0-ac8c-e7b7edf134b5&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Bahn (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D9471ab46-e244-4ba0-ac8c-e7b7edf134b5%26type%3DSERVICE%26generateFrom%3Dmetadata"},
+				{"name": "Metadaten zum Datensatz - Leitung (Extern)", "link":"https://Metaver.de/trefferanzeige?docuuid=8bf404de-1595-48eb-b63d-3b30b2ca48f2&plugid=/ingrid-group:iplug-csw-dsc-gdi-sl&docid=0M9bG30B-Xhv7YYsyVGu"},
+                {"name": "Download - Leitung (AtomFeed)", "link":"https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D8bf404de-1595-48eb-b63d-3b30b2ca48f2%26type%3DSERVICE%26generateFrom%3Dmetadata"},
                 {"name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)", "link": "https://www.govdata.de/dl-de/by-2-0"}		
                 
             ]
