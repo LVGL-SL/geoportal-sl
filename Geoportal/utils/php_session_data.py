@@ -18,7 +18,7 @@ from useroperations.models import MbUser
 
 
 def get_mapbender_session_by_memcache(session_id):
-    client = base.Client(('localhost', 11211))
+    client = base.Client(('127.0.0.1', 11211))
 
     try:
         session_data = client.get(MEMCACHED_SESSION_PREFIX + session_id)
