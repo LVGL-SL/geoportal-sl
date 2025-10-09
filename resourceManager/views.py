@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
 from pprint import pprint
@@ -96,35 +98,44 @@ def download(request):
 
     if resourceType == "wmslayer":
         resourceType="layer"
-        ressource_id = refererparams["layerid"][0]
-        service_id = Layer.objects.get(layer_id=ressource_id).fkey_wms_id
+        resource_ids = [refererparams["layerid"][0]]
+        service_id = Layer.objects.get(layer_id=resource_ids[0]).fkey_wms_id
         secured_service_hash = Wms.objects.get(wms_id=service_id).wms_owsproxy
-        #print(ressource_id)
         #print(service_id)
     elif resourceType == "wfs":
         resourceType="featuretype"
         wfs_id = refererparams["wfsid"][0]
+        # Ticket #8406: wfs may have multiple featuretypes
+        # Although the typeNames parameter should be the same for all urls,
+        # we extract and check the parameter from all urls to protect against malformed requests.
+        featuretype_names = set()
+        for url in body['urls']:
+            query = urllib.parse.urlparse(urllib.parse.unquote(url)).query
+            query_dict = urllib.parse.parse_qs(query)
+            featuretype_names.update(chain.from_iterable(map(lambda s: s.split(","), query_dict.get("typeNames", []))))
         #Ticket #7352: Including inspire_download=1 to enable logic for wfs
         #Currently a working workaround since the flag is only supposed to be set once for our services
         #For an adeqequate solution we'd need the featuretype_id here -> Delivered from php -> js (data)-> request params
         #Alternatively -> Change select conditions to make sure the correct ft is selected 
-        ressource_id = WfsFeaturetype.objects.get(fkey_wfs_id=wfs_id, inspire_download=1).featuretype_id
+        # Ticket #8406: a wfs may have multiple featuretypes, so expect multiple rows from the database
+        resource_ids = WfsFeaturetype.objects.filter(
+            fkey_wfs_id=wfs_id, featuretype_name__in=featuretype_names, inspire_download=1
+        ).values_list("featuretype_id", flat=True)
         secured_service_hash = Wfs.objects.get(wfs_id=wfs_id).wfs_owsproxy
-        #print(ressource_id)
     else:
         return HttpResponse('No security hash for service found',status=500)
 
     #print(secured_service_hash)
 
-    permission = requests.get(HTTP_OR_SSL + '127.0.0.1/mapbender/php/mod_permissionWrapper.php?userId='+body['user_id']+'&resourceType='+resourceType+'&resourceId='+str(ressource_id), verify=INTERNAL_SSL)
-    permission = json.loads(permission.text)
-
-    #print(permission)
     if secured_service_hash != "" and secured_service_hash != None:
-        if permission["result"] != True:
-            return HttpResponse('User is not allowed to access this ressource',status=403)
-        else:
-            secured=1
+        for resource_id in resource_ids:
+            permission = requests.get(
+                f"{HTTP_OR_SSL}127.0.0.1/mapbender/php/mod_permissionWrapper.php?userId={body['user_id']}&resourceType={resourceType}&resourceId={str(resource_id)}",
+                verify=INTERNAL_SSL,
+            ).json()
+            if not permission["result"]:
+                return HttpResponse('User is not allowed to access this ressource',status=403)
+        secured=1
 
     # build whitelist
     wfslist = Wfs.objects.values('wfs_getfeature').distinct()
