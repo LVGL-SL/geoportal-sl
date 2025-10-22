@@ -944,12 +944,9 @@ msgid "Please enter your username."
 msgstr "Bitte geben Sie Ihren Benutzernamen ein."
 
 #: useroperations/forms.py:18 useroperations/forms.py:37
-msgid "Please enter your password with at least 9 characters."
-msgstr "Bitte geben Sie Ihr Passwort mit mindestens 9 Zeichen ein. Erlaubte Sonderzeichen @#$%&+=!:-_"
+msgid "Please enter your password with at least 9 characters. Allowed special characters: @#$%&+=!:-_"
+msgstr "Bitte geben Sie Ihr Passwort mit mindestens 9 Zeichen ein. Erlaubte Sonderzeichen: @#$%&+=!:-_"
 
-#: useroperations/forms.py:18
-msgid "Please use at least 9 characters."
-msgstr "Bitte verwenden Sie mindestens 9 Zeichen."
 
 #: useroperations/forms.py:18 useroperations/forms.py:33
 msgid "Password"
