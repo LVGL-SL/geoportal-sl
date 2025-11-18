@@ -166,7 +166,7 @@ def get_all_applications():
     Returns:
          A list of all applications
     """
-    searcher = Searcher(keywords="", resource_set=["application"], host=HOSTNAME, max_results=55)
+    searcher = Searcher(keywords="", resource_set=["application"], host=HOSTNAME, max_results=75)
     return searcher.search_primary_catalogue_data().get("application", {}).get("application", {}).get("application", {}).get("srv", [])
 
 
@@ -236,23 +236,16 @@ def model_objects_case_insensitive_get(model, **kwargs):
         ))
     
 
-def get_article_conf(conf_file_name, lang, is_url = False):
-    """ Returns the HTML body content of the corresponding mediawiki page
+def get_article_conf(conf_file_name, lang = False, is_url = False):
+    # Returns an object containing the article configuration
+    # conf_file_name: name of the configuration file (without .json)
+    # lang: if set to a language code, the function will try to get the language specific configuration file first (e.g. "article_conf_en.json") - not yet supported
 
-    Args:
-        conf_file_name (str): A keyword that matches a mediawiki article title
-        lang (str): The currently selected language
-    Returns:
-        str: The html content of the wiki article
-    """
+    # if is_url is not yet supported, return False
     if is_url:
         return False
-
     else:
         config_name = BASE_DIR + '/useroperations/article_conf/' + conf_file_name + ".json"
-        #json_config = open(config_name)
-
-
         try:
             with open(config_name, encoding='utf-8') as file:
                 data = json.load(file)
