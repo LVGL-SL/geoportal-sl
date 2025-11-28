@@ -1,57 +1,77 @@
-<body>
-    <div class="container my-5">
-        <h2>{{ results.article_title }}</h2>
-        <p>{{ results.article_description }}</p>
-        <div class="accordion" id="accordionExample">
-            {% for group in topic_groups %}
-            <div class="card my-3">
-                <div class="card-header" id="headingCard{{ forloop.counter }}">
-                    <h3 class="mb-0">
-                        <button class="btn btn-link w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCard{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseCard{{ forloop.counter }}">
-                            {{ group }}
-                        </button>
-                    </h3>
-                </div>
-                <div id="collapseCard{{ forloop.counter }}" class="collapse" aria-labelledby="headingCard{{ forloop.counter }}" data-bs-parent="#accordionExample">
-                    <div class="accordion" id="accordionGroup{{ forloop.counter }}">
-                        {% for item in results.data %}
-                            {% if item.group == group %}
-                                {% if item.url  %}
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                        <!-- <button class="accordion-button" type="button"> -->
-                                            <a class="accordion-button no-collapse" href="{{item.url}}" target="_blank">{{ item.title }}</a>
-                                        <!-- </button> -->
-                                    </h2>
-                                </div>
-                                {% else %}
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                                {{ item.title }}
-                                            </button>
-                                        </h2>
-                                        <div id="collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#accordionGroup{{ forloop.parentloop.counter }}">
-                                            <div class="accordion-body">
-                                                <img src="{{ item.image_url }}" alt="Image for {{ item.title }}" class="me-3 mb-3 mb-md-0 item-image">
-                                                <div class="links-container">
-                                                    <ul class="list-unstyled">
-                                                        {% for link in item.links %}
-                                                        <li class="link-item"><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></li> 
-                                                        {% endfor %}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
+<div class="container my-5">
+    {% for section in results.sections %}
+    {% if section.title %}
+    <h2>{{ section.title }}</h2>
+    {% endif %}
+    {% if section.description %}
+    <p>{{ section.description|safe }}</p>
+    {% endif %}
+    {% if section.content %}
+    <div class="accordion" id="mainAccordion-{{ forloop.counter }}">
+        {% for group in section.content|dictsort:"group_name" %}
+        <div class="card my-3">
+            <div class="card-header" id="heading-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                <h3 class="mb-0">
+                    <button class="btn btn-link w-100 text-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                        aria-expanded="false"
+                        aria-controls="collapse-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                        {{ group.group_name }}
+                    </button>
+                </h3>
+            </div>
+            <div id="collapse-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="collapse"
+                aria-labelledby="heading-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                data-bs-parent="#mainAccordion-{{ forloop.parentloop.counter }}">
+                <div class="card-body" style="padding: 0;"> 
+                    <div class="accordion" id="subAccordion-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                        {% for item in group.data %}
+                        {% if item.url %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <a class="accordion-button no-collapse" href="{{item.url}}" target="_blank">{{ item.title }}</a>
+                            </h2>
+                        </div>
+                        {% else %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"
+                                id="itemHeading-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#itemCollapse-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                    aria-expanded="false"
+                                    aria-controls="itemCollapse-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                    {{ item.title }}
+                                </button>
+                            </h2>
+                            <div id="itemCollapse-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="itemHeading-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                data-bs-parent="#subAccordion-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
+                                <div class="accordion-body">
+                                    {% if item.image_url %}
+                                    <img src="{{ item.image_url }}" alt="Image for {{ item.title }}"
+                                        class="me-3 mb-3 mb-md-0 item-image">
+                                    {% endif %}
+                                    {% if item.links %}
+                                    <div class="links-container">
+                                        <ul class="list-unstyled">
+                                            {% for link in item.links %}
+                                            <li class="link-item"><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
-                                {% endif %}
-                            {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
-    </div> 
-   
-</body>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
