@@ -1,0 +1,68 @@
+{
+  "sections": [
+    {
+      "title": "Digitale Orthophotos",
+      "description": "<b>Digitale Orthophotos</b> bieten eine <span style=\"color:green;\">hochwertige Grundlage</span> für viele Anwendungen. <ul><li>Aktuellste Luftbilder</li><li>Hohe Auflösung</li></ul>",
+      "content": [
+        {
+          "group_name": "DOP20",
+          "data": [
+            {
+              "title": "DOP20 (2023)",
+              "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46747",
+              "links": [
+                {
+                  "name": "Darstellung (WMS)",
+                  "link": "https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46746&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"
+                },
+                {
+                  "name": "Metadaten zum Datensatz (Extern)",
+                  "link": "https://Metaver.de/trefferanzeige?docuuid=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&q=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&f="
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Zusätzliche Hinweise",
+      "description": "<table border=\"1\"><tr><th>Typ</th><th>Beschreibung</th></tr><tr><td>DOP20</td><td>20cm Auflösung</td></tr></table>"
+    },
+    {
+      "title": "Zwischentitelbeispiel"
+    },
+    {
+      "description": "<br>Abstand zum näcshten Titel oder Text<br><br>"
+    },    
+    {
+      "title": "ALKIS",
+      "description": "Das Amtliche Liegenschaftskataster-Informationssystem (<span style=\"background:yellow;\">ALKIS</span>) stellt <i>umfangreiche Informationen</i> zu Grundstücken bereit.<br><br><b>Hinweis:</b> Für die Nutzung ist ggf. eine Anmeldung erforderlich.",
+      "content": [
+        {
+          "group_name": "ALKIS Saarland",
+          "data": [
+            {
+              "title": "WFS SL ALKIS Vereinfacht",
+              "image_url": "/var/opt/geoportal/media/preview/keinevorschau.jpg",
+              "links": [
+                {
+                  "name": "WFS Capabilities",
+                  "link": "https://geoportal.saarland.de/registry/wfs/414?REQUEST=GetCapabilities&VERSION=2.0.0&SERVICE=WFS"
+                },
+                {
+                  "name": "Metadaten zum Datensatz (Extern)",
+                  "link": "https://metaver.de/trefferanzeige?docuuid=2cd9351d-91e0-4ddb-a678-26766a633972&q=2cd9351d-91e0-4ddb-a678-26766a633972"
+                },
+                {
+                  "name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)",
+                  "link": "https://www.govdata.de/dl-de/by-2-0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

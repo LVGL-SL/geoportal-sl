@@ -1,0 +1,57 @@
+{
+  "sections": [
+    {
+      "title": "Section 1: Lorem Ipsum",
+      "description": "<b>Lorem Ipsum</b> dolor sit amet, <span style=\"color:blue;\">consectetur</span> adipiscing elit.<br><ul><li>Praesent commodo cursus magna</li><li>Vestibulum id ligula porta felis</li></ul>",
+      "content": [
+        {
+          "group_name": "Gruppe A",
+          "data": [
+            {
+              "title": "Eintrag A1",
+              "image_url": "https://geoportal.saarland.de/static/useroperations/images/logo-state.jpg",
+              "links": [
+                {"name": "Mehr Infos", "link": "https://geoportal.saarland.de"}
+              ]
+            }
+          ]
+        },
+        {
+          "group_name": "Gruppe B",
+          "data": [
+            {
+              "title": "Eintrag B1",
+              "image_url": "https://geoportal.saarland.de/static/useroperations/images/logo-state.jpg",
+              "links": [
+                {"name": "Mehr Infos", "link": "https://geoportal.saarland.de"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Section 2: Dolor Sit",
+      "description": "Curabitur blandit tempus porttitor. <span style=\"background:lightgray;\">Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</span>",
+      "content": [
+        {
+          "group_name": "Gruppe C",
+          "data": [
+            {
+              "title": "Eintrag C1",
+              "image_url": "https://geoportal.saarland.de/static/useroperations/images/logo-state.jpg",
+              "links": [
+                {"name": "Details", "link": "https://geoportal.saarland.de"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Section 3: Hinweise",
+      "description": "<b>Hinweis:</b> Zeilenumbrüche sind im JSON nicht möglich. Nutzen Sie in VS Code <i>View → Toggle Word Wrap</i> für bessere Übersicht.",
+      "content": []
+    }
+  ]
+}
