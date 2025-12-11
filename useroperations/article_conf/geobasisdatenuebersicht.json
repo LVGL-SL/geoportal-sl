@@ -7,58 +7,32 @@
                     "group_name": "Digitale Orthophotos",
                     "data": [
                         {
-                            "title": "DOP20 (2023)",
-                            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46747",
+                            "title": "DOP20 (2025)",
+                            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=49805",
                             "links": [
                                 {
                                     "name": "Darstellung (WMS)",
-                                    "link": "https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46746&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"
+                                    "link": "https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=49804&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"
                                 },
                                 {
                                     "name": "Metadaten zum Datensatz (Extern)",
-                                    "link": "https://Metaver.de/trefferanzeige?docuuid=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&q=e7995adf-2aeb-4fa4-a536-041e3cc8b24a&f="
+                                    "link": "https://Metaver.de/trefferanzeige?docuuid=f808a27f-16c5-40a2-bd0d-9ff49fdb0a35&q=f808a27f-16c5-40a2-bd0d-9ff49fdb0a35&f="
                                 },
                                 {
                                     "name": "Link zum Kartenviewer",
-                                    "link": "https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46746&LAYER[visible]=1&LAYER[querylayer]=0"
-                                },
-                                {
-                                    "name": "Download (AtomFeed)",
-                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3De7995adf-2aeb-4fa4-a536-041e3cc8b24a%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46747"
-                                },
-                                {
-                                    "name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)",
-                                    "link": "https://www.govdata.de/dl-de/by-2-0"
-                                }
-                            ]
-                        },
-                        {
-                            "title": "TrueDOP",
-                            "image_url": "https://geoportal.saarland.de/mapbender/geoportal/mod_showPreview.php?resource=layer&id=46303",
-                            "links": [
-                                {
-                                    "name": "Darstellung (WMS)",
-                                    "link": "https://geoportal.saarland.de/mapbender/php/wms.php?layer_id=46302&REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS&withChilds=1"
-                                },
-                                {
-                                    "name": "Metadaten zum Datensatz (Extern)",
-                                    "link": "https://Metaver.de/trefferanzeige?docuuid=6c2eb4e4-6b85-4858-93f8-b62a2ef87987&q=6c2eb4e4-6b85-4858-93f8-b62a2ef87987&f="
-                                },
-                                {
-                                    "name": "Link zum Kartenviewer",
-                                    "link": "https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=46302&LAYER[visible]=1&LAYER[querylayer]=0"
+                                    "link": "https://geoportal.saarland.de/map?LAYER[zoom]=1&LAYER[id]=49804&LAYER[visible]=1&LAYER[querylayer]=0"
                                 },
                                 {
                                     "name": "Download (AtomFeed), RGB",
-                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6c2eb4e4-6b85-4858-93f8-b62a2ef87987%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46303"
+                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Df808a27f-16c5-40a2-bd0d-9ff49fdb0a35%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D49805"
                                 },
                                 {
                                     "name": "Download (AtomFeed),CIR",
-                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6c2eb4e4-6b85-4858-93f8-b62a2ef87987%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46304"
+                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Df808a27f-16c5-40a2-bd0d-9ff49fdb0a35%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D49806"
                                 },
                                 {
                                     "name": "Download (AtomFeed), IR",
-                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3D6c2eb4e4-6b85-4858-93f8-b62a2ef87987%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D46305"
+                                    "link": "https://geoportal.saarland.de/mapbender/plugins/mb_downloadFeedClient.php?url=https%3A%2F%2Fgeoportal.saarland.de%2Fmapbender%2Fphp%2Fmod_inspireDownloadFeed.php%3Fid%3Df808a27f-16c5-40a2-bd0d-9ff49fdb0a35%26type%3DSERVICE%26generateFrom%3Dwmslayer%26layerid%3D49807"
                                 },
                                 {
                                     "name": "Datenlizenz Deutschland Namensnennung 2.0 Quellenvermerk: © GeoBasis DE/LVGL-SL (Jahr)",
