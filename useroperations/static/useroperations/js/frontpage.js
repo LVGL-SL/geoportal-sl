@@ -105,19 +105,19 @@ function toggleMapviewer(servicetype){
             // start mobile from wms search
             if (servicetype.match(/wms/)){
                 var layerid=servicetype.match(/\d+/);
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?layerid='+layerid[0];
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap3/index.html?layerid='+layerid[0];
             // start mobile from wmc search
             } else if (servicetype.match(/wmc/)) {
                 var wmcid=servicetype.match(/\d+/);
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?wmc_id='+wmcid[0];
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap3/index.html?wmc_id='+wmcid[0];
             // start mobile with default mobile wmc (from index)
             }
         }else{
             const mobile_wmc_id = $("#mapviewer-sidebar").attr("mobile_wmc");
             if (Number.isInteger(mobile_wmc_id)) {
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html?wmc_id='+$("#mapviewer-sidebar").attr("mobile_wmc");
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap3/index.html?wmc_id='+$("#mapviewer-sidebar").attr("mobile_wmc");
             } else {
-                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap2/index.html';
+                window.location.href = window.location.href.split('/').slice(0, 3).join('/')+'/mapbender/extensions/mobilemap3/index.html';
             }
         }
     }else{
@@ -266,7 +266,7 @@ $(document).on("click", ".mobile-button", function(){
     var id = elem.attr("data-id");
     // get rid of 'WMC=' which is needed for the usual call
     id = id.split("=")[1];
-    openInNewTab("/mapbender/extensions/mobilemap2/index.html?wmc_id=" + id);
+    openInNewTab("/mapbender/extensions/mobilemap3/index.html?wmc_id=" + id);
 });
 
 $(document).on("click", ".map-viewer-selector", function(){
@@ -343,7 +343,7 @@ $(document).on("click", ".map-viewer-list-entry", function(){
     gui_id = elem.attr("data-resource");
     if(gui_id.includes("http")){
         // Open the mobile client in a new window
-        if(gui_id.includes("mobilemap2")){
+        if(gui_id.includes("mobilemap3")){
             window.open(gui_id);
         } else {
         // simply paste in the new url

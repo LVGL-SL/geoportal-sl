@@ -1710,7 +1710,7 @@ $(document).ready(function () {
             if (diff > 50000) { z = 9; }
             if (diff > 100000) { z = 8; }
 
-            window.location.href = window.location.href.split('/').slice(0, 3).join('/') + '/mapbender/extensions/mobilemap2/index.html?x=' + x + '&y=' + y + '&z=' + z;
+            window.location.href = window.location.href.split('/').slice(0, 3).join('/') + '/mapbender/extensions/mobilemap3/index.html?x=' + x + '&y=' + y + '&z=' + z;
         } else {
             // create parameter string, which defines a zoom to the given bbox
             var param = "ZOOM=" + bbox + ",EPSG%3A" + srs
