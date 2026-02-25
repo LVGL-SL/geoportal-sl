@@ -181,14 +181,14 @@ def download(request):
     for id, url in enumerate(body['urls']):
         if "/" in body['names'][id]:
             body['names'][id] = body['names'][id].replace("/", "-")
- 
+
         if secured == 0:
             #Ticket #7275: "Encoding" the +-symbol explicitely due to issues with certain servers
             #Might make sense to generally do this but for now this is only getting tested for one case 
             decoded_url = urllib.parse.unquote_plus(url)
             url_with_encoded_plus = decoded_url.replace("gml+xml", "gml%2Bxml")
             #download = requests.get(urllib.parse.unquote_plus(url,encoding='utf-8',  errors='replace'), stream=True, proxies=PROXIES, verify=False)
-            download = requests.get(url_with_encoded_plus, stream=True, proxies=PROXIES, verify=False)
+            download = requests.get(url_with_encoded_plus, proxies=PROXIES, verify=False)
             #print(download.raw)
         elif secured == 1:
             query = urllib.parse.urlparse(urllib.parse.unquote(url)).query
@@ -200,12 +200,12 @@ def download(request):
             new_url = "https://127.0.0.1/owsproxy/"+body['session_id']+"/"+secured_service_hash+"?"+query
             #print(urllib.parse.urlparse(urllib.parse.unquote(url)).query)
             #print(new_url)
-            download = requests.get(new_url, stream=True, proxies=None, verify=False)
+            download = requests.get(new_url, proxies=None, verify=False)
         else:
             return HttpResponse("Something went wrong, please contact an Admin",status=500)
 
         with open(INSPIRE_ATOM_DIR + body['uuid'] + '/' + body['names'][id] + format, mode='wb') as out_file:
-            shutil.copyfileobj(download.raw, out_file)
+            out_file.write(download.content)
         del download
 
     shutil.make_archive(INSPIRE_ATOM_DIR + 'InspireDownload_' + body['uuid'], 'zip',
