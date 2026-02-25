@@ -18,6 +18,8 @@ import shutil
 import os
 import environ
 
+from django.utils.text import get_valid_filename
+
 
 @csrf_exempt
 def download(request):
@@ -204,7 +206,7 @@ def download(request):
         else:
             return HttpResponse("Something went wrong, please contact an Admin",status=500)
 
-        with open(INSPIRE_ATOM_DIR + body['uuid'] + '/' + body['names'][id] + format, mode='wb') as out_file:
+        with open(INSPIRE_ATOM_DIR + body['uuid'] + '/' + get_valid_filename(body['names'][id]) + format, mode='wb') as out_file:
             out_file.write(download.content)
         del download
 
