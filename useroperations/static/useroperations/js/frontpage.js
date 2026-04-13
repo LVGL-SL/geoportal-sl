@@ -134,7 +134,7 @@ function toggleMapviewer(servicetype){
         var url = new URL(dataParams)
         var params = new URLSearchParams(url.search);
         if(preferred_gui == "Geoportal-RLP" || preferred_gui.length == 0 ){
-            params.set('gui_id',"Geoportal-RLP")
+            params.set('gui_id',"Geoportal-SL-2020")
         }else{
             params.set('gui_id', preferred_gui)
         }
