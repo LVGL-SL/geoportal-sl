@@ -24,7 +24,7 @@
 	<script src="{% static 'useroperations/js/html5shiv-printshiv.js' %}"></script>
     <![endif]-->
     {% if USE_RECAPTCHA == 1 %}
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js' async></script>
     {% endif %}
     {% block head %}
     {% endblock %}
