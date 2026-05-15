@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import truncatechars
 from django.utils import timezone
 
 from Geoportal.settings import DEFAULT_GUI
@@ -12,7 +13,7 @@ class Navigation(models.Model):
     icon_name = models.CharField(max_length=200, blank=True)
     position = models.IntegerField(unique=True)
 
-    def __str__(self): 
+    def __str__(self):
         return self.name
 
 
@@ -321,7 +322,7 @@ class ApplicationSliderElement(models.Model):
     image_src = models.URLField(max_length=255)
     rank = models.IntegerField()
 
-    def __str__(self): 
+    def __str__(self):
         return self.title
 
 
@@ -334,3 +335,6 @@ class LandingPageDispatch(models.Model):
     text = models.TextField(max_length=1000)
     is_active = models.BooleanField(default=False)
     dispatch_type = models.CharField(max_length=20, choices=DISPATCH_TYPES)
+
+    def __str__(self) -> str:
+        return f"{self.title} – {truncatechars(self.text, 150)}"
