@@ -53,10 +53,10 @@ def get_source_catalogues(external_call: bool=False):
             "key": _("Germany"),
             "img": DE_SRC_IMG,
         }
-        sources["eu"] = {
-            "key": _("Europe"),
-            "img": EU_SRC_IMG,
-        }
+        # sources["eu"] = {
+        #     "key": _("Europe"),
+        #     "img": EU_SRC_IMG,
+        # }
         sources["info"] = {
             "key": _("Info"),
             "title": _("Info pages"),
