@@ -21,13 +21,14 @@ from Geoportal.settings import STATIC_URL
 
 urlpatterns = [
     path('favicon.ico', lambda x: HttpResponseRedirect(STATIC_URL + "useroperations/images/favicon.ico")),
-    #path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('search/', include('searchCatalogue.urls')),
     path('captcha/', include('captcha.urls')),
     path('manage/', include('resourceManager.urls')),
     path('', include('useroperations.urls')),
     path('news/', include('news.urls')),
     path("i18n/", include("django.conf.urls.i18n")),
+    path('app-article/', include('appArticle.urls')),
 ]
 
 handler500 = "useroperations.views.handle500"

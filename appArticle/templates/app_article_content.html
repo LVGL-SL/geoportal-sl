@@ -8,7 +8,7 @@
     {% endif %}
     {% if section.content %}
     <div class="accordion" id="mainAccordion-{{ forloop.counter }}">
-        {% for group in section.content|dictsort:"group_name" %}
+        {% for group in section.content %}
         <div class="card my-3">
             <div class="card-header" id="heading-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
                 <h3 class="mb-0">
@@ -56,7 +56,13 @@
                                     <div class="links-container">
                                         <ul class="list-unstyled">
                                             {% for link in item.links %}
-                                            <li class="link-item"><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></li>
+                                            <li class="link-item">
+                                                {% if link.link %}
+                                                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
+                                                {% else %}
+                                                {{ link.name }}
+                                                {% endif %}
+                                            </li>
                                             {% endfor %}
                                         </ul>
                                     </div>

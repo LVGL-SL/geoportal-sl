@@ -71,6 +71,9 @@ class MbUser(models.Model):
         managed = False
         db_table = 'mb_user'
 
+    def __str__(self):
+        return self.mb_user_name
+
 class MbUserMbGroup(models.Model):
         fkey_mb_user = models.OneToOneField(MbUser, on_delete=models.CASCADE, primary_key=True)
         #fkey_mb_user = models.ForeignKey('MbUser', models.DO_NOTHING, primary_key=True) # !!autogen!!

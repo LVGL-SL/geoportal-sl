@@ -61,6 +61,8 @@ EU_CATALOGUE = 4
 EU_SRC_IMG = "eu_results.png"
 OPEN_DATA_URL = "https://okfn.org/opendata/"
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
 # Gui settings
 MODERN_GUI = "Geoportal-SL-2020"
 DEFAULT_GUI = MODERN_GUI
@@ -91,6 +93,7 @@ INSTALLED_APPS = [
     'captcha',
     'django_user_agents',
     'resourceManager',
+    'appArticle',
 ]
 
 MIDDLEWARE = [
@@ -220,7 +223,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default='')
 GOOGLE_RECAPTCHA_PUBLIC_KEY = env("GOOGLE_RECAPTCHA_PUBLIC_KEY", default='')
 
 # WMC ID that should be loaded on mobile devices
-#MOBILE_WMC_ID = None
+#MOBILE_WMC_ID = None #"default_wmc" #7591
 
 # Directory for inspire Downloads
 INSPIRE_ATOM_DIR = "/data2/inspiredownloads/"  # eg: "/var/www/html/inspiredownloads/"

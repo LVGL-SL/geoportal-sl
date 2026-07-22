@@ -5,8 +5,7 @@ import string
 import bcrypt
 import requests
 from lxml import html
-import json
-from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, INTERNAL_SSL, MULTILINGUAL, BASE_DIR, DEBUG
+from Geoportal.settings import HOSTNAME, HTTP_OR_SSL, INTERNAL_SSL, MULTILINGUAL
 from Geoportal.utils import utils
 from searchCatalogue.utils.searcher import Searcher
 from useroperations.models import *
@@ -235,28 +234,3 @@ def model_objects_case_insensitive_get(model, **kwargs):
             model.__name__, result_count, kwargs
         ))
     
-
-def get_article_conf(conf_file_name, lang=False, is_url=False):
-    # Returns an object containing the article configuration
-    # conf_file_name: name of the configuration file (without .json)
-    # lang: if set to a language code, the function will try to get the language specific configuration file first (e.g. "article_conf_en.json") - not yet supported
-
-    if is_url:
-        return False
-    
-    # Try paths in order
-    paths = [
-        BASE_DIR + '/useroperations/article_conf/' + conf_file_name + ".json"
-    ]
-    
-    if DEBUG:
-        paths.append(BASE_DIR + '/useroperations/article_conf/templates/' + conf_file_name + ".json")
-    
-    for config_path in paths:
-        try:
-            with open(config_path, encoding='utf-8') as file:
-                return json.load(file)
-        except Exception:
-            continue
-    
-    return False

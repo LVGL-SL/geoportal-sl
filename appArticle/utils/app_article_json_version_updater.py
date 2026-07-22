@@ -3,10 +3,10 @@ import argparse
 import logging
 from pathlib import Path
 
-# Add parent directory to path to import from useroperations
+# Add parent directory to path to import from appArticle
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from useroperations.utils.app_article_json_conv_class import JsonConverter
+from appArticle.utils.app_article_json_converter import JsonConverter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
