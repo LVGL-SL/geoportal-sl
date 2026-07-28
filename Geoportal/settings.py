@@ -236,4 +236,6 @@ PROXIES = {
 }
 
 # Memcached
+MEMCACHED_HOST = env("MEMCACHED_HOST", default="127.0.0.1")
+MEMCACHED_PORT = env("MEMCACHED_PORT", default=11211)
 MEMCACHED_SESSION_PREFIX = env("MEMCACHED_SESSION_PREFIX", default='memc.sess.')

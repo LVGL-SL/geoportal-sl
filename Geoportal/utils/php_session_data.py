@@ -12,13 +12,13 @@ import requests
 from pymemcache.client import base
 from phpserialize import *
 from django.http import HttpRequest
-from Geoportal.settings import DEFAULT_GUI, HTTP_OR_SSL, INTERNAL_SSL, PROJECT_DIR, SESSION_NAME, MEMCACHED_SESSION_PREFIX
+from Geoportal.settings import DEFAULT_GUI, HTTP_OR_SSL, INTERNAL_SSL, PROJECT_DIR, SESSION_NAME, MEMCACHED_HOST, MEMCACHED_PORT, MEMCACHED_SESSION_PREFIX
 from Geoportal.utils.mbConfReader import get_mapbender_config_value
 from useroperations.models import MbUser
 
 
 def get_mapbender_session_by_memcache(session_id):
-    client = base.Client(('127.0.0.1', 11211))
+    client = base.Client((MEMCACHED_HOST, MEMCACHED_PORT))
 
     try:
         session_data = client.get(MEMCACHED_SESSION_PREFIX + session_id)
@@ -33,7 +33,7 @@ def get_mapbender_session_by_memcache(session_id):
 
 
 def delete_mapbender_session_by_memcache(session_id):
-    client = base.Client(('127.0.0.1', 11211))
+    client = base.Client((MEMCACHED_HOST, MEMCACHED_PORT))
     client.delete(MEMCACHED_SESSION_PREFIX + session_id)
 
 
