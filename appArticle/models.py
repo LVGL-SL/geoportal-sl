@@ -65,7 +65,7 @@ class ArticleSection(models.Model):
         ordering = ['order']
     
     def __str__(self):
-        return f"{self.article.article_keyword} - {self.title or 'Section'}"
+        return f"Section: {self.order} - {self.title or '(No Title)'}"
     
     def to_dict(self):
         return {
@@ -87,7 +87,7 @@ class SectionGroup(models.Model):
         verbose_name_plural = "03. Dienst-/Item-Gruppen"
     
     def __str__(self):
-        return self.group_name
+        return f"{self.section.title} - {self.group_name}"
     
     def to_dict(self):
         return {

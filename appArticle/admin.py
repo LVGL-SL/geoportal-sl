@@ -301,22 +301,27 @@ class ItemLinkInline(admin.TabularInline):
 class GroupItemAdmin(admin.ModelAdmin):
     list_display = (
         "title",
-        "group",
+        "group_name_with_section",
         "order",
         "url",
     )
 
     search_fields = (
         "title",
+        "group_name_with_section",
     )
 
-    list_filter = (
-        "group__section__article",
-    )
+    # list_filter = (
+    #     "group__section__article",
+    # )
 
     inlines = [
         ItemLinkInline,
     ]
+
+    @admin.display(description=" Section - Group")
+    def group_name_with_section(self, obj):
+        return f"{obj.group.section.title} - {obj.group.group_name}"
 
 
 # @admin.register(ItemLink)
