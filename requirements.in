@@ -1,3 +1,4 @@
+asgiref<3.12
 bcrypt==5.*
 captcha==0.7.*
 Django==3.*
