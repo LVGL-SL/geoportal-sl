@@ -74,8 +74,10 @@ ua-parser==1.0.1
     # via
     #   -c requirements.constraint
     #   user-agents
-ua-parser-builtins==202606
-    # via ua-parser
+ua-parser-builtins==0.18.0.post1
+    # via
+    #   -c requirements.constraint
+    #   ua-parser
 urllib3==2.6.3
     # via
     #   -c requirements.constraint
