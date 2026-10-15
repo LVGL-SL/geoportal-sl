@@ -135,6 +135,10 @@ input:checked + .slider:before {
     object-fit: contain;
 }
 
+.tile-title {
+    word-break: break-word;
+}
+
 .organizations .sub-tile-container, .topics .sub-tile-container{
     color: var(--secondary);
 }
@@ -236,8 +240,6 @@ input:checked + .slider:before {
 
 
 @media screen and (max-width: 700px){
-
-.
     .tile-wrapper{
         width: 90vw;
     }
@@ -261,3 +263,4 @@ input:checked + .slider:before {
     .tile-content{
         font-size: 1.05em;
     }
+}
