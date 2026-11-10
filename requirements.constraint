@@ -1,5 +1,5 @@
 asgiref<3.12
-chardet<5
+chardet<6
 cssselect<1.4
 pillow<12
 requests<2.33
