@@ -8,7 +8,7 @@ django-simple-captcha==0.5.*
 django-user-agents==0.4.*
 lxml[cssselect]==6.*
 phpserialize==1.*
-psycopg2==2.*
+psycopg2==2.9.12
 pymemcache==4.*
 PyYAML==6.*
 requests[use_chardet_on_py3]==2.*
