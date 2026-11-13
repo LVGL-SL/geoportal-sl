@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'django_user_agents',
     'resourceManager',
     'appArticle',
+    'secureddownloads',
 ]
 
 MIDDLEWARE = [
